@@ -1,0 +1,16 @@
+{
+  "name": "attalos",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "react": "^0.12",
+    "browserify": "^6.3.2",
+    "reactify": "^0.16.0",
+    "express": "~4.8.4",
+    "peer": "~0.2.6",
+    "socket.io": "~1.0.6",
+    "material-ui": "~0.2.2",
+    "less": "~2.0.0"
+  }
+}
