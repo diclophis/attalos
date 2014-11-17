@@ -12,5 +12,8 @@
     "socket.io": "~1.0.6",
     "material-ui": "~0.2.2",
     "less": "~2.0.0"
+  },
+  "engines": {
+    "node": "0.10.28"
   }
 }
