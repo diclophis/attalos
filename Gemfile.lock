@@ -1,0 +1,18 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    closure-compiler (1.1.11)
+    dotenv (0.11.1)
+      dotenv-deployment (~> 0.0.2)
+    dotenv-deployment (0.0.2)
+    foreman (0.75.0)
+      dotenv (~> 0.11.1)
+      thor (~> 0.19.1)
+    thor (0.19.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  closure-compiler
+  foreman
