@@ -23,15 +23,12 @@ var AttalosComponent = React.createClass({
   render: function() {
     return (
       <Paper rounded={false} className="c5">
+        <PaperButton onClick={this.toggleLeftNav} type={PaperButton.Types.FLAT} label="INDEX" />
         <LeftNav ref="leftNav" docked={false} menuItems={menuItems} />
-        <Paper>
-          <PaperButton onClick={this.toggleLeftNav} type={PaperButton.Types.FLAT} label="INDEX"/>
-        </Paper>
-        <AttalosCreateRoom/>
+        <AttalosCreateRoom />
       </Paper>
     );
   }
 });
-
 
 module.exports = AttalosComponent;
