@@ -2,6 +2,7 @@ var React = require('react'),
   mui = require('material-ui'),
   LeftNav = mui.LeftNav,
   MenuItem = mui.MenuItem,
+  Paper = mui.Paper,
   PaperButton = mui.PaperButton;
 
 var menuItems = [
@@ -15,16 +16,20 @@ var menuItems = [
 ];
 
 var AttalosComponent = React.createClass({
-
+  toggleLeftNav: function() {
+    this.refs.leftNav.toggle();
+  },
   render: function() {
     return (
-      <div>
-        <LeftNav menuItems={menuItems} />
-        <PaperButton type={PaperButton.Types.FLAT} label="Default" />
-      </div>
+      <Paper ref="mainPaper" rounded={false}>
+        <LeftNav ref="leftNav" docked={false} menuItems={menuItems} />
+        <Paper rounded={false}>
+          <PaperButton onClick={this.toggleLeftNav} type={PaperButton.Types.FLAT} label="INDEX" />
+        </Paper>
+      </Paper>
     );
   }
-
 });
+
 
 module.exports = AttalosComponent;
