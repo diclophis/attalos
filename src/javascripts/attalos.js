@@ -3,10 +3,11 @@ var React = require('react'),
   LeftNav = mui.LeftNav,
   MenuItem = mui.MenuItem,
   Paper = mui.Paper,
-  PaperButton = mui.PaperButton;
+  PaperButton = mui.PaperButton,
+  AttalosCreateRoom = require('./attalos-create-room');
 
 var menuItems = [
-  { route: 'login', text: 'Login' },
+  { route: '#attalos-create-room', text: 'CREATE ROOM' },
   { type: MenuItem.Types.SUBHEADER, text: 'Help' },
   { 
      type: MenuItem.Types.LINK, 
@@ -21,11 +22,12 @@ var AttalosComponent = React.createClass({
   },
   render: function() {
     return (
-      <Paper ref="mainPaper" rounded={false}>
+      <Paper rounded={false} className="c5">
         <LeftNav ref="leftNav" docked={false} menuItems={menuItems} />
-        <Paper rounded={false}>
-          <PaperButton onClick={this.toggleLeftNav} type={PaperButton.Types.FLAT} label="INDEX" />
+        <Paper>
+          <PaperButton onClick={this.toggleLeftNav} type={PaperButton.Types.FLAT} label="INDEX"/>
         </Paper>
+        <AttalosCreateRoom/>
       </Paper>
     );
   }
