@@ -12,7 +12,11 @@
     "socket.io": "~1.0.6",
     "material-ui": "~0.2.2",
     "less": "~2.0.0",
-    "stss": "^0"
+    "stss": "^0",
+    "debug": "^0",
+    "stanza.io": "git://github.com/otalk/stanza.io.git#master",
+    "node-xmpp": "^0",
+    "node-xmpp-bosh": "git://github.com/dhruvbird/node-xmpp-bosh.git#master"
   },
   "engines": {
     "node": "0.10.28"

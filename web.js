@@ -1,6 +1,4 @@
-var PeerServer = require('peer').PeerServer,
-    express = require('express'),
-    //Topics = require('./public/src/Topics.js'),
+var express = require('express'),
     app = express(),
     port = process.env.PORT || 3001;
 
