@@ -12,11 +12,14 @@
     "socket.io": "~1.0.6",
     "material-ui": "~0.2.2",
     "less": "~2.0.0",
-    "stss": "^0",
-    "debug": "^0",
+    "stss": "~0.3.0",
+    "debug": "~2.1.0",
+    "node-stringprep": "git://github.com/node-xmpp/node-stringprep.git#master",
     "stanza.io": "git://github.com/otalk/stanza.io.git#master",
-    "node-xmpp": "^0",
-    "node-xmpp-bosh": "git://github.com/dhruvbird/node-xmpp-bosh.git#master"
+    "node-xmpp-server": "git://github.com/node-xmpp/node-xmpp-server.git#master",
+    "node-xmpp-core": "git://github.com/node-xmpp/node-xmpp-core.git#master",
+    "node-xmpp-bosh": "git://github.com/dhruvbird/node-xmpp-bosh.git#master",
+    "node-uuid": "1.4.1"
   },
   "engines": {
     "node": "0.10.28"

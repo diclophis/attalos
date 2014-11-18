@@ -1,17 +1,18 @@
 //
 
-var xmpp = require('node-xmpp');
+var C2SServer = require('node-xmpp-server').C2SServer;
+var Message = require('node-xmpp-core').Stanza.Message
 
 /* This is a very basic C2S server example. One of the key design decisions
 * of node-xmpp is to keep it very lightweight
 * If you need a full blown server check out https://github.com/superfeedr/xmpp-server
 */
 
-var port = process.env.PORT || 5222;
+//var port = process.env.PORT || 5222;
 
 // Sets up the server.
-var c2s = new xmpp.C2SServer({
-  domain: 'localhost',
+var c2s = new C2SServer({
+  domain: 'localhost'
   //port: port
   // key : "key.pem content",
   // cert : "cert.pem content",
@@ -33,18 +34,18 @@ c2s.on('connect', function(client) {
 
   // Allows the developer to authenticate users against anything they want.
   client.on('authenticate', function(opts, cb) {
-    console.log('AUTH' + opts.jid + ' -> ' +opts.password);
+    console.log('AUTH', opts.jid);
     cb(null, opts); // cb(false)
   });
 
   client.on('online', function() {
     console.log('ONLINE');
-    client.send(new xmpp.Message({ type: 'chat' }).c('body').t('Hello there, little client.'));
+    client.send(new Message({ type: 'chat' }).c('body').t('Hello there, little client.'));
   });
 
   // Stanza handling
   client.on('stanza', function(stanza) {
-    console.log('STANZA' + stanza);
+    console.log('STANZA', stanza);
   });
 
   // On Disconnect event. When a client disconnects

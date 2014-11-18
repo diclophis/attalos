@@ -3,35 +3,33 @@ var mui = require('material-ui'),
     Input = mui.Input,
     PaperButton = mui.PaperButton;
 var debug = require('debug');
-var xmpp = require('stanza.io'); // if using browserify
-
-debug.enable('*');
+var xmpp = require('stanza.io');
+var uuid = require('node-uuid');
 
 var AttalosCreateRoom = React.createClass({
   onCreatedRoom: function() {
 
-var client = xmpp.createClient({
-    jid: 'echobot@localhost',
-    password: 'password',
-    transport: 'bosh',
-    boshURL: 'http://localhost:5280/http-bind/'
-});
-
-client.on('session:started', function () {
-    client.getRoster();
-    client.sendPresence();
-    console.log("wtf");
-});
-
-client.on('chat', function (msg) {
-    client.sendMessage({
-      to: msg.from,
-      body: 'You sent: ' + msg.body
+    var client = xmpp.createClient({
+        jid: uuid.v4() + '@localhost',
+        password: 'password',
+        transport: 'bosh',
+        boshURL: 'http://localhost:5280/http-bind/'
     });
-});
 
-var foo = client.connect();
-console.log("wtf2", foo);
+    client.on('session:started', function () {
+      client.getRoster();
+      client.sendPresence();
+      console.log("wtf");
+    });
+
+    client.on('chat', function (msg) {
+      client.sendMessage({
+        to: msg.from,
+        body: 'You sent: ' + msg.body
+      });
+    });
+
+    client.connect();
 
   },
   render: function() {

@@ -2,8 +2,9 @@
 
 exports.config = {
 	//host: '127.0.0.1', 
+  //port: process.env.PORT || 5280,
 	path: /^\/http-bind(\/+)?$/, 
-	logging: 'TRACE',
+	logging: 'INFO',
 	
 	// The maximum number of bytes that the BOSH server will 
 	// "hold" from the client
@@ -92,7 +93,7 @@ exports.config = {
 
     // The password used to protect the /PATH/sysinfo/ URL. The
     // username to use when prompted for authentication is 'admin'.
-    system_info_password: 'qwerty',
+    system_info_password: 'password',
 
 	// The period, in seconds, between sending WebSocket ping frames to each
 	// client. If a client fails to respond with a pong frame twice in a row,
