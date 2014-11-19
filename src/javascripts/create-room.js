@@ -1,12 +1,13 @@
 var React = require('react');
 var mui = require('material-ui'),
     Input = mui.Input,
+    Paper = mui.Paper,
     PaperButton = mui.PaperButton;
 var debug = require('debug');
 var xmpp = require('stanza.io');
 var uuid = require('node-uuid');
 
-var AttalosCreateRoom = React.createClass({
+var CreateRoom = React.createClass({
   onCreatedRoom: function() {
 
     var client = xmpp.createClient({
@@ -39,7 +40,7 @@ var AttalosCreateRoom = React.createClass({
   },
   render: function() {
     return (
-      <form className="c6">
+      <form>
         <Input name="room" type="text" description="typically used as the topic of discussion" placeholder="name of room"/>
         <PaperButton onClick={this.onCreatedRoom} type={PaperButton.Types.FLAT} label="CREATE ROOM"/>
       </form>
@@ -47,4 +48,4 @@ var AttalosCreateRoom = React.createClass({
   }
 });
 
-module.exports = AttalosCreateRoom;
+module.exports = CreateRoom;
