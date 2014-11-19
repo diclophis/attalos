@@ -26,6 +26,7 @@
     "node-xmpp-bosh": "git://github.com/dhruvbird/node-xmpp-bosh.git#master"
   },
   "engines": {
-    "node": "0.10.28"
+    "node": "0.10.28",
+    "npm": ">=1.1.2"
   }
 }
