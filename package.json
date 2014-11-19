@@ -2,24 +2,27 @@
   "name": "attalos",
   "version": "0.0.0",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "foo.git"
+  },
   "main": "index.js",
-  "dependencies": {
+  "devDependencies": {
     "react": "^0.12",
     "browserify": "^6.3.2",
     "reactify": "^0.16.0",
     "express": "~4.8.4",
-    "peer": "~0.2.6",
-    "socket.io": "~1.0.6",
     "material-ui": "git://github.com/callemall/material-ui.git#master",
     "less": "~2.0.0",
-    "stss": "~0.3.0",
-    "debug": "~2.1.0",
+    "stss": "~0.3.0"
+  },
+  "dependencies": {
     "node-stringprep": "git://github.com/node-xmpp/node-stringprep.git#master",
     "stanza.io": "git://github.com/otalk/stanza.io.git#master",
+    "node-uuid": "1.4.1",
     "node-xmpp-server": "git://github.com/node-xmpp/node-xmpp-server.git#master",
     "node-xmpp-core": "git://github.com/node-xmpp/node-xmpp-core.git#master",
-    "node-xmpp-bosh": "git://github.com/dhruvbird/node-xmpp-bosh.git#master",
-    "node-uuid": "1.4.1"
+    "node-xmpp-bosh": "git://github.com/dhruvbird/node-xmpp-bosh.git#master"
   },
   "engines": {
     "node": "0.10.28"
