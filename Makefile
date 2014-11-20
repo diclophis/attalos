@@ -1,6 +1,8 @@
 # OSX Makefile
 
-build: public/index.html
+.PHONY: dist test
+
+dist: test public/index.html
 
 public/stylesheets/application.css: src/stylesheets/*.less
 	./node_modules/.bin/lessc src/stylesheets/index.less > $@
@@ -16,6 +18,9 @@ public/javascripts/application.min.js: public/javascripts/application.js
 
 public/index.html: public/javascripts/application.min.js public/stylesheets/application.min.css
 	./node_modules/.bin/browserify --exclude crypt --exclude node-uuid --exclude stanza.io -t reactify src/javascripts/index.js | node > $@
+
+test: tests/* 
+	./node_modules/.bin/jest
 
 clean:
 	rm -f public/javascripts/application.min.js public/stylesheets/application.min.css public/index.html

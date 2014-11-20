@@ -9,10 +9,17 @@
   "main": "/dev/null/index.js",
   "devDependencies": {
     "react": "^0.12",
+    "react-tools": "*",
     "reactify": "^0.16.0",
     "browserify": "^6.3.2",
     "less": "~2.0.0",
-    "stss": "~0.3.0"
+    "stss": "~0.3.0",
+    "jest-cli": "~0.1.18"
+  },
+  "jest": {
+    "testDirectoryName": "tests",
+    "scriptPreprocessor": "<rootDir>/jsx-preprocessor.js",
+    "unmockedModulePathPatterns": ["<rootDir>/node_modules/react"] 
   },
   "dependencies": {
     "express": "~4.8.4",
