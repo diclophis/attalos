@@ -22,11 +22,13 @@ var Index = React.createClass({
   }
 });
 
-if (typeof(document) === 'undefined') {
-  console.log(React.renderToStaticMarkup(<Index />));
-} else {
-  document.addEventListener("DOMContentLoaded", function() {
-    var mainContainer = document.getElementById("main-container");
-    React.render(<AttalosComponent />, mainContainer);
-  });
-}
+(function() {
+  if (typeof(document) === 'undefined') {
+    console.log(React.renderToStaticMarkup(<Index />));
+  } else {
+    document.addEventListener("DOMContentLoaded", function() {
+      var mainContainer = document.getElementById("main-container");
+      React.render(<AttalosComponent />, mainContainer);
+    });
+  }
+})();
