@@ -52,4 +52,4 @@ c2s.on('connect', function(client) {
 
 });
 
-console.log(c2s);
+console.log('Listening on port: ' + c2s.options.port);
