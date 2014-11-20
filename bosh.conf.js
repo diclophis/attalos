@@ -2,7 +2,7 @@
 
 exports.config = {
 	//host: '127.0.0.1', 
-  //port: process.env.PORT || 5280,
+  port: process.env.PORT || 5280,
 	path: /^\/http-bind(\/+)?$/, 
 	logging: 'INFO',
 	
@@ -63,7 +63,7 @@ exports.config = {
 	//
 	firewall: {
 		// allow: [ /* 'jabber.org', /(.*\.)?jappix.com$/ */ ],
-    allow: ['localhost']
+    // allow: ['localhost']
 		// deny:  [ /* 'gmail.com' */ ]
 	},
 

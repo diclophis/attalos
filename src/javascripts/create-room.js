@@ -5,12 +5,17 @@ var CreateRoom = React.createClass({
     ev.preventDefault();
 
     var xmpp = require('stanza.io');
+    var url = require('url');
+    // Parse the URL of the current location
+    var parts = url.parse(window.location.toString());
+    // Log the parts object to our browser's console
+    console.log(parts);
 
     var client = xmpp.createClient({
-      jid: 'foo@localhost',
+      jid: 'foo@' + parts.hostname,
       password: 'password',
       transport: 'bosh',
-      boshURL: 'http://localhost:5280/http-bind/'
+      boshURL: 'http://' + (parts.hostname) + ':' + (document.getElementById("bosh-port").value) +  '/http-bind/'
     });
 
     client.on('session:started', function () {
@@ -37,6 +42,7 @@ var CreateRoom = React.createClass({
   render: function() {
     return (
       <form onSubmit={this.onCreatedRoom}>
+        <input id="bosh-port" type="text" placeholder="" />
         <input name="room" type="text" placeholder="name of room" />
         <button>CREATE ROOM</button>
       </form>
