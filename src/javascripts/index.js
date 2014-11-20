@@ -3,8 +3,6 @@
 var React = require('react');
 var AttalosComponent = require('./attalos');
 
-var mainComponent = <AttalosComponent />;
-
 var Index = React.createClass({
   render: function() {
     return(
@@ -16,7 +14,6 @@ var Index = React.createClass({
         </head>
         <body>
           <div id="main-container" className="grid-fluid">
-            {mainComponent}
           </div>
           <script src="javascripts/application.min.js"></script>
         </body>
@@ -30,6 +27,6 @@ if (typeof(document) === 'undefined') {
 } else {
   document.addEventListener("DOMContentLoaded", function() {
     var mainContainer = document.getElementById("main-container");
-    React.render(mainComponent, mainContainer);
+    React.render(<AttalosComponent />, mainContainer);
   });
 }

@@ -1,11 +1,11 @@
 var React = require('react');
+var xmpp = require('stanza.io');
+var url = require('url');
 
 var CreateRoom = React.createClass({
   onCreatedRoom: function(ev) {
     ev.preventDefault();
 
-    var xmpp = require('stanza.io');
-    var url = require('url');
     // Parse the URL of the current location
     var parts = url.parse(window.location.toString());
     // Log the parts object to our browser's console
