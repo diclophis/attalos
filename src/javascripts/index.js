@@ -1,10 +1,35 @@
 // something
 
-var React = require('react'),
-    AttalosComponent = require('./attalos');
+var React = require('react');
+var AttalosComponent = require('./attalos');
 
-document.addEventListener("DOMContentLoaded", function() {
-  var mainComponent = <AttalosComponent/>;
-  var mainContainer = document.getElementById("main-container");
-  React.render(mainComponent, mainContainer);
-})
+var mainComponent = <AttalosComponent />;
+
+var Index = React.createClass({
+  render: function() {
+    return(
+      <html>
+        <head>
+          <meta httpEquiv="Content-Type" content="text/html;charset=utf-8" />
+          <title>Attalos Index</title>
+          <link href="stylesheets/application.min.css" media="all" rel="stylesheet" type="text/css" />
+        </head>
+        <body>
+          <div id="main-container" className="grid-fluid">
+            {mainComponent}
+          </div>
+          <script src="javascripts/application.min.js"></script>
+        </body>
+      </html>
+    );
+  }
+});
+
+if (typeof(document) === 'undefined') {
+  console.log(React.renderToStaticMarkup(<Index />));
+} else {
+  document.addEventListener("DOMContentLoaded", function() {
+    var mainContainer = document.getElementById("main-container");
+    React.render(mainComponent, mainContainer);
+  });
+}

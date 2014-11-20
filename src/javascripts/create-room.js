@@ -4,14 +4,13 @@ var mui = require('material-ui'),
     Paper = mui.Paper,
     PaperButton = mui.PaperButton;
 var debug = require('debug');
-var xmpp = require('stanza.io');
-var uuid = require('node-uuid');
 
 var CreateRoom = React.createClass({
   onCreatedRoom: function() {
+    var xmpp = require('stanza.io');
 
     var client = xmpp.createClient({
-      jid: uuid.v4() + '@localhost',
+      jid: 'foo@localhost',
       password: 'password',
       transport: 'bosh',
       boshURL: 'http://localhost:5280/http-bind/'

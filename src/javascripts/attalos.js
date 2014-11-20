@@ -17,6 +17,11 @@ var AttalosComponent = React.createClass({
     //var parts = url.parse(window.location.toString());
     // Log the parts object to our browser's console
     //console.log(parts);
+    var defaultMainView = null;
+    if (typeof(window) === 'undefined') {
+    } else {
+      defaultMainView = window.location.hash
+    }
 
     return {
       menuItems: [
@@ -29,7 +34,7 @@ var AttalosComponent = React.createClass({
            text: 'GitHub' 
         },
       ],
-      mainView: window.location.hash
+      mainView: defaultMainView
     };
   },
   componentDidMount: function() {

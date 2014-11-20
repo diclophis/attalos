@@ -1,7 +1,7 @@
 {
   "name": "attalos",
   "version": "0.0.0",
-  "description": "",
+  "description": "5222 TCP     XMPP client connection (RFC 3920)        Official   5223 TCP     XMPP client connection over SSL          Unofficial 5269 TCP     XMPP server connection (RFC 3920)        Official 5298 TCP UDP XMPP JEP-0174: Link-Local Messaging /    Official XEP-0174: Serverless Messaging 8010 TCP     XMPP File transfers                      Unofficial",
   "repository": {
     "type": "git",
     "url": "foo.git"
@@ -20,7 +20,6 @@
     "socket.io": "~1.0.6",
     "node-stringprep": "git://github.com/node-xmpp/node-stringprep.git#master",
     "stanza.io": "git://github.com/otalk/stanza.io.git#master",
-    "node-uuid": "1.4.1",
     "node-xmpp-server": "git://github.com/node-xmpp/node-xmpp-server.git#master",
     "node-xmpp-core": "git://github.com/node-xmpp/node-xmpp-core.git#master",
     "node-xmpp-bosh": "git://github.com/dhruvbird/node-xmpp-bosh.git#master"
@@ -28,5 +27,10 @@
   "engines": {
     "node": "0.10.28",
     "npm": ">=1.1.2"
-  }
+  },
+  "scripts": {
+    "test": "node test.js"
+  },
+  "author": "Jon Bardin",
+  "license": "GPL"
 }
