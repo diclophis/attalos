@@ -224,7 +224,7 @@
     },
     "node-uuid": {
       "version": "1.4.1",
-      "from": "node-uuid@1.4.1",
+      "from": "https://registry.npmjs.org/node-uuid/-/node-uuid-1.4.1.tgz",
       "resolved": "https://registry.npmjs.org/node-uuid/-/node-uuid-1.4.1.tgz"
     },
     "node-xmpp-bosh": {

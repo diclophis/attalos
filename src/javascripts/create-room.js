@@ -1,12 +1,9 @@
 var React = require('react');
-var mui = require('material-ui'),
-    Input = mui.Input,
-    Paper = mui.Paper,
-    PaperButton = mui.PaperButton;
-var debug = require('debug');
 
 var CreateRoom = React.createClass({
-  onCreatedRoom: function() {
+  onCreatedRoom: function(ev) {
+    ev.preventDefault();
+
     var xmpp = require('stanza.io');
 
     var client = xmpp.createClient({
@@ -39,9 +36,9 @@ var CreateRoom = React.createClass({
   },
   render: function() {
     return (
-      <form>
-        <Input name="room" type="text" description="typically used as the topic of discussion" placeholder="name of room"/>
-        <PaperButton onClick={this.onCreatedRoom} type={PaperButton.Types.FLAT} label="CREATE ROOM"/>
+      <form onSubmit={this.onCreatedRoom}>
+        <input name="room" type="text" placeholder="name of room" />
+        <button>CREATE ROOM</button>
       </form>
     );
   }

@@ -1,11 +1,4 @@
 var React = require('react');
-
-var mui = require('material-ui'),
-      LeftNav = mui.LeftNav,
-      MenuItem = mui.MenuItem,
-      Paper = mui.Paper,
-      PaperButton = mui.PaperButton;
-
 var CreateRoom = require('./create-room');
 var ListRooms = require('./list-rooms');
 
@@ -24,16 +17,6 @@ var AttalosComponent = React.createClass({
     }
 
     return {
-      menuItems: [
-        { type: MenuItem.Types.LINK, payload: '#list-rooms', text: 'LIST ROOMS' },
-        { type: MenuItem.Types.LINK, payload: '#create-room', text: 'CREATE ROOM' },
-        { type: MenuItem.Types.SUBHEADER, text: 'Help' },
-        { 
-           type: MenuItem.Types.LINK, 
-           payload: 'https://github.com/diclophis/attalos', 
-           text: 'GitHub' 
-        },
-      ],
       mainView: defaultMainView
     };
   },
@@ -44,7 +27,7 @@ var AttalosComponent = React.createClass({
     };
   },
   toggleLeftNav: function() {
-    this.refs.leftNav.toggle();
+    //this.refs.leftNav.toggle();
   },
   render: function() {
     var mainViewComponent = null;
@@ -61,10 +44,9 @@ var AttalosComponent = React.createClass({
 
     return (
       <div>
-        <PaperButton onClick={this.toggleLeftNav} type={PaperButton.Types.FLAT} label="=" />
-        <PaperButton href="#list-rooms" type="FLAT" label="LIST ROOMS" />
-        <PaperButton href="#create-room" type="FLAT" label="CREATE ROOM" />
-        <LeftNav ref="leftNav" docked={false} menuItems={this.state.menuItems} />
+        <a onClick={this.toggleLeftNav} href="">#</a>
+        <a href="#list-rooms">LIST ROOMS</a>
+        <a href="#create-room">CREATE ROOM</a>
         {mainViewComponent}
       </div>
     );
