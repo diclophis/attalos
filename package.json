@@ -6,7 +6,7 @@
     "type": "git",
     "url": "foo.git"
   },
-  "main": "index.js",
+  "main": "/dev/null/index.js",
   "devDependencies": {
     "react": "^0.12",
     "reactify": "^0.16.0",

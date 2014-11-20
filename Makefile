@@ -12,5 +12,8 @@ public/javascripts/application.min.js: src/javascripts/*.js package.json
 	#./node_modules/.bin/browserify -t reactify package.json src/javascripts/*.js | ruby -r 'rubygems' -r 'closure-compiler' -e "puts Closure::Compiler.new(:compilation_level => 'SIMPLE_OPTIMIZATIONS').compile(STDIN)" > $@
 	./node_modules/.bin/browserify -t reactify package.json src/javascripts/*.js > $@
 
+#public/stylesheets/application.min.css: src/stylesheets/*.less
+#	./node_modules/.bin/lessc -x src/stylesheets/index.less > $@
+
 clean:
 	rm -f public/javascripts/application.min.js public/stylesheets/application.min.css
