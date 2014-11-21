@@ -6,6 +6,7 @@ var CreateRoom = React.createClass({
   onCreatedRoom: function(ev) {
     ev.preventDefault();
 
+/*
     // Parse the URL of the current location
     var parts = url.parse(window.location.toString());
     // Log the parts object to our browser's console
@@ -37,13 +38,13 @@ var CreateRoom = React.createClass({
     });
 
     client.connect();
+*/
 
   },
   render: function() {
     return (
       <form onSubmit={this.onCreatedRoom}>
-        <input id="bosh-port" type="text" placeholder="" />
-        <input name="room" type="text" placeholder="name of room" />
+        <input name="room" type="text" placeholder="name of room/discussion" />
         <button>CREATE ROOM</button>
       </form>
     );

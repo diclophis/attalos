@@ -16,6 +16,18 @@
   }
 }
 
+.authenticated {
+  a {
+  }
+}
+
+.restricted {
+  a:not(.vip) {
+    text-decoration: line-through;
+    pointer-events: none;
+  }
+}
+
 form {
   padding: 0;
   margin: 1em;

@@ -4,6 +4,7 @@ var React = require('react');
 var Connect = require('./connect');
 var CreateRoom = require('./create-room');
 var ListRooms = require('./list-rooms');
+var vent = require('./vent').vent;
 var url = require('url');
 
 var AttalosComponent = React.createClass({
@@ -19,7 +20,8 @@ var AttalosComponent = React.createClass({
     }
 
     return {
-      mainView: defaultMainView
+      mainView: defaultMainView,
+      roomLinks: []
     };
   },
   componentDidMount: function() {
@@ -27,6 +29,15 @@ var AttalosComponent = React.createClass({
     window.onhashchange = function () {
       attalosWindowBridge.setState({ mainView: window.location.hash });
     };
+
+    vent.on('login', function(loggedIn) {
+      attalosWindowBridge.setState({ loggedIn: loggedIn });
+      window.location.hash = "#list-rooms";
+    });
+
+    vent.on('logout', function(loggedIn) {
+      attalosWindowBridge.setState({ loggedIn: loggedIn });
+    });
   },
   render: function() {
     var mainViewComponent = null;
@@ -45,10 +56,13 @@ var AttalosComponent = React.createClass({
     }
 
     return (
-      <div className={this.props.bootstrapped ? 'bootstrapped' : 'static'}>
-        <a href="">#</a>
-        <a href="#list-rooms">LIST ROOMS</a>
-        <a href="#create-room">CREATE ROOM</a>
+      <div className={this.state.loggedIn ? 'authenticated' : 'restricted'}>
+        <div>
+          <a className="vip" href="#">#</a>
+          <a href="#list-rooms">LIST ROOMS</a>
+          <a href="#create-room">CREATE ROOM</a>
+          {this.state.roomLinks}
+        </div>
         {mainViewComponent}
       </div>
     );

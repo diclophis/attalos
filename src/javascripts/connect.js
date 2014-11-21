@@ -62,26 +62,33 @@ var Connect = React.createClass({
 
     var parts = url.parse(document.getElementById("bosh-url").value);
     var jid = parts.auth + '@' + parts.hostname;
-    var boshUrl = 'http://' + (parts.hostname) + ':' + (parts.port) +  '/http-bind/';
+    var boshUrl = 'http://' + (parts.hostname) + ':' + (parts.port) +  '/http-bind';
     console.log(jid, boshUrl);
 
     var client = xmpp.createClient({
       jid: jid,
       password: 'password',
       transport: 'bosh',
+      useStreamManagement: true,
       boshURL: boshUrl
     });
 
     client.on('session:started', function () {
-      //client.getRoster();
-      //client.sendPresence();
+      client.getRoster();
+      client.sendPresence();
       //client.sendMessage({
       //  to: client.jid,
       //  body: 'I just joined sent'
       //});
-      console.log("session:started");
+      console.log("connected");
 
-      vent.emit("VENT-DEBUG", 123);
+      vent.emit("login", true);
+    });
+
+    client.on('disconnected', function () {
+      console.log("disconnected");
+
+      vent.emit("logout", false);
     });
 
     client.connect();

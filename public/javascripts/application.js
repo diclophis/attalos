@@ -5,6 +5,7 @@ var React = require('react');
 var Connect = require('./connect');
 var CreateRoom = require('./create-room');
 var ListRooms = require('./list-rooms');
+var vent = require('./vent').vent;
 var url = require('url');
 
 var AttalosComponent = React.createClass({displayName: 'AttalosComponent',
@@ -20,7 +21,8 @@ var AttalosComponent = React.createClass({displayName: 'AttalosComponent',
     }
 
     return {
-      mainView: defaultMainView
+      mainView: defaultMainView,
+      roomLinks: []
     };
   },
   componentDidMount: function() {
@@ -28,6 +30,15 @@ var AttalosComponent = React.createClass({displayName: 'AttalosComponent',
     window.onhashchange = function () {
       attalosWindowBridge.setState({ mainView: window.location.hash });
     };
+
+    vent.on('login', function(loggedIn) {
+      attalosWindowBridge.setState({ loggedIn: loggedIn });
+      window.location.hash = "#list-rooms";
+    });
+
+    vent.on('logout', function(loggedIn) {
+      attalosWindowBridge.setState({ loggedIn: loggedIn });
+    });
   },
   render: function() {
     var mainViewComponent = null;
@@ -46,10 +57,13 @@ var AttalosComponent = React.createClass({displayName: 'AttalosComponent',
     }
 
     return (
-      React.createElement("div", {className: this.props.bootstrapped ? 'bootstrapped' : 'static'}, 
-        React.createElement("a", {href: ""}, "#"), 
-        React.createElement("a", {href: "#list-rooms"}, "LIST ROOMS"), 
-        React.createElement("a", {href: "#create-room"}, "CREATE ROOM"), 
+      React.createElement("div", {className: this.state.loggedIn ? 'authenticated' : 'restricted'}, 
+        React.createElement("div", null, 
+          React.createElement("a", {className: "vip", href: "#"}, "#"), 
+          React.createElement("a", {href: "#list-rooms"}, "LIST ROOMS"), 
+          React.createElement("a", {href: "#create-room"}, "CREATE ROOM"), 
+          this.state.roomLinks
+        ), 
         mainViewComponent
       )
     );
@@ -58,7 +72,7 @@ var AttalosComponent = React.createClass({displayName: 'AttalosComponent',
 
 module.exports = AttalosComponent;
 
-},{"./connect":2,"./create-room":3,"./list-rooms":5,"react":263,"url":112}],2:[function(require,module,exports){
+},{"./connect":2,"./create-room":3,"./list-rooms":5,"./vent":6,"react":263,"url":112}],2:[function(require,module,exports){
 var React = require('react');
 var xmpp = require('stanza.io');
 var url = require('url');
@@ -123,26 +137,33 @@ var Connect = React.createClass({displayName: 'Connect',
 
     var parts = url.parse(document.getElementById("bosh-url").value);
     var jid = parts.auth + '@' + parts.hostname;
-    var boshUrl = 'http://' + (parts.hostname) + ':' + (parts.port) +  '/http-bind/';
+    var boshUrl = 'http://' + (parts.hostname) + ':' + (parts.port) +  '/http-bind';
     console.log(jid, boshUrl);
 
     var client = xmpp.createClient({
       jid: jid,
       password: 'password',
       transport: 'bosh',
+      useStreamManagement: true,
       boshURL: boshUrl
     });
 
     client.on('session:started', function () {
-      //client.getRoster();
-      //client.sendPresence();
+      client.getRoster();
+      client.sendPresence();
       //client.sendMessage({
       //  to: client.jid,
       //  body: 'I just joined sent'
       //});
-      console.log("session:started");
+      console.log("connected");
 
-      vent.emit("VENT-DEBUG", 123);
+      vent.emit("login", true);
+    });
+
+    client.on('disconnected', function () {
+      console.log("disconnected");
+
+      vent.emit("logout", false);
     });
 
     client.connect();
@@ -168,6 +189,7 @@ var CreateRoom = React.createClass({displayName: 'CreateRoom',
   onCreatedRoom: function(ev) {
     ev.preventDefault();
 
+/*
     // Parse the URL of the current location
     var parts = url.parse(window.location.toString());
     // Log the parts object to our browser's console
@@ -199,13 +221,13 @@ var CreateRoom = React.createClass({displayName: 'CreateRoom',
     });
 
     client.connect();
+*/
 
   },
   render: function() {
     return (
       React.createElement("form", {onSubmit: this.onCreatedRoom}, 
-        React.createElement("input", {id: "bosh-port", type: "text", placeholder: ""}), 
-        React.createElement("input", {name: "room", type: "text", placeholder: "name of room"}), 
+        React.createElement("input", {name: "room", type: "text", placeholder: "name of room/discussion"}), 
         React.createElement("button", null, "CREATE ROOM")
       )
     );

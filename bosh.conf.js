@@ -36,7 +36,12 @@ exports.config = {
 	// The maximum number of active streams allowed per BOSH session
 	max_streams_per_session: 8, 
 
-	http_headers: { }, 
+	http_headers: { 
+    'Access-Control-Allow-Origin': "*",
+    'Access-Control-Allow-Headers': "Content-Type, X-Requested-With, Set-Cookie",
+    'Access-Control-Allow-Methods': "OPTIONS, GET, PUT POST, DELETE",
+    'Access-Control-Max-Age': "14400"
+  }, 
 
 	// 
 	// A list of Domains for which TLS should NOT be used 

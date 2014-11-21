@@ -32,7 +32,7 @@ public/index.html: node_modules build/index.js public/javascripts/application.mi
 	node build/index.js --dist > $@
 
 build/%.js: src/javascripts/*.js package.json node_modules/**/*
-	./node_modules/.bin/jsx src/javascripts build
+	./node_modules/.bin/jsx src/javascripts build 
 
 public/javascripts/application.js: build/index.js src/javascripts/*.js package.json node_modules/**/*
 	./node_modules/.bin/browserify build/index.js > $@

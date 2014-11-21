@@ -47,5 +47,8 @@ Source of both client and server logic is only in this repo
 
 # Build it yourself
 
+    bundle
+    DEFAULT_XMPP_PORT=5100 foreman start
+
 1. TODO: vagrant dev box
 1. TODO: docker image (think federations based on domain over a cluster of servers)
