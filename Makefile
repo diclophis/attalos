@@ -6,12 +6,18 @@ all: public/dev.html
 
 dist: public/index.html
 
-check:
+check: node_modules build/index.js
 	./node_modules/.bin/jest
 
 clean:
 	rm -Rf build public/javascripts/application.* public/stylesheets/application.* public/index.html
 	mkdir -p build public/javascripts public/stylesheets
+
+dist-clean:
+	rm -Rf node_modules
+
+node_modules:
+	npm install
 
 public/stylesheets/application.min.css: public/stylesheets/application.css
 	./node_modules/.bin/lessc -x $< > $@
@@ -19,10 +25,10 @@ public/stylesheets/application.min.css: public/stylesheets/application.css
 public/stylesheets/application.css: src/stylesheets/*.less
 	./node_modules/.bin/lessc src/stylesheets/index.less > $@
 
-public/dev.html: build/index.js public/javascripts/application.js public/stylesheets/application.css
+public/dev.html: node_modules build/index.js public/javascripts/application.js public/stylesheets/application.css
 	node build/index.js > $@
 
-public/index.html: build/index.js public/javascripts/application.min.js public/stylesheets/application.min.css
+public/index.html: node_modules build/index.js public/javascripts/application.min.js public/stylesheets/application.min.css
 	node build/index.js --dist > $@
 
 build/%.js: src/javascripts/*.js package.json node_modules/**/*
