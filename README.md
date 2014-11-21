@@ -1,7 +1,51 @@
+# Attalos
 
-5222 TCP     XMPP client connection (RFC 3920)        Official  
-5223 TCP     XMPP client connection over SSL          Unofficial
-5269 TCP     XMPP server connection (RFC 3920)        Official
-5298 TCP UDP XMPP JEP-0174: Link-Local Messaging /    Official
-XEP-0174: Serverless Messaging
-8010 TCP     XMPP File transfers                      Unofficial   
+A modern platform for online discussion built on GNU principles
+
+# Separation of services
+
+This application is split into 2 main categories:
+
+1. front-end
+   
+   The front-end of attalos is a static single page application built primarily with the react platform. The main component diagram is as follows:
+   
+       <IndexComponent>
+         <AttalosComponent />
+       </IndexComponent>
+
+1. back-end
+   
+   The back-end of the attalos is several servers each with a specific duty
+
+    * CHAT
+    
+      Primary Messaging Bus, based on `XMPP`, allowing for both `c2s` and `s2s` operation 
+
+    * WEB
+    
+	  Serves resources under the `public/*` directory over HTTP with `express`
+	  
+    * BOSH
+    
+      Legacy networking adapter for enhanced client compatibility
+
+
+# Where to start
+
+This project uses `make` to coordinate all aspects of its development, the primary targets of interest are:
+
+ * clean
+ * all
+ * check
+ * dist
+
+Source of both client and server logic is only in this repo
+
+* src/javascripts
+* src/stylesheets
+
+# Build it yourself
+
+1. TODO: vagrant dev box
+1. TODO: docker image (think federations based on domain over a cluster of servers)
