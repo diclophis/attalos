@@ -112,35 +112,44 @@ var CreateRoom = React.createClass({displayName: 'CreateRoom',
 module.exports = CreateRoom;
 
 },{"react":261,"stanza.io":262,"url":110}],3:[function(require,module,exports){
+(function (process){
 // something
 
 var React = require('react');
 var AttalosComponent = require('./attalos');
 
-var Index = React.createClass({displayName: 'Index',
+var IndexComponent = React.createClass({displayName: 'IndexComponent',
   render: function() {
     return(
       React.createElement("html", null, 
         React.createElement("head", null, 
           React.createElement("meta", {httpEquiv: "Content-Type", content: "text/html;charset=utf-8"}), 
           React.createElement("title", null, "Attalos Index"), 
-          React.createElement("link", {href: "stylesheets/application.min.css", media: "all", rel: "stylesheet", type: "text/css"})
+          React.createElement("link", {href: this.props.css, media: "all", rel: "stylesheet", type: "text/css"})
         ), 
         React.createElement("body", null, 
           React.createElement("div", {id: "main-container", className: "grid-fluid"}
           ), 
-          React.createElement("script", {src: "javascripts/application.min.js"})
+          React.createElement("script", {src: this.props.js})
         )
       )
     );
   }
 });
 
-module.exports = Index;
+module.exports = IndexComponent;
 
 (function() {
   if (typeof(document) === 'undefined') {
-    console.log(React.renderToStaticMarkup(React.createElement(Index, null)));
+    var dist = (process.argv.indexOf("--dist") != -1);
+
+    var js = dist ? "javascripts/application.min.js" : "javascripts/application.js"
+    var css = dist ? "stylesheets/application.min.css" : "stylesheets/application.css"
+
+    //var idx = React.createElement(IndexComponent, null);
+    //console.log(idx);
+    //idx.setState({dist: (process.argv.indexOf("--dist") != -1)});
+    console.log(React.renderToStaticMarkup(React.createElement(IndexComponent, {js: js, css: css})));
   } else {
     document.addEventListener("DOMContentLoaded", function() {
       var mainContainer = document.getElementById("main-container");
@@ -149,7 +158,8 @@ module.exports = Index;
   }
 })();
 
-},{"./attalos":1,"react":261}],4:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./attalos":1,"_process":92,"react":261}],4:[function(require,module,exports){
 var React = require('react');
 
 var ListRooms = React.createClass({displayName: 'ListRooms',

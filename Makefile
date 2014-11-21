@@ -2,10 +2,16 @@
 
 .PHONY: all check clean
 
-all: public/index.html
+all: public/dev.html
 
-check: public/index.html tests/*
+dist: public/index.html
+
+check:
 	./node_modules/.bin/jest
+
+clean:
+	rm -Rf build public/javascripts/application.* public/stylesheets/application.* public/index.html
+	mkdir -p build public/javascripts public/stylesheets
 
 public/stylesheets/application.min.css: public/stylesheets/application.css
 	./node_modules/.bin/lessc -x $< > $@
@@ -13,18 +19,17 @@ public/stylesheets/application.min.css: public/stylesheets/application.css
 public/stylesheets/application.css: src/stylesheets/*.less
 	./node_modules/.bin/lessc src/stylesheets/index.less > $@
 
-public/index.html: build/index.js public/javascripts/application.min.js public/stylesheets/application.min.css
+public/dev.html: build/index.js public/javascripts/application.js public/stylesheets/application.css
 	node build/index.js > $@
 
-build/*: src/javascripts/*.js package.json node_modules/**/*
+public/index.html: build/index.js public/javascripts/application.min.js public/stylesheets/application.min.css
+	node build/index.js --dist > $@
+
+build/%.js: src/javascripts/*.js package.json node_modules/**/*
 	./node_modules/.bin/jsx src/javascripts build
 
-public/javascripts/application.js: build/*
+public/javascripts/application.js: build/index.js
 	./node_modules/.bin/browserify build/index.js > $@
 
 public/javascripts/application.min.js: public/javascripts/application.js
 	ruby -r 'rubygems' -r 'closure-compiler' -e "puts Closure::Compiler.new(:warning_level => 'QUIET', :compilation_level => 'SIMPLE_OPTIMIZATIONS').compile(STDIN)" < $< > $@
-
-clean:
-	rm -Rf build public/javascripts/application.* public/stylesheets/application.* public/index.html
-	mkdir -p build public/javascripts public/stylesheets
