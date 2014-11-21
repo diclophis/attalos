@@ -57846,6 +57846,8 @@ var Index = React.createClass({displayName: 'Index',
   }
 });
 
+module.exports = Index;
+
 (function() {
   if (typeof(document) === 'undefined') {
     console.log(React.renderToStaticMarkup(React.createElement(Index, null)));
