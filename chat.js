@@ -1,6 +1,5 @@
-//
+// listens for XMPP connections, and dispatches events based on stanza data
 
-//var EventEmitter = require('events').EventEmitter;
 var C2SServer = require('node-xmpp-server').C2SServer;
 var Message = require('node-xmpp-core').Stanza.Message
 
@@ -36,6 +35,8 @@ c2s.on('connect', function(client) {
 
   // Stanza handling
   client.on('stanza', function(stanza) {
+    // This re-broadcasts the stanza to all connected clients, in effect creating an echo chamber
+    // at some point this will be replaced with specific logic based on different XEPs
     console.log('STANZA', clients.length, stanza);
     for (var i=0; i<clients.length; i++) {
       var client = clients[i];

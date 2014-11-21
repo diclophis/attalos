@@ -1,7 +1,9 @@
+// primary entry point
+
 var React = require('react');
+var Connect = require('./connect');
 var CreateRoom = require('./create-room');
 var ListRooms = require('./list-rooms');
-
 var url = require('url');
 
 var AttalosComponent = React.createClass({
@@ -26,9 +28,6 @@ var AttalosComponent = React.createClass({
       attalosWindowBridge.setState({ mainView: window.location.hash });
     };
   },
-  toggleLeftNav: function() {
-    //this.refs.leftNav.toggle();
-  },
   render: function() {
     var mainViewComponent = null;
 
@@ -38,13 +37,16 @@ var AttalosComponent = React.createClass({
         break;
 
       case '#list-rooms':
-      default:
         mainViewComponent = <ListRooms />;
+        break;
+
+      default:
+        mainViewComponent = <Connect />;
     }
 
     return (
-      <div>
-        <a onClick={this.toggleLeftNav} href="">#</a>
+      <div className={this.props.bootstrapped ? 'bootstrapped' : 'static'}>
+        <a href="">#</a>
         <a href="#list-rooms">LIST ROOMS</a>
         <a href="#create-room">CREATE ROOM</a>
         {mainViewComponent}

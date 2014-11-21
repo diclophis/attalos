@@ -34,7 +34,7 @@ public/index.html: node_modules build/index.js public/javascripts/application.mi
 build/%.js: src/javascripts/*.js package.json node_modules/**/*
 	./node_modules/.bin/jsx src/javascripts build
 
-public/javascripts/application.js: build/index.js
+public/javascripts/application.js: build/index.js src/javascripts/*.js package.json node_modules/**/*
 	./node_modules/.bin/browserify build/index.js > $@
 
 public/javascripts/application.min.js: public/javascripts/application.js

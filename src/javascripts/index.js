@@ -13,7 +13,8 @@ var IndexComponent = React.createClass({
           <link href={this.props.css} media="all" rel="stylesheet" type="text/css" />
         </head>
         <body>
-          <div id="main-container" className="grid-fluid">
+          <div id="main-container" className="static">
+            <AttalosComponent bootstrapped={false}/>
           </div>
           <script src={this.props.js}></script>
         </body>
@@ -27,18 +28,15 @@ module.exports = IndexComponent;
 (function() {
   if (typeof(document) === 'undefined') {
     var dist = (process.argv.indexOf("--dist") != -1);
-
     var js = dist ? "javascripts/application.min.js" : "javascripts/application.js"
     var css = dist ? "stylesheets/application.min.css" : "stylesheets/application.css"
 
-    //var idx = React.createElement(IndexComponent, null);
-    //console.log(idx);
-    //idx.setState({dist: (process.argv.indexOf("--dist") != -1)});
     console.log(React.renderToStaticMarkup(<IndexComponent js={js} css={css} />));
   } else {
     document.addEventListener("DOMContentLoaded", function() {
       var mainContainer = document.getElementById("main-container");
-      React.render(<AttalosComponent />, mainContainer);
+      React.render(<AttalosComponent bootstrapped={true}/>, mainContainer);
+      mainContainer.className = "bootstrapped";
     });
   }
 })();
