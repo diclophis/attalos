@@ -2,7 +2,7 @@
 
 jest.autoMockOff();
 
-var index = require('../src/javascripts/index.js');
+var index = require('../build/index.js');
 
 describe('index', function() {
   it('fails', function() {
