@@ -17,7 +17,6 @@
   },
   "jest": {
     "testDirectoryName": "tests",
-    "scriptPreprocessor": "<rootDir>/jsx-preprocessor.js",
     "unmockedModulePathPatterns": ["<rootDir>/node_modules/react"] 
   },
   "dependencies": {
