@@ -1,5 +1,7 @@
 # Makefile see: https://www.gnu.org/prep/standards/html_node/Standard-Targets.html
 
+javascripts = $(patsubst src/javascripts/%,build/%, $(wildcard src/javascripts/*.js))
+
 .PHONY: all check clean
 
 all: public/dev.html
@@ -25,14 +27,14 @@ public/stylesheets/application.min.css: public/stylesheets/application.css
 public/stylesheets/application.css: src/stylesheets/*.less
 	./node_modules/.bin/lessc src/stylesheets/index.less > $@
 
-public/dev.html: node_modules build/index.js public/javascripts/application.js public/stylesheets/application.css
+public/dev.html: node_modules $(javascripts) public/javascripts/application.js public/stylesheets/application.css
 	node build/index.js > $@
 
 public/index.html: node_modules build/index.js public/javascripts/application.min.js public/stylesheets/application.min.css
 	node build/index.js --dist > $@
 
-build/%.js: src/javascripts/*.js package.json node_modules/**/*
-	./node_modules/.bin/jsx src/javascripts build 
+build/%.js: src/javascripts/%.js
+	./node_modules/.bin/jsx $< > $@
 
 public/javascripts/application.js: build/index.js src/javascripts/*.js package.json node_modules/**/*
 	./node_modules/.bin/browserify build/index.js > $@
