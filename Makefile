@@ -4,11 +4,13 @@ javascripts = $(patsubst src/javascripts/%,build/%, $(wildcard src/javascripts/*
 
 .PHONY: all check clean
 
-all: public/dev.html
+all: check dev dist
+
+dev: public/dev.html
 
 dist: public/index.html
 
-check: node_modules build/index.js
+check: node_modules $(javascripts)
 	./node_modules/.bin/jest
 
 clean:
