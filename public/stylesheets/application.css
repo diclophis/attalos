@@ -6,7 +6,7 @@
   opacity: 1.0;
   pointer-events: auto;
 }
-.restricted a:not(.vip) {
+.restricted .attalos-a {
   text-decoration: line-through;
   pointer-events: none;
 }
