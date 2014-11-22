@@ -18,7 +18,7 @@ clean:
 dist-clean:
 	rm -Rf node_modules
 
-node_modules:
+node_modules: package.json
 	npm install
 
 public/stylesheets/application.min.css: public/stylesheets/application.css

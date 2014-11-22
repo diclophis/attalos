@@ -5,46 +5,28 @@ var url = require('url');
 var CreateRoom = React.createClass({
   onCreatedRoom: function(ev) {
     ev.preventDefault();
+    room = this.getDOMNode();
+    form = url.parse(room.action, true);
+    console.log(room.action, form, form.queryString);
+    window.location.hash = form.hash;
 
-/*
-    // Parse the URL of the current location
-    var parts = url.parse(window.location.toString());
-    // Log the parts object to our browser's console
-    console.log(parts);
 
-    var client = xmpp.createClient({
-      jid: 'foo@' + parts.hostname,
-      password: 'password',
-      transport: 'bosh',
-      boshURL: 'http://' + (parts.hostname) + ':' + (document.getElementById("bosh-port").value) +  '/http-bind/'
-    });
+    //var data = new FormData(form);
+    //history.pushState(data, "", null);
 
-    client.on('session:started', function () {
-      client.getRoster();
-      client.sendPresence();
-      client.sendMessage({
-        to: client.jid,
-        body: 'I just joined sent'
-      });
-      console.log("session:started");
-    });
+    //this.props.children;
 
-    client.on('chat', function (msg) {
-      console.log("onChat", msg);
-      client.sendMessage({
-        to: msg.from,
-        body: 'echo echo'
-      });
-    });
+    //React.Children.map(this.props.children, function(a) {
+    //  console.log(a);
+    //});
 
-    client.connect();
-*/
+    //debugger;
 
   },
   render: function() {
     return (
-      <form onSubmit={this.onCreatedRoom}>
-        <input name="room" type="text" placeholder="name of room/discussion" />
+      <form action="#room" onSubmit={this.onCreatedRoom}>
+        <input name="description" type="text" placeholder="name of room/discussion" />
         <button>CREATE ROOM</button>
       </form>
     );
