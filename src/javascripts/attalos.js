@@ -1,6 +1,7 @@
 // primary entry point
 
 var React = require('react');
+var Anchor = require('./anchor');
 var Connect = require('./connect');
 var CreateRoom = require('./create-room');
 var ListRooms = require('./list-rooms');
@@ -12,8 +13,9 @@ var getControllerFromHash = function() {
   var newController = null;
 
   if (typeof(window) != 'undefined') {
-    if (window.location.hash) {
-      newController = window.location.hash.replace(/[^a-z\-]/g, '');
+    var parts = url.parse(window.location.toString(), true);
+    if (parts.query.controller) {
+      newController = parts.query.controller.replace(/[^a-z\-]/g, '');
       //console.log(newController, window.location.hash);
     }
   }
@@ -53,25 +55,16 @@ var AttalosComponent = React.createClass({
   componentDidMount: function() {
     this.listenTo(vent, 'login', this.onLoggedInOrOut);
     this.listenTo(vent, 'logout', this.onLoggedInOrOut);
-    this.listenTo(window, 'onpopstate', this.onPopState);
-    this.listenTo(window, 'hashchange', this.onControllerChanged);
+    this.listenTo(vent, 'popstate', this.onPopState);
+    this.listenTo(window, 'popstate', this.onPopState);
   },
 
-  onControllerChanged: function() {
-    //console.log(getControllerFromHash());
+  onPopState: function(ev) {
+    console.log("popstate", this.state, ev, history.state);
     this.setState({mainView: getControllerFromHash()});
   },
 
-  onPopState: function() {
-    //var currentMainView = this.state.mainView;
-    //var newMainView = null
-    //if (newMainView) {
-    //this.setState({mainView: this.getControllerFromHash());
-    console.log("popstate", this.state, history.state);
-  },
-
   onLoggedInOrOut: function(loggedIn) {
-    //console.log("login", loggedIn, this.state);
     this.setState({ loggedIn: loggedIn });
   },
 
@@ -98,9 +91,9 @@ var AttalosComponent = React.createClass({
     return (
       <div className={this.state.loggedIn ? 'authenticated' : 'restricted'}>
         <div>
-          <a className="vip" href="#">#</a>
-          <a href="#list-rooms">LIST ROOMS</a>
-          <a href="#create-room">CREATE ROOM</a>
+          <a href="?">#</a>
+          <Anchor href="?controller=list-rooms">LIST ROOMS</Anchor>
+          <Anchor href="?controller=create-room">CREATE ROOM</Anchor>
           {this.state.roomLinks}
         </div>
         {mainViewComponent}
