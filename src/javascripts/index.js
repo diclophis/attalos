@@ -2,6 +2,7 @@
 
 var React = require('react');
 var AttalosComponent = require('./attalos');
+var shaFetcher = require('./sha-fetcher');
 
 var IndexComponent = React.createClass({
   render: function() {
@@ -31,7 +32,13 @@ module.exports = IndexComponent;
     var js = dist ? "javascripts/application.min.js" : "javascripts/application.js"
     var css = dist ? "stylesheets/application.min.css" : "stylesheets/application.css"
 
-    console.log(React.renderToStaticMarkup(<IndexComponent js={js} css={css} />));
+    shaFetcher(js, function(jsSha) {
+      shaFetcher(css, function(cssSha) {
+        js = js + '?' + jsSha;
+        css = css + '?' + cssSha;
+        console.log(React.renderToStaticMarkup(<IndexComponent js={js} css={css} />));
+      });
+    });
   } else {
     document.addEventListener("DOMContentLoaded", function() {
       var mainContainer = document.getElementById("main-container");

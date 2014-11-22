@@ -37,10 +37,11 @@ exports.config = {
 	max_streams_per_session: 8, 
 
 	http_headers: { 
-    'Access-Control-Allow-Origin': "*",
-    'Access-Control-Allow-Headers': "Content-Type, X-Requested-With, Set-Cookie",
-    'Access-Control-Allow-Methods': "OPTIONS, GET, PUT POST, DELETE",
-    'Access-Control-Max-Age': "14400"
+    //'Access-Control-Allow-Origin': "http://localhost:5000"
+    //'Access-Control-Allow-Headers': "Content-Type, X-Requested-With, Set-Cookie, Accept",
+    //'Access-Control-Allow-Methods': "OPTIONS, GET, PUT POST, DELETE",
+    //'Access-Control-Allow-Credentials': "true",
+    //'Access-Control-Max-Age': "14400"
   }, 
 
 	// 

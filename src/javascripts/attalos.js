@@ -32,7 +32,8 @@ var AttalosComponent = React.createClass({
 
     vent.on('login', function(loggedIn) {
       attalosWindowBridge.setState({ loggedIn: loggedIn });
-      window.location.hash = "#list-rooms";
+      //window.location.hash = "#list-rooms";
+      history.pushState({}, "Page Two 2", "?foobarbaz");
     });
 
     vent.on('logout', function(loggedIn) {
