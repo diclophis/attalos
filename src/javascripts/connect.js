@@ -42,35 +42,13 @@ var Connect = React.createClass({
 
   },
 */
-  
-  getDefaultProps: function() {
-    // Parse the URL of the current location
-    var parts = { hostname: 'localhost', port: 5200 };
-
-    if (typeof(window) === 'undefined') {
-    } else {
-      parts = url.parse(window.location.toString());
-      parts.port = parseInt(parts.port) + 200;
-    }
-    
-    return {
-      boshUrl: 'http://foo@' + parts.hostname + ':' + parts.port
-    };
-  },
-  onConnect: function(ev) {
-    ev.preventDefault();
-
-    var parts = url.parse(document.getElementById("bosh-url").value);
-    var jid = parts.auth + '@' + parts.hostname;
-    var boshUrl = 'http://' + (parts.hostname) + ':' + (parts.port) +  '/http-bind';
-    console.log(jid, boshUrl);
-
+  getInitialState: function() {
     var client = xmpp.createClient({
-      jid: jid,
+      jid: null,
       password: 'password',
       transport: 'bosh',
-      useStreamManagement: true,
-      boshURL: boshUrl
+      //useStreamManagement: true,
+      boshURL: null
     });
 
     client.on('session:started', function () {
@@ -91,13 +69,42 @@ var Connect = React.createClass({
       vent.emit("logout", false);
     });
 
-    client.connect();
+    return {
+      client: client
+    };
+  },
+  getDefaultProps: function() {
+    // Parse the URL of the current location
+    var parts = { hostname: 'localhost', port: 5200 };
+
+    if (typeof(window) === 'undefined') {
+    } else {
+      parts = url.parse(window.location.toString());
+      parts.port = parseInt(parts.port) + 200;
+    }
+    
+    return {
+      boshUrl: 'http://foo@' + parts.hostname + ':' + parts.port
+    };
+  },
+  onConnect: function(ev) {
+    ev.preventDefault();
+
+    var parts = url.parse(document.getElementById("bosh-url").value);
+    var jid = parts.auth + '@' + parts.hostname;
+    var boshUrl = 'http://' + (parts.hostname) + ':' + (parts.port) +  '/http-bind';
+
+    this.state.client.config.boshURL = boshUrl;
+    this.state.client.config.jid = jid;
+    this.state.client.connect();
+
+    this.setState({client: this.state.client, isConnecting: true});
   },
   render: function() {
     return (
       <form onSubmit={this.onConnect}>
         <input id="bosh-url" type="text" defaultValue={this.props.boshUrl} />
-        <button>CONNECT</button>
+        <button disabled={this.state.isConnecting}>CONNECT</button>
       </form>
     );
   }

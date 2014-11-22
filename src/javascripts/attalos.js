@@ -52,7 +52,10 @@ var AttalosComponent = React.createClass({
         break;
 
       default:
-        mainViewComponent = <Connect />;
+        if (this.state.loggedIn) {
+        } else {
+          mainViewComponent = <Connect />;
+        }
     }
 
     return (
