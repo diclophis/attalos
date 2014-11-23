@@ -4,22 +4,22 @@ var url = require('url');
 var querystring = require('querystring');
 var vent = require('./vent').vent;
 
-var CreateRoom = React.createClass({
+var JoinRoom = React.createClass({
   getInitialState: function() {
     return {
       controller: 'room',
-      room: ''
+      id: ''
     };
   },
 
   handleRoomValidation: function(event) {
-    this.setState({room: event.target.value.substr(0, 32)});
+    this.setState({id: event.target.value.substr(0, 32)});
   },
 
-  onCreatedRoom: function(ev) {
+  willJoinRoom: function(ev) {
     ev.preventDefault();
-    room = this.getDOMNode();
-    form = url.parse(room.action, true);
+    //room = this.getDOMNode();
+    //form = url.parse(room.action, true);
     var newQueryString = querystring.stringify(this.state);
 
     var newControllerUrl = window.location.pathname + '?' + newQueryString;
@@ -29,12 +29,12 @@ var CreateRoom = React.createClass({
 
   render: function() {
     return (
-      <form action="#room" onSubmit={this.onCreatedRoom}>
-        <input name="room" type="text" placeholder="name of room/discussion" value={this.state.room} onChange={this.handleRoomValidation}></input>
-        <button disabled={this.state.room.length == 0}>CREATE ROOM</button>
+      <form onSubmit={this.willJoinRoom}>
+        <input placeholder="name of discussion" value={this.state.id} onChange={this.handleRoomValidation}></input>
+        <button disabled={this.state.id.length == 0}>JOIN ROOM</button>
       </form>
     );
   }
 });
 
-module.exports = CreateRoom;
+module.exports = JoinRoom;
