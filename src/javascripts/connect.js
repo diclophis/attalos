@@ -40,6 +40,7 @@ var Connect = React.createClass({
 
     this.state.client.getRoster();
     this.state.client.sendPresence();
+
     this.setState({ loggedIn: true })
 
     vent.emit("login", true);
@@ -53,9 +54,19 @@ var Connect = React.createClass({
     vent.emit("logout", false);
   },
 
+  onChat: function(msg) {
+    vent.emit("recv", msg);
+  },
+
+  willSendChat: function(msg) {
+    this.state.client.sendMessage(msg);
+  },
+
   componentDidMount: function() {
     this.listenTo(this.state.client, 'session:started', this.onSessionStarted);
     this.listenTo(this.state.client, 'disconnected', this.onSessionDisconnected);
+    this.listenTo(this.state.client, 'chat', this.onChat);
+    this.listenTo(vent, 'send', this.willSendChat);
 
     if (this.state.autoConnect) {
       this.connect();
@@ -64,7 +75,7 @@ var Connect = React.createClass({
 
   connect: function() {
     var parts = url.parse(this.state.boshUrl);
-    var jid = parts.auth + '@' + parts.hostname;
+    var jid = 'foo@' + parts.hostname;
 
     var opts = {
       jid: jid,

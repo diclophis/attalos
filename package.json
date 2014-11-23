@@ -14,7 +14,8 @@
     "less": "~2.0.0",
     "stss": "~0.3.0",
     "jest-cli": "~0.1.18",
-    "react-listento": "~0.1.0"
+    "react-listento": "~0.1.0",
+    "marked": "~0.3.2"
   },
   "jest": {
     "testDirectoryName": "tests",

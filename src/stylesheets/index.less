@@ -33,8 +33,10 @@ form {
   margin: 1em;
 }
 
-a {
-  margin: 1em;
+.primary-anchors {
+  a {
+    margin: 1em;
+  }
 }
 
 input {
@@ -42,21 +44,24 @@ input {
 }
 
 .room-messages {
-  height: 10em; 
+  height: 20em; 
   width: 100%;
   overflow: scroll;
   margin: 0em 0 1em 0;
   padding: 0 0 0 0;
+
+  ul {
+    margin: 0;
+  }
 }
 
 .room-input {
-
   height: 3.75em;
   width: 100%;
 
   textarea {
     height: 100%;
-    margin: 0;
+    margin: 0 1em 0 0;
     padding: 0.5em;
     float: left;
     width: 60%;
@@ -67,5 +72,17 @@ input {
     margin: 0;
     padding: 0.5em 2em 0.5em 2em;
     float: left;
+  }
+}
+
+pre {
+  padding: 0.25em;
+  background-color: #e0e0e0;
+}
+
+p {
+  code {
+    padding: 0.25em;
+    background-color: #e0e0e0;
   }
 }

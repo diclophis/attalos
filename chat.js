@@ -37,12 +37,17 @@ c2s.on('connect', function(client) {
   client.on('stanza', function(stanza) {
     // This re-broadcasts the stanza to all connected clients, in effect creating an echo chamber
     // at some point this will be replaced with specific logic based on different XEPs
-    console.log('STANZA', clients.length, stanza);
+    //console.log('STANZA', clients.length, stanza);
     for (var i=0; i<clients.length; i++) {
       var client = clients[i];
-      if (this != client) {
-        client.send(stanza);
-      }
+      //if (this != client) {
+      //console.log(stanza.from, client.jid.toString());
+
+        msg = new Message({ type: 'chat', to: stanza.to, from: stanza.from });
+        msg.c('body').t(stanza.getChildText('body'));
+
+        client.send(msg);
+      //}
     }
   });
 

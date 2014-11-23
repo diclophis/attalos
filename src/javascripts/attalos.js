@@ -97,7 +97,7 @@ var AttalosComponent = React.createClass({
         break;
 
       case 'room':
-        mainViewComponent = <Room id={this.state.id} />;
+        mainViewComponent = <Room id={this.state.id} client={this.state.connectionComponent} />;
         break;
 
       default:
@@ -105,7 +105,7 @@ var AttalosComponent = React.createClass({
 
     return (
       <div className={this.state.loggedIn ? 'authenticated' : 'restricted'}>
-        <div>
+        <div className="primary-anchors">
           <a href="?">#</a>
           <Anchor href="?controller=list-rooms">LIST ROOMS</Anchor>
           <Anchor href="?controller=join-room">JOIN ROOM</Anchor>
