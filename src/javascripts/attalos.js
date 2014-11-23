@@ -9,6 +9,7 @@ var vent = require('./vent').vent;
 var url = require('url');
 var listenTo = require('react-listento');
 
+//TODO: move to module, or internalize
 var getControllerFromHash = function() {
   var newController = null;
 
@@ -16,7 +17,6 @@ var getControllerFromHash = function() {
     var parts = url.parse(window.location.toString(), true);
     if (parts.query.controller) {
       newController = parts.query.controller.replace(/[^a-z\-]/g, '');
-      //console.log(newController, window.location.hash);
     }
   }
 
@@ -48,6 +48,8 @@ var AttalosComponent = React.createClass({
     } else {
       history.pushState(defaultState, "", null);
     }
+
+    defaultState.connectionComponent = <Connect />;
 
     return defaultState;
   },
@@ -83,11 +85,6 @@ var AttalosComponent = React.createClass({
       default:
     }
 
-    if (this.state.loggedIn) {
-    } else {
-      mainViewComponent = <Connect />;
-    }
-
     return (
       <div className={this.state.loggedIn ? 'authenticated' : 'restricted'}>
         <div>
@@ -96,6 +93,7 @@ var AttalosComponent = React.createClass({
           <Anchor href="?controller=create-room">CREATE ROOM</Anchor>
           {this.state.roomLinks}
         </div>
+        {this.state.connectionComponent}
         {mainViewComponent}
       </div>
     );

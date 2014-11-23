@@ -1,4 +1,5 @@
-// something
+// shaFetcher(filename, callbackFn(sha));
+
 var crypto = require('crypto');
 var fs = require('fs');
 

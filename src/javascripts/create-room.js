@@ -2,10 +2,12 @@ var React = require('react');
 var xmpp = require('stanza.io');
 var url = require('url');
 var querystring = require('querystring');
+var vent = require('./vent').vent;
 
 var CreateRoom = React.createClass({
   getInitialState: function() {
     return {
+      controller: 'room',
       room: ''
     };
   },
@@ -20,11 +22,9 @@ var CreateRoom = React.createClass({
     form = url.parse(room.action, true);
     var newQueryString = querystring.stringify(this.state);
 
-    history.pushState({}, "", window.location.pathname + '?' + newQueryString);
-
-    //window.location.hash = form.hash;
-
-    console.log("onSubmit", this.state, history.state);
+    var newControllerUrl = window.location.pathname + '?' + newQueryString;
+    history.pushState({}, "", newControllerUrl);
+    vent.emit('popstate', {});
   },
 
   render: function() {

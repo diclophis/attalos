@@ -1,4 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+// more reactful form of <a href=...> tags
+
 var React = require('react');
 var url = require('url');
 var vent = require('./vent').vent;
@@ -33,6 +35,7 @@ var vent = require('./vent').vent;
 var url = require('url');
 var listenTo = require('react-listento');
 
+//TODO: move to module, or internalize
 var getControllerFromHash = function() {
   var newController = null;
 
@@ -40,7 +43,6 @@ var getControllerFromHash = function() {
     var parts = url.parse(window.location.toString(), true);
     if (parts.query.controller) {
       newController = parts.query.controller.replace(/[^a-z\-]/g, '');
-      //console.log(newController, window.location.hash);
     }
   }
 
@@ -72,6 +74,8 @@ var AttalosComponent = React.createClass({displayName: 'AttalosComponent',
     } else {
       history.pushState(defaultState, "", null);
     }
+
+    defaultState.connectionComponent = React.createElement(Connect, null);
 
     return defaultState;
   },
@@ -107,11 +111,6 @@ var AttalosComponent = React.createClass({displayName: 'AttalosComponent',
       default:
     }
 
-    if (this.state.loggedIn) {
-    } else {
-      mainViewComponent = React.createElement(Connect, null);
-    }
-
     return (
       React.createElement("div", {className: this.state.loggedIn ? 'authenticated' : 'restricted'}, 
         React.createElement("div", null, 
@@ -120,6 +119,7 @@ var AttalosComponent = React.createClass({displayName: 'AttalosComponent',
           React.createElement(Anchor, {href: "?controller=create-room"}, "CREATE ROOM"), 
           this.state.roomLinks
         ), 
+        this.state.connectionComponent, 
         mainViewComponent
       )
     );
@@ -133,109 +133,121 @@ var React = require('react');
 var xmpp = require('stanza.io');
 var url = require('url');
 var vent = require('./vent').vent;
+var listenTo = require('react-listento');
 
 var Connect = React.createClass({displayName: 'Connect',
-/*
-  onCreatedRoom: function(ev) {
-    ev.preventDefault();
+  mixins: [listenTo],
 
-    // Parse the URL of the current location
-    var parts = url.parse(window.location.toString());
-    // Log the parts object to our browser's console
-    console.log(parts);
-
-    var client = xmpp.createClient({
-      jid: 'foo@' + parts.hostname,
-      password: 'password',
-      transport: 'bosh',
-      boshURL: 'http://' + (parts.hostname) + ':' + (document.getElementById("bosh-port").value) +  '/http-bind/'
-    });
-
-    client.on('session:started', function () {
-      client.getRoster();
-      client.sendPresence();
-      client.sendMessage({
-        to: client.jid,
-        body: 'I just joined sent'
-      });
-      console.log("session:started");
-    });
-
-    client.on('chat', function (msg) {
-      console.log("onChat", msg);
-      client.sendMessage({
-        to: msg.from,
-        body: 'echo echo'
-      });
-    });
-
-    client.connect();
-
-  },
-*/
   getInitialState: function() {
+
     var client = xmpp.createClient({
-      jid: null,
-      password: 'password',
-      transport: 'bosh',
-      //useStreamManagement: true,
-      boshURL: null
     });
 
-    client.on('session:started', function () {
-      client.getRoster();
-      client.sendPresence();
-      //client.sendMessage({
-      //  to: client.jid,
-      //  body: 'I just joined sent'
-      //});
-      console.log("connected");
-
-      vent.emit("login", true);
-    });
-
-    client.on('disconnected', function () {
-      console.log("disconnected");
-
-      vent.emit("logout", false);
-    });
-
-    return {
-      client: client
-    };
-  },
-  getDefaultProps: function() {
-    // Parse the URL of the current location
     var parts = { hostname: 'localhost', port: 5200 };
+    var autoConnect = false;
 
     if (typeof(window) === 'undefined') {
     } else {
       parts = url.parse(window.location.toString());
       parts.port = parseInt(parts.port) + 200;
+
+      //TODO: add toBoolean
+      autoConnect = sessionStorage.getItem("autoConnect") === "true";
     }
+
+    var boshUrl = 'http://' + parts.hostname + ':' + parts.port + '/http-bind';
     
     return {
-      boshUrl: 'http://foo@' + parts.hostname + ':' + parts.port
+      loggedIn: false,
+      isConnecting: false,
+      autoConnect: autoConnect,
+      boshUrl: boshUrl,
+      client: client
     };
   },
+
+  onSessionStarted: function () {
+    console.log("connected");
+
+    this.state.client.getRoster();
+    this.state.client.sendPresence();
+    this.setState({ loggedIn: true })
+
+    vent.emit("login", true);
+  },
+
+  onSessionDisconnected: function () {
+    console.log("disconnected");
+
+    this.setState({ loggedIn: false, isConnecting: false })
+
+    vent.emit("logout", false);
+  },
+
+  componentDidMount: function() {
+    this.listenTo(this.state.client, 'session:started', this.onSessionStarted);
+    this.listenTo(this.state.client, 'disconnected', this.onSessionDisconnected);
+
+    if (this.state.autoConnect) {
+      this.connect();
+    }
+  },
+
+  connect: function() {
+    var parts = url.parse(this.state.boshUrl);
+    var jid = parts.auth + '@' + parts.hostname;
+
+    var opts = {
+      jid: jid,
+      password: 'password',
+      transport: 'bosh',
+      boshURL: this.state.boshUrl
+    };
+
+    this.state.client.connect(opts);
+    this.setState({ isConnecting: true });
+  },
+
   onConnect: function(ev) {
     ev.preventDefault();
 
-    var parts = url.parse(document.getElementById("bosh-url").value);
-    var jid = parts.auth + '@' + parts.hostname;
+    this.connect();
+  },
+
+  componentWillUnmount: function() {
+    console.log("FUUUU");
+  },
+
+  handleBoshUrlValidation: function(ev) {
+    var parts = url.parse(ev.target.value);
     var boshUrl = 'http://' + (parts.hostname) + ':' + (parts.port) +  '/http-bind';
 
-    this.state.client.config.boshURL = boshUrl;
-    this.state.client.config.jid = jid;
-    this.state.client.connect();
-
-    this.setState({client: this.state.client, isConnecting: true});
+    this.setState({boshUrl: boshUrl });
   },
+
+  handleAutoConnectValidation: function(ev) {
+    sessionStorage.setItem("autoConnect", ev.target.checked);
+  },
+
+  handleConnectedValidation: function(ev) {
+    if (!ev.target.checked) {
+      this.state.client.disconnect();
+    }
+  },
+
   render: function() {
     return (
       React.createElement("form", {onSubmit: this.onConnect}, 
-        React.createElement("input", {id: "bosh-url", type: "text", defaultValue: this.props.boshUrl}), 
-        React.createElement("button", {disabled: this.state.isConnecting}, "CONNECT")
+        React.createElement("input", {id: "bosh-url", defaultValue: this.state.boshUrl, onChange: this.handleBoshUrlValidation, disabled: this.state.isConnecting}), 
+        React.createElement("button", {disabled: this.state.isConnecting}, "CONNECT"), 
+        React.createElement("input", {id: "auto-connect", type: "checkbox", defaultChecked: this.state.autoConnect, onChange: this.handleAutoConnectValidation, disabled: this.state.isConnecting}), 
+        React.createElement("label", {htmlFor: "auto-connect"}, 
+          "auto-connect?"
+        ), 
+        React.createElement("input", {id: "connected", type: "checkbox", checked: this.state.loggedIn, onChange: this.handleConnectedValidation, disabled: !this.state.isConnecting}), 
+        React.createElement("label", {htmlFor: "connected"}, 
+          "connected?"
+        )
       )
     );
   }
@@ -243,15 +255,17 @@ var Connect = React.createClass({displayName: 'Connect',
 
 module.exports = Connect;
 
-},{"./vent":8,"react":267,"stanza.io":268,"url":115}],4:[function(require,module,exports){
+},{"./vent":8,"react":267,"react-listento":121,"stanza.io":268,"url":115}],4:[function(require,module,exports){
 var React = require('react');
 var xmpp = require('stanza.io');
 var url = require('url');
 var querystring = require('querystring');
+var vent = require('./vent').vent;
 
 var CreateRoom = React.createClass({displayName: 'CreateRoom',
   getInitialState: function() {
     return {
+      controller: 'room',
       room: ''
     };
   },
@@ -266,11 +280,9 @@ var CreateRoom = React.createClass({displayName: 'CreateRoom',
     form = url.parse(room.action, true);
     var newQueryString = querystring.stringify(this.state);
 
-    history.pushState({}, "", window.location.pathname + '?' + newQueryString);
-
-    //window.location.hash = form.hash;
-
-    console.log("onSubmit", this.state, history.state);
+    var newControllerUrl = window.location.pathname + '?' + newQueryString;
+    history.pushState({}, "", newControllerUrl);
+    vent.emit('popstate', {});
   },
 
   render: function() {
@@ -285,7 +297,7 @@ var CreateRoom = React.createClass({displayName: 'CreateRoom',
 
 module.exports = CreateRoom;
 
-},{"querystring":101,"react":267,"stanza.io":268,"url":115}],5:[function(require,module,exports){
+},{"./vent":8,"querystring":101,"react":267,"stanza.io":268,"url":115}],5:[function(require,module,exports){
 (function (process){
 // something
 
@@ -373,7 +385,8 @@ var ListRooms = React.createClass({displayName: 'ListRooms',
 module.exports = ListRooms;
 
 },{"react":267}],7:[function(require,module,exports){
-// something
+// shaFetcher(filename, callbackFn(sha));
+
 var crypto = require('crypto');
 var fs = require('fs');
 
@@ -392,6 +405,8 @@ module.exports = function(fn, cb) {
 };
 
 },{"crypto":19,"fs":9}],8:[function(require,module,exports){
+// global event bus
+
 var EventEmitter = require('events').EventEmitter;
 
 exports.vent = new EventEmitter();

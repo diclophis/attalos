@@ -1,3 +1,5 @@
+// more reactful form of <a href=...> tags
+
 var React = require('react');
 var url = require('url');
 var vent = require('./vent').vent;

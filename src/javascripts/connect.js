@@ -2,109 +2,121 @@ var React = require('react');
 var xmpp = require('stanza.io');
 var url = require('url');
 var vent = require('./vent').vent;
+var listenTo = require('react-listento');
 
 var Connect = React.createClass({
-/*
-  onCreatedRoom: function(ev) {
-    ev.preventDefault();
+  mixins: [listenTo],
 
-    // Parse the URL of the current location
-    var parts = url.parse(window.location.toString());
-    // Log the parts object to our browser's console
-    console.log(parts);
-
-    var client = xmpp.createClient({
-      jid: 'foo@' + parts.hostname,
-      password: 'password',
-      transport: 'bosh',
-      boshURL: 'http://' + (parts.hostname) + ':' + (document.getElementById("bosh-port").value) +  '/http-bind/'
-    });
-
-    client.on('session:started', function () {
-      client.getRoster();
-      client.sendPresence();
-      client.sendMessage({
-        to: client.jid,
-        body: 'I just joined sent'
-      });
-      console.log("session:started");
-    });
-
-    client.on('chat', function (msg) {
-      console.log("onChat", msg);
-      client.sendMessage({
-        to: msg.from,
-        body: 'echo echo'
-      });
-    });
-
-    client.connect();
-
-  },
-*/
   getInitialState: function() {
+
     var client = xmpp.createClient({
-      jid: null,
-      password: 'password',
-      transport: 'bosh',
-      //useStreamManagement: true,
-      boshURL: null
     });
 
-    client.on('session:started', function () {
-      client.getRoster();
-      client.sendPresence();
-      //client.sendMessage({
-      //  to: client.jid,
-      //  body: 'I just joined sent'
-      //});
-      console.log("connected");
-
-      vent.emit("login", true);
-    });
-
-    client.on('disconnected', function () {
-      console.log("disconnected");
-
-      vent.emit("logout", false);
-    });
-
-    return {
-      client: client
-    };
-  },
-  getDefaultProps: function() {
-    // Parse the URL of the current location
     var parts = { hostname: 'localhost', port: 5200 };
+    var autoConnect = false;
 
     if (typeof(window) === 'undefined') {
     } else {
       parts = url.parse(window.location.toString());
       parts.port = parseInt(parts.port) + 200;
+
+      //TODO: add toBoolean
+      autoConnect = sessionStorage.getItem("autoConnect") === "true";
     }
+
+    var boshUrl = 'http://' + parts.hostname + ':' + parts.port + '/http-bind';
     
     return {
-      boshUrl: 'http://foo@' + parts.hostname + ':' + parts.port
+      loggedIn: false,
+      isConnecting: false,
+      autoConnect: autoConnect,
+      boshUrl: boshUrl,
+      client: client
     };
   },
+
+  onSessionStarted: function () {
+    console.log("connected");
+
+    this.state.client.getRoster();
+    this.state.client.sendPresence();
+    this.setState({ loggedIn: true })
+
+    vent.emit("login", true);
+  },
+
+  onSessionDisconnected: function () {
+    console.log("disconnected");
+
+    this.setState({ loggedIn: false, isConnecting: false })
+
+    vent.emit("logout", false);
+  },
+
+  componentDidMount: function() {
+    this.listenTo(this.state.client, 'session:started', this.onSessionStarted);
+    this.listenTo(this.state.client, 'disconnected', this.onSessionDisconnected);
+
+    if (this.state.autoConnect) {
+      this.connect();
+    }
+  },
+
+  connect: function() {
+    var parts = url.parse(this.state.boshUrl);
+    var jid = parts.auth + '@' + parts.hostname;
+
+    var opts = {
+      jid: jid,
+      password: 'password',
+      transport: 'bosh',
+      boshURL: this.state.boshUrl
+    };
+
+    this.state.client.connect(opts);
+    this.setState({ isConnecting: true });
+  },
+
   onConnect: function(ev) {
     ev.preventDefault();
 
-    var parts = url.parse(document.getElementById("bosh-url").value);
-    var jid = parts.auth + '@' + parts.hostname;
+    this.connect();
+  },
+
+  componentWillUnmount: function() {
+    console.log("FUUUU");
+  },
+
+  handleBoshUrlValidation: function(ev) {
+    var parts = url.parse(ev.target.value);
     var boshUrl = 'http://' + (parts.hostname) + ':' + (parts.port) +  '/http-bind';
 
-    this.state.client.config.boshURL = boshUrl;
-    this.state.client.config.jid = jid;
-    this.state.client.connect();
-
-    this.setState({client: this.state.client, isConnecting: true});
+    this.setState({boshUrl: boshUrl });
   },
+
+  handleAutoConnectValidation: function(ev) {
+    sessionStorage.setItem("autoConnect", ev.target.checked);
+  },
+
+  handleConnectedValidation: function(ev) {
+    if (!ev.target.checked) {
+      this.state.client.disconnect();
+    }
+  },
+
   render: function() {
     return (
       <form onSubmit={this.onConnect}>
-        <input id="bosh-url" type="text" defaultValue={this.props.boshUrl} />
+        <input id="bosh-url" defaultValue={this.state.boshUrl} onChange={this.handleBoshUrlValidation} disabled={this.state.isConnecting}></input>
         <button disabled={this.state.isConnecting}>CONNECT</button>
+        <input id="auto-connect" type="checkbox" defaultChecked={this.state.autoConnect} onChange={this.handleAutoConnectValidation} disabled={this.state.isConnecting}></input>
+        <label htmlFor="auto-connect">
+          auto-connect?
+        </label>
+        <input id="connected" type="checkbox" checked={this.state.loggedIn} onChange={this.handleConnectedValidation} disabled={!this.state.isConnecting}></input>
+        <label htmlFor="connected">
+          connected?
+        </label>
       </form>
     );
   }

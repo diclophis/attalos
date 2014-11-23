@@ -1,3 +1,5 @@
+// global event bus
+
 var EventEmitter = require('events').EventEmitter;
 
 exports.vent = new EventEmitter();
