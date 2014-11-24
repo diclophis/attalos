@@ -1,6 +1,8 @@
 var express = require('express'),
     app = express();
 
+var spawn = require('child_process').spawn;
+
 //app.all(__dirname + '/public', function(req, res, next) {
 //  res.header("Access-Control-Allow-Origin", "*");
 //  res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -8,12 +10,27 @@ var express = require('express'),
 //});
 
 app.use(function(req, res, next) {
-  //res.header("Access-Control-Allow-Origin", "localhost:5200");
-  //res.header("Access-Control-Allow-Headers", "Content-Type, X-Requested-With, Set-Cookie, accept, content-type");
-  //res.header("Access-Control-Allow-Methods", "OPTIONS, GET, PUT, POST, DELETE");
-  //res.header("Access-Control-Allow-Credentials", "true");
-  //res.header('Access-Control-Max-Age', "14400");
-  next();
+
+  var isDev = (req.url.indexOf('dev.html') != -1);
+
+  if (isDev) {
+    var make = spawn('make');
+
+    make.stdout.on('data', function (data) {
+      console.log('stdout: ' + data);
+    });
+
+    make.stderr.on('data', function (data) {
+      console.log('stderr: ' + data);
+    });
+
+    make.on('close', function (code) {
+      console.log('child process exited with code ' + code);
+      next();
+    });
+  } else {
+    next();
+  }
 });
 
 app.use(express.static(__dirname + '/public'));
