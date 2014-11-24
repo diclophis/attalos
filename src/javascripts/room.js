@@ -45,7 +45,7 @@ var Room = React.createClass({
 
     if (msg.body) {
       //TODO: figure out if this is a memory leak or not
-      this.setState({ messages: this.state.messages.concat(msg.body)});
+      this.setState({ messages: [msg.body].concat(this.state.messages)});
     }
   },
 
@@ -54,37 +54,51 @@ var Room = React.createClass({
   },
 
   componentWillUpdate: function() {
-    var node = this.refs.messages.getDOMNode();
-    this.shouldScrollBottom = (node.scrollTop + node.clientHeight === node.scrollHeight);
+    var node = this.refs.allm.getDOMNode();
+    //this.shouldScrollBottom = (window.scrollBottom + node.clientHeight === node.scrollHeight);
+    //sb = parseInt(document.clientHeight) - parseInt(window.scrollTop) - parseInt(window.clientHeight); 
+    //console.log(sb, (document.scrollHeight), (window.scrollTop),  (window.clientHeight));
+    //console.log((window.innerHeight + window.scrollY), document.body.offsetHeight, window.scrollY, window.innerHeight, node.offsetHeight, node.style.height);
+    //(window.innerHeight + window.scrollY) >= node.offsetHeight;
+    //var node = this.refs.messages.getDOMNode();
+    //node.scrollTop = (parseInt(node.scrollHeight) + 1000) + 'px';
+    //document.body.scrollTop = window.height;
+
+    this.shouldScrollBottom = (window.innerHeight + window.scrollY) >= node.offsetHeight;
   },
    
   componentDidUpdate: function() {
     if (this.shouldScrollBottom) {
       var node = this.refs.messages.getDOMNode();
-      node.scrollTop = node.scrollHeight
+      node.focus();
+      node.scrollIntoView(false);
     }
   },
 
   render: function() {
     var messages = [];
 
-    for (var i=0; i<this.state.messages.length; i++) {
-      var message = marked(this.state.messages[i]);
-      messages.push(
+    var slicedMessages = this.state.messages.slice(0, 32);
+
+    for (var i=0; i<slicedMessages.length; i++) {
+      var message = marked(slicedMessages[i]);
+      messages.unshift(
         <li key={i + '-message'} dangerouslySetInnerHTML={{__html: message}}></li>
       );
     }
 
     return (
       <form onSubmit={this.willSend}>
-        <div ref="messages" className="room-messages">
-          <ul>
-            {messages}
-          </ul>
-        </div>
-        <div className="room-input">
-          <textarea defaultValue={this.state.message} value={this.state.message} onKeyDown={this.handleShiftKeyToggle} onChange={this.handleMessageValidation}></textarea>
-          <button>SEND</button>
+        <div ref="allm" className="room">
+          <div className="room-messages">
+            <ul>
+              {messages}
+            </ul>
+          </div>
+          <div ref="messages" className="room-input">
+            <textarea defaultValue={this.state.message} value={this.state.message} onKeyDown={this.handleShiftKeyToggle} onChange={this.handleMessageValidation}></textarea>
+            <button>SEND</button>
+          </div>
         </div>
       </form>
     );

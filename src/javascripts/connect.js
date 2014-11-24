@@ -13,7 +13,7 @@ var Connect = React.createClass({
     });
 
     var parts = { hostname: 'localhost', port: 5200 };
-    var autoConnect = false;
+    var autoConnect = true;
 
     if (typeof(window) === 'undefined') {
     } else {
@@ -21,15 +21,25 @@ var Connect = React.createClass({
       parts.port = parseInt(parts.port) + 200;
 
       //TODO: add toBoolean
-      autoConnect = sessionStorage.getItem("autoConnect") === "true";
+      var fromSession = sessionStorage.getItem("autoConnect")
+      if (fromSession) {
+        autoConnect = fromSession === "true";
+      }
     }
 
     var boshUrl = 'http://' + parts.hostname + ':' + parts.port + '/http-bind';
-    
+
+    if (typeof(sessionStorage) != 'undefined') {
+      sessionStorage.setItem("autoConnect", autoConnect);
+    }
+
+    var jid = 'foo@' + parts.hostname;
+
     return {
       loggedIn: false,
       isConnecting: false,
       autoConnect: autoConnect,
+      jid: jid,
       boshUrl: boshUrl,
       client: client
     };
@@ -74,15 +84,14 @@ var Connect = React.createClass({
   },
 
   connect: function() {
-    var parts = url.parse(this.state.boshUrl);
-    var jid = 'foo@' + parts.hostname;
-
     var opts = {
-      jid: jid,
+      jid: this.state.jid,
       password: 'password',
       transport: 'bosh',
       boshURL: this.state.boshUrl
     };
+
+    console.log('connectin', opts);
 
     this.state.client.connect(opts);
     this.setState({ isConnecting: true });
@@ -105,6 +114,10 @@ var Connect = React.createClass({
     this.setState({boshUrl: boshUrl });
   },
 
+  handleJidValidation: function(ev) {
+    this.setState({ jid: ev.target.value });
+  },
+
   handleAutoConnectValidation: function(ev) {
     sessionStorage.setItem("autoConnect", ev.target.checked);
   },
@@ -118,19 +131,21 @@ var Connect = React.createClass({
   render: function() {
     return (
       <form onSubmit={this.onConnect}>
-        jid:
-        <input id="jid" defaultValue={this.state.jid} disabled={this.state.isConnecting}></input>
-        bosh:
-        <input id="bosh-url" defaultValue={this.state.boshUrl} onChange={this.handleBoshUrlValidation} disabled={this.state.isConnecting}></input>
-        <button disabled={this.state.isConnecting}>CONNECT</button>
-        <label htmlFor="auto-connect">
-          auto-connect?
-        </label>
-        <input id="auto-connect" type="checkbox" defaultChecked={this.state.autoConnect} onChange={this.handleAutoConnectValidation} disabled={this.state.isConnecting}></input>
-        <label htmlFor="connected">
-          currently-connected?
-        </label>
-        <input id="connected" type="checkbox" checked={this.state.loggedIn} onChange={this.handleConnectedValidation} disabled={!this.state.isConnecting}></input>
+        <div className="connect">
+          jid:
+          <input id="jid" defaultValue={this.state.jid} onChange={this.handleJidValidation} disabled={this.state.isConnecting}></input>
+          bosh:
+          <input id="bosh-url" defaultValue={this.state.boshUrl} onChange={this.handleBoshUrlValidation} disabled={this.state.isConnecting}></input>
+          <button disabled={this.state.isConnecting}>CONNECT</button>
+          <label htmlFor="auto-connect">
+            auto-connect?
+          </label>
+          <input id="auto-connect" type="checkbox" defaultChecked={this.state.autoConnect} onChange={this.handleAutoConnectValidation} disabled={this.state.isConnecting}></input>
+          <label htmlFor="connected">
+            currently-connected?
+          </label>
+          <input id="connected" type="checkbox" checked={this.state.loggedIn} onChange={this.handleConnectedValidation} disabled={!this.state.isConnecting}></input>
+        </div>
       </form>
     );
   }
