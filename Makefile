@@ -30,9 +30,11 @@ node_modules: package.json
 	npm install
 
 public/stylesheets/application.min.css: public/stylesheets/application.css
+	mkdir -p $(shell dirname $@)
 	./node_modules/.bin/lessc -x $< > $@
 
 public/stylesheets/application.css: src/stylesheets/*.less
+	mkdir -p $(shell dirname $@)
 	./node_modules/.bin/lessc src/stylesheets/index.less > $@
 
 public/dev.html: node_modules $(javascripts) public/javascripts/application.js public/stylesheets/application.css
@@ -46,7 +48,9 @@ build/%: src/javascripts/%
 	./node_modules/.bin/jsx $< > $@
 
 public/javascripts/application.js: $(javascripts) package.json node_modules/**/*
+	mkdir -p $(shell dirname $@)
 	./node_modules/.bin/browserify build/index.js > $@
 
 public/javascripts/application.min.js: public/javascripts/application.js
+	mkdir -p $(shell dirname $@)
 	ruby -r 'rubygems' -r 'closure-compiler' -e "puts Closure::Compiler.new(:warning_level => 'DEFAULT', :compilation_level => 'SIMPLE_OPTIMIZATIONS').compile(STDIN)" < $< > $@

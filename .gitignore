@@ -1,6 +1,7 @@
 node_modules
 .sass-cache
 build
+public/
 public/dev.html
 public/index.html
 public/javascripts/application.js
