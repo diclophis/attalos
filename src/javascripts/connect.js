@@ -118,16 +118,19 @@ var Connect = React.createClass({
   render: function() {
     return (
       <form onSubmit={this.onConnect}>
+        jid:
+        <input id="jid" defaultValue={this.state.jid} disabled={this.state.isConnecting}></input>
+        bosh:
         <input id="bosh-url" defaultValue={this.state.boshUrl} onChange={this.handleBoshUrlValidation} disabled={this.state.isConnecting}></input>
         <button disabled={this.state.isConnecting}>CONNECT</button>
-        <input id="auto-connect" type="checkbox" defaultChecked={this.state.autoConnect} onChange={this.handleAutoConnectValidation} disabled={this.state.isConnecting}></input>
         <label htmlFor="auto-connect">
           auto-connect?
         </label>
-        <input id="connected" type="checkbox" checked={this.state.loggedIn} onChange={this.handleConnectedValidation} disabled={!this.state.isConnecting}></input>
+        <input id="auto-connect" type="checkbox" defaultChecked={this.state.autoConnect} onChange={this.handleAutoConnectValidation} disabled={this.state.isConnecting}></input>
         <label htmlFor="connected">
-          connected?
+          currently-connected?
         </label>
+        <input id="connected" type="checkbox" checked={this.state.loggedIn} onChange={this.handleConnectedValidation} disabled={!this.state.isConnecting}></input>
       </form>
     );
   }

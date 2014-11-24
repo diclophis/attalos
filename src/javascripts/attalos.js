@@ -9,6 +9,7 @@ var Room = require('./room');
 var vent = require('./vent').vent;
 var url = require('url');
 var listenTo = require('react-listento');
+var slug = require('./slug');
 
 //TODO: move to module, or internalize
 var getControllerFromHash = function() {
@@ -18,11 +19,11 @@ var getControllerFromHash = function() {
   if (typeof(window) != 'undefined') {
     var parts = url.parse(window.location.toString(), true);
     if (parts.query.controller) {
-      newController = parts.query.controller.replace(/[^a-z\-]/g, '');
+      newController = slug(parts.query.controller, 16);
     }
 
     if (parts.query.id) {
-      newId = parseInt(parts.query.id);
+      newId = slug(parts.query.id, 64);
     }
   }
 
@@ -38,29 +39,11 @@ var AttalosComponent = React.createClass({
   mixins: [listenTo],
 
   getInitialState: function() {
-    //var defaultState = {};
-    //if (typeof(window) === 'undefined') {
-    //} else {
-    //  if (history.state) {
-    //    defaultState = history.state;
-    //  }
-    //}
-
     var defaultState = getControllerFromHash();
-
-    //if (!defaultState.mainView) {
-    //  defaultState.mainView = defaultMainView;
-    //}
 
     defaultState.roomLinks = [];
 
-    //if (typeof(history) === 'undefined') {
-    //} else {
-    //  history.pushState(defaultState, "", null);
-    //}
-
-    //defaultState.controller = defaultController.controller;
-
+    //TODO: figure out a better way to manage global state?
     defaultState.connectionComponent = <Connect />;
 
     return defaultState;
@@ -74,9 +57,8 @@ var AttalosComponent = React.createClass({
   },
 
   onPopState: function(ev) {
-    console.log("popstate", this.state, ev, history.state);
+    //console.log("popstate", this.state, ev, history.state);
     var foo = getControllerFromHash();
-    console.log(foo);
     this.setState(foo);
   },
 
@@ -103,13 +85,19 @@ var AttalosComponent = React.createClass({
       default:
     }
 
+    var extraAnchor = null;
+
+    if (this.state.id && this.state.controller == 'room') {
+      extraAnchor = <Anchor href={"?controller=room&id=" + this.state.id}>{this.state.id.toUpperCase()}</Anchor>;
+    }
+
     return (
       <div className={this.state.loggedIn ? 'authenticated' : 'restricted'}>
         <div className="primary-anchors">
           <a href="?">#</a>
           <Anchor href="?controller=list-rooms">LIST ROOMS</Anchor>
           <Anchor href="?controller=join-room">JOIN ROOM</Anchor>
-          {this.state.roomLinks}
+          {extraAnchor}
         </div>
         {this.state.connectionComponent}
         {mainViewComponent}
