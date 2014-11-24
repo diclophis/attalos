@@ -43,7 +43,7 @@ c2s.on('connect', function(client) {
       //if (this != client) {
       //console.log(stanza.from, client.jid.toString());
 
-        msg = new Message({ type: 'chat', to: stanza.to, from: stanza.from });
+        msg = new Message({ type: stanza.type, from: stanza.to });
         msg.c('body').t(stanza.getChildText('body'));
 
         client.send(msg);

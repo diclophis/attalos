@@ -8,7 +8,7 @@ exports.config = {
 	
 	// The maximum number of bytes that the BOSH server will 
 	// "hold" from the client
-	max_data_held: 100000, 
+	max_data_held: 10000000, 
 
 	// Terminate the session if a stanza from XMPP server for 
 	// a stream exceeds max_xmpp_stanza_size bytes
@@ -21,7 +21,7 @@ exports.config = {
 
 	// The maximum number of packets on either side of the current 'rid'
 	// that we are willing to accept.
-	window_size: 2, 
+	window_size: 10, 
 
 	// How much time (in second) should we hold a response object 
 	// before sending and empty response on it?

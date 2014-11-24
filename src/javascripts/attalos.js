@@ -91,6 +91,10 @@ var AttalosComponent = React.createClass({
       extraAnchor = <Anchor href={"?controller=room&id=" + this.state.id}>{this.state.id.toUpperCase()}</Anchor>;
     }
 
+    if (!this.state.loggedIn) {
+      mainViewComponent = null;
+    }
+
     return (
       <div className={this.state.loggedIn ? 'authenticated' : 'restricted'}>
         <div className="primary-anchors">

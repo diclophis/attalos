@@ -12,11 +12,14 @@ var Connect = React.createClass({
     var client = xmpp.createClient({
     });
 
+
     var parts = { hostname: 'localhost', port: 5200 };
     var autoConnect = true;
 
     if (typeof(window) === 'undefined') {
     } else {
+      // window.client = client;
+
       parts = url.parse(window.location.toString());
       parts.port = parseInt(parts.port) + 200;
 
@@ -33,13 +36,15 @@ var Connect = React.createClass({
       sessionStorage.setItem("autoConnect", autoConnect);
     }
 
-    var jid = 'foo@' + parts.hostname;
+    var jid = 'local-user@localhost';
+    var password = 'totally-secret';
 
     return {
       loggedIn: false,
       isConnecting: false,
       autoConnect: autoConnect,
       jid: jid,
+      password: password,
       boshUrl: boshUrl,
       client: client
     };
@@ -48,8 +53,8 @@ var Connect = React.createClass({
   onSessionStarted: function () {
     console.log("connected");
 
-    this.state.client.getRoster();
-    this.state.client.sendPresence();
+    //this.state.client.getRoster();
+    //this.state.client.sendPresence();
 
     this.setState({ loggedIn: true })
 
@@ -72,11 +77,40 @@ var Connect = React.createClass({
     this.state.client.sendMessage(msg);
   },
 
+  willJoinRoom: function(id) {
+    //this.listenTo(window.client, '*', this.didReceiveMessage);
+    //window.client.getDiscoItems('conference.error0.xmpp.slack.com', null, function(a, b, c) {
+    //  console.log("SADASD", a, b, c);
+    //});
+
+    //console.log("JOIN", id, this.state.client.jid.local);
+
+    if (this.state.loggedIn) {
+      this.state.client.joinRoom(id, this.state.client.jid.local);
+    } else {
+      console.warn("!loggedIn");
+      //TODO: figure out the semantics of this memory leak
+      //throw new Error('notLoggedIn');
+      //var stateBridge = this.state;
+      //vent.once("login", function(_) {
+      //  stateBridge.client.joinRoom(id, stateBridge.client.jid.local);
+      //});
+    }
+  },
+
+  onDebug: function(a, b) {
+    //console.log(a, b);
+  },
+
   componentDidMount: function() {
     this.listenTo(this.state.client, 'session:started', this.onSessionStarted);
     this.listenTo(this.state.client, 'disconnected', this.onSessionDisconnected);
     this.listenTo(this.state.client, 'chat', this.onChat);
+    this.listenTo(this.state.client, 'groupchat', this.onChat);
+    this.listenTo(this.state.client, '*', this.onDebug);
+
     this.listenTo(vent, 'send', this.willSendChat);
+    this.listenTo(vent, 'room:join', this.willJoinRoom);
 
     if (this.state.autoConnect) {
       this.connect();
@@ -86,7 +120,7 @@ var Connect = React.createClass({
   connect: function() {
     var opts = {
       jid: this.state.jid,
-      password: 'password',
+      password: this.state.password,
       transport: 'bosh',
       boshURL: this.state.boshUrl
     };
@@ -118,6 +152,10 @@ var Connect = React.createClass({
     this.setState({ jid: ev.target.value });
   },
 
+  handlePasswordValidation: function(ev) {
+    this.setState({ password: ev.target.value });
+  },
+
   handleAutoConnectValidation: function(ev) {
     sessionStorage.setItem("autoConnect", ev.target.checked);
   },
@@ -134,6 +172,8 @@ var Connect = React.createClass({
         <div className="connect">
           jid:
           <input id="jid" defaultValue={this.state.jid} onChange={this.handleJidValidation} disabled={this.state.isConnecting}></input>
+          password:
+          <input id="password" type="password" defaultValue="{this.state.password}" onChange={this.handlePasswordValidation} disabled={this.state.isConnecting}></input>
           bosh:
           <input id="bosh-url" defaultValue={this.state.boshUrl} onChange={this.handleBoshUrlValidation} disabled={this.state.isConnecting}></input>
           <button disabled={this.state.isConnecting}>CONNECT</button>

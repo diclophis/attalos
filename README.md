@@ -1,6 +1,8 @@
 # Attalos
 
-A modern platform for online discussion built on GNU principles
+![image](attalos.png)
+
+A modern real-time platform for online discussion built with GNU Make, XMPP, Stanza.io, React, Browserify, as an static isomorphic javascript web application with a messaging back-end.
 
 # Separation of services
 
@@ -10,9 +12,12 @@ This application is split into 2 main categories:
    
   The front-end of attalos is a static single page application built primarily with the react platform. The main component diagram is as follows:
    
-      <IndexComponent>
-        <AttalosComponent />
-      </IndexComponent>
+      <Index>
+        <Attalos>
+          <Connect />
+          <Room />
+        </Attalos>
+      </Index>
 
   ### Theory of Routing
 
@@ -40,7 +45,7 @@ This application is split into 2 main categories:
 
     * WEB
     
-	  Serves resources under the `public/*` directory over HTTP with `express`
+	    Serves resources under the `public/*` directory over HTTP with `express`
 	  
     * BOSH
     
@@ -51,6 +56,7 @@ This application is split into 2 main categories:
 
 This project uses `make` to coordinate all aspects of its development, the primary targets of interest are:
 
+ * dev
  * clean
  * all
  * check
@@ -60,6 +66,8 @@ Source of both client and server logic is only in this repo
 
 * src/javascripts
 * src/stylesheets
+
+The `build` products are placed in `public/` it is possible to self-host these files as long as you provide your own `BOSH` and `CHAT` servers!
 
 # Build it yourself
 

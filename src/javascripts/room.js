@@ -21,9 +21,16 @@ var Room = React.createClass({
   },
 
   sendMessage: function() {
-    vent.emit('send', {
-      to: 'foo@localhost', body: this.state.message
-    });
+    //console.log(window.client.jid);
+
+    if (this.state.message.replace(/^\s+|\s+$/g, '').length > 0) {
+      vent.emit('send', {
+        to: this.props.id,
+        body: this.state.message,
+        type: 'groupchat'
+      });
+    }
+    
     this.setState({ message: '' });
   },
 
@@ -40,10 +47,10 @@ var Room = React.createClass({
     }
   },
 
-  didReceiveMessage: function(msg) {
-    //console.log('didRec', msg);
+  didReceiveMessage: function(msg, _) {
+    //console.log('didRec', (msg.to.bare === this.props.id), this.state.id, msg, _);
 
-    if (msg.body) {
+    if (msg.from && (msg.from.bare === this.props.id) && msg.body) {
       //TODO: figure out if this is a memory leak or not
       this.setState({ messages: [msg.body].concat(this.state.messages)});
     }
@@ -51,18 +58,13 @@ var Room = React.createClass({
 
   componentDidMount: function() {
     this.listenTo(vent, 'recv', this.didReceiveMessage);
+    vent.emit('room:join', this.props.id);
+    var node = this.refs.focusTarget.getDOMNode();
+    node.focus();
   },
 
   componentWillUpdate: function() {
     var node = this.refs.allm.getDOMNode();
-    //this.shouldScrollBottom = (window.scrollBottom + node.clientHeight === node.scrollHeight);
-    //sb = parseInt(document.clientHeight) - parseInt(window.scrollTop) - parseInt(window.clientHeight); 
-    //console.log(sb, (document.scrollHeight), (window.scrollTop),  (window.clientHeight));
-    //console.log((window.innerHeight + window.scrollY), document.body.offsetHeight, window.scrollY, window.innerHeight, node.offsetHeight, node.style.height);
-    //(window.innerHeight + window.scrollY) >= node.offsetHeight;
-    //var node = this.refs.messages.getDOMNode();
-    //node.scrollTop = (parseInt(node.scrollHeight) + 1000) + 'px';
-    //document.body.scrollTop = window.height;
 
     this.shouldScrollBottom = (window.innerHeight + window.scrollY) >= node.offsetHeight;
   },
@@ -70,8 +72,9 @@ var Room = React.createClass({
   componentDidUpdate: function() {
     if (this.shouldScrollBottom) {
       var node = this.refs.messages.getDOMNode();
-      node.focus();
       node.scrollIntoView(false);
+      node = this.refs.focusTarget.getDOMNode();
+      node.focus();
     }
   },
 
@@ -96,8 +99,8 @@ var Room = React.createClass({
             </ul>
           </div>
           <div ref="messages" className="room-input">
-            <textarea defaultValue={this.state.message} value={this.state.message} onKeyDown={this.handleShiftKeyToggle} onChange={this.handleMessageValidation}></textarea>
-            <button>SEND</button>
+            <textarea ref="focusTarget" defaultValue={this.state.message} value={this.state.message} onKeyDown={this.handleShiftKeyToggle} onChange={this.handleMessageValidation}></textarea>
+            <button disabled={this.state.message.length == 0}>SEND</button>
           </div>
         </div>
       </form>

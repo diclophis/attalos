@@ -5,8 +5,7 @@ var ListRooms = React.createClass({
   getInitialState: function() {
     return {
       roomMenuItems: [
-       { payload: '?controller=room&id=1', text: 'ROOM 1' },
-       { payload: '?controller=room&id=2', text: 'ROOM 2' }
+       { payload: '?controller=room&id=general@conference.error0.xmpp.slack.com', text: 'GENERAL' }
       ]
     };
   },

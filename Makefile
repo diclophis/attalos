@@ -53,4 +53,4 @@ public/javascripts/application.js: $(javascripts) package.json node_modules/**/*
 
 public/javascripts/application.min.js: public/javascripts/application.js
 	mkdir -p $(shell dirname $@)
-	ruby -r 'rubygems' -r 'closure-compiler' -e "puts Closure::Compiler.new(:warning_level => 'DEFAULT', :compilation_level => 'SIMPLE_OPTIMIZATIONS').compile(STDIN)" < $< > $@
+	ruby -r 'rubygems' -r 'closure-compiler' -e "puts Closure::Compiler.new(:warning_level => 'QUIET', :compilation_level => 'SIMPLE_OPTIMIZATIONS').compile(STDIN)" < $< > $@
