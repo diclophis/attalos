@@ -4,8 +4,10 @@ jest.autoMockOff();
 
 var index = require('../build/index.js');
 
-describe('index', function() {
-  it('fails', function() {
-    expect(index).toNotBe(null);
+describe('indexHtml', function() {
+  it('includes minified assets when invoked as dist', function() {
+    var distHtml = index.render("a.js", "b.css");
+    expect(distHtml).toContain('<script src="a.js"');
+    expect(distHtml).toContain('<link href="b.css"');
   });
 });

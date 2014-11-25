@@ -4,6 +4,11 @@ javascript_src = src/javascripts
 javascripts_jsx = $(shell find $(javascript_src) -type f -name "*.js")
 javascripts = $(patsubst $(javascript_src)/%,build/%, $(javascripts_jsx))
 
+debug_js=public/javascripts/application.js
+debug_css=public/stylesheets/application.css
+dist_js=public/javascripts/application.min.js
+dist_css=public/stylesheets/application.min.css
+
 .PHONY: all check clean
 
 dev: public/dev.html
@@ -37,11 +42,11 @@ public/stylesheets/application.css: src/stylesheets/*.less
 	mkdir -p $(shell dirname $@)
 	./node_modules/.bin/lessc src/stylesheets/index.less > $@
 
-public/dev.html: node_modules $(javascripts) public/javascripts/application.js public/stylesheets/application.css
-	node build/index.js > $@
+public/dev.html: node_modules $(javascripts) $(debug_js) $(debug_css)
+	node -p -e "require('./build/index.js').render(\"$(debug_js)?$(shell shasum $(debug_js) | cut -f1 -d' ')\", \"$(debug_css)?$(shell shasum $(debug_css) | cut -f1 -d' ')\")" > $@
 
-public/index.html: node_modules $(javascripts) public/javascripts/application.min.js public/stylesheets/application.min.css
-	node build/index.js --dist > $@
+public/index.html: node_modules $(javascripts) $(dist_js) $(dist_css)
+	node -p -e "require('./build/index.js').render(\"$(dist_js)?$(shell shasum $(dist_js) | cut -f1 -d' ')\", \"$(dist_css)?$(shell shasum $(dist_css) | cut -f1 -d' ')\")" > $@
 
 build/%: src/javascripts/%
 	mkdir -p $(shell dirname $@)

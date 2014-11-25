@@ -5,7 +5,7 @@ var fs = require('fs');
 
 module.exports = function(fn, cb) {
   var shasum = crypto.createHash('sha1');
-  var s = fs.ReadStream('public/' + fn);
+  var s = fs.ReadStream(fn);
 
   s.on('data', function(d) {
     shasum.update(d);

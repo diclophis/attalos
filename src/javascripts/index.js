@@ -24,26 +24,16 @@ var IndexComponent = React.createClass({
   }
 });
 
-module.exports = IndexComponent;
+module.exports = {
+  render: function(js, css, cb) {
+    return React.renderToStaticMarkup(<IndexComponent js={js} css={css} />);
+  },
 
-(function() {
-  if (typeof(document) === 'undefined') {
-    var dist = (process.argv.indexOf("--dist") != -1);
-    var js = dist ? "javascripts/application.min.js" : "javascripts/application.js"
-    var css = dist ? "stylesheets/application.min.css" : "stylesheets/application.css"
-
-    shaFetcher(js, function(jsSha) {
-      shaFetcher(css, function(cssSha) {
-        js = js + '?' + jsSha;
-        css = css + '?' + cssSha;
-        console.log(React.renderToStaticMarkup(<IndexComponent js={js} css={css} />));
-      });
-    });
-  } else {
+  attach: function() {
     document.addEventListener("DOMContentLoaded", function() {
       var mainContainer = document.getElementById("main-container");
       React.render(<AttalosComponent bootstrapped={true}/>, mainContainer);
       mainContainer.className = "bootstrapped";
     });
   }
-})();
+};

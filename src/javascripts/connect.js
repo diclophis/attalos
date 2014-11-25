@@ -12,7 +12,6 @@ var Connect = React.createClass({
     var client = xmpp.createClient({
     });
 
-
     var parts = { hostname: 'localhost', port: 5200 };
     var autoConnect = true;
 
@@ -33,6 +32,7 @@ var Connect = React.createClass({
     var boshUrl = 'http://' + parts.hostname + ':' + parts.port + '/http-bind';
 
     if (typeof(sessionStorage) != 'undefined') {
+    console.log(sessionStorage);
       sessionStorage.setItem("autoConnect", autoConnect);
     }
 

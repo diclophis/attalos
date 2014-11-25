@@ -95,6 +95,13 @@ var AttalosComponent = React.createClass({
       mainViewComponent = null;
     }
 
+    var bootstrappedComponents = [];
+
+    if (this.props.bootstrapped) {
+      bootstrappedComponents.push(this.state.connectionComponent);
+      bootstrappedComponents.push(mainViewComponent);
+    }
+
     return (
       <div className={this.state.loggedIn ? 'authenticated' : 'restricted'}>
         <div className="primary-anchors">
@@ -103,8 +110,7 @@ var AttalosComponent = React.createClass({
           <Anchor href="?controller=join-room">JOIN ROOM</Anchor>
           {extraAnchor}
         </div>
-        {this.state.connectionComponent}
-        {mainViewComponent}
+        {bootstrappedComponents}
       </div>
     );
   }
