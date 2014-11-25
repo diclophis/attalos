@@ -46,7 +46,7 @@ public/dev.html: node_modules $(javascripts) $(debug_js) $(debug_css)
 	node -p -e "require('./build/index.js').render(\"javascripts/application.js?$(shell shasum $(debug_js) | cut -f1 -d' ')\", \"stylesheets/application.css?$(shell shasum $(debug_css) | cut -f1 -d' ')\")" > $@
 
 public/index.html: node_modules $(javascripts) $(dist_js) $(dist_css)
-	node -p -e "require('./build/index.js').render(\"javascripts/application.js?$(shell shasum $(dist_js) | cut -f1 -d' ')\", \"stylesheets/application.css?$(shell shasum $(dist_css) | cut -f1 -d' ')\")" > $@
+	node -p -e "require('./build/index.js').render(\"javascripts/application.min.js?$(shell shasum $(dist_js) | cut -f1 -d' ')\", \"stylesheets/application.min.css?$(shell shasum $(dist_css) | cut -f1 -d' ')\")" > $@
 
 build/%: src/javascripts/%
 	mkdir -p $(shell dirname $@)
