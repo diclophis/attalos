@@ -18,6 +18,7 @@ var IndexComponent = React.createClass({
             <AttalosComponent bootstrapped={false}/>
           </div>
           <script src={this.props.js}></script>
+          <script dangerouslySetInnerHTML={{__html:'window["Attalos"].attach();'}}></script>
         </body>
       </html>
     );

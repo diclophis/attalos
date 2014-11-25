@@ -43,10 +43,10 @@ public/stylesheets/application.css: src/stylesheets/*.less
 	./node_modules/.bin/lessc src/stylesheets/index.less > $@
 
 public/dev.html: node_modules $(javascripts) $(debug_js) $(debug_css)
-	node -p -e "require('./build/index.js').render(\"$(debug_js)?$(shell shasum $(debug_js) | cut -f1 -d' ')\", \"$(debug_css)?$(shell shasum $(debug_css) | cut -f1 -d' ')\")" > $@
+	node -p -e "require('./build/index.js').render(\"javascripts/application.js?$(shell shasum $(debug_js) | cut -f1 -d' ')\", \"stylesheets/application.css?$(shell shasum $(debug_css) | cut -f1 -d' ')\")" > $@
 
 public/index.html: node_modules $(javascripts) $(dist_js) $(dist_css)
-	node -p -e "require('./build/index.js').render(\"$(dist_js)?$(shell shasum $(dist_js) | cut -f1 -d' ')\", \"$(dist_css)?$(shell shasum $(dist_css) | cut -f1 -d' ')\")" > $@
+	node -p -e "require('./build/index.js').render(\"javascripts/application.js?$(shell shasum $(dist_js) | cut -f1 -d' ')\", \"stylesheets/application.css?$(shell shasum $(dist_css) | cut -f1 -d' ')\")" > $@
 
 build/%: src/javascripts/%
 	mkdir -p $(shell dirname $@)
@@ -54,7 +54,7 @@ build/%: src/javascripts/%
 
 public/javascripts/application.js: $(javascripts) package.json node_modules/**/*
 	mkdir -p $(shell dirname $@)
-	./node_modules/.bin/browserify build/index.js > $@
+	./node_modules/.bin/browserify --standalone Attalos build/index.js > $@
 
 public/javascripts/application.min.js: public/javascripts/application.js
 	mkdir -p $(shell dirname $@)
