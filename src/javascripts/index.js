@@ -2,7 +2,6 @@
 
 var React = require('react');
 var AttalosComponent = require('./attalos');
-var shaFetcher = require('./sha-fetcher');
 
 var IndexComponent = React.createClass({
   render: function() {
@@ -18,7 +17,7 @@ var IndexComponent = React.createClass({
             <AttalosComponent bootstrapped={false}/>
           </div>
           <script src={this.props.js}></script>
-          <script dangerouslySetInnerHTML={{__html:'window["Attalos"].attach();'}}></script>
+          <script dangerouslySetInnerHTML={{__html:'window["Attalos"].attach("main-container");'}}></script>
         </body>
       </html>
     );
@@ -30,9 +29,9 @@ module.exports = {
     return React.renderToStaticMarkup(<IndexComponent js={js} css={css} />);
   },
 
-  attach: function() {
+  attach: function(mainContainerId) {
     document.addEventListener("DOMContentLoaded", function() {
-      var mainContainer = document.getElementById("main-container");
+      var mainContainer = document.getElementById(mainContainerId);
       React.render(<AttalosComponent bootstrapped={true}/>, mainContainer);
       mainContainer.className = "bootstrapped";
     });
