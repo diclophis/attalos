@@ -6,7 +6,7 @@ var Connect = require('./connect');
 var JoinRoom = require('./join-room');
 var ListRooms = require('./list-rooms');
 var Room = require('./room');
-var vent = require('./vent').vent;
+var centralDispatch = require('./central-dispatch').singleton;
 var url = require('url');
 var listenTo = require('react-listento');
 var slug = require('./slug');
@@ -50,10 +50,9 @@ var AttalosComponent = React.createClass({
   },
 
   componentDidMount: function() {
-    this.listenTo(vent, 'login', this.onLoggedInOrOut);
-    this.listenTo(vent, 'logout', this.onLoggedInOrOut);
-    this.listenTo(vent, 'popstate', this.onPopState);
-    this.listenTo(window, 'popstate', this.onPopState);
+    centralDispatch.addLoginLogoutHandler(this, this.onLoggedInOrOut);
+    centralDispatch.addPopStateHandler(this, this.onPopState);
+
   },
 
   onPopState: function(ev) {

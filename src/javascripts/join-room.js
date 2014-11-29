@@ -2,7 +2,7 @@ var React = require('react');
 var xmpp = require('stanza.io');
 var url = require('url');
 var querystring = require('querystring');
-var vent = require('./vent').vent;
+var centralDispatch = require('./central-dispatch').singleton;
 var slug = require('./slug');
 
 var JoinRoom = React.createClass({
@@ -13,26 +13,29 @@ var JoinRoom = React.createClass({
     };
   },
 
-  handleRoomValidation: function(event) {
-    this.setState({ id: slug(event.target.value, 32) });
+  handleRoomValidation: function(ev) {
+    this.setState({ id: slug(ev.target.value, 32) });
   },
 
   willJoinRoom: function(ev) {
     ev.preventDefault();
-    //room = this.getDOMNode();
-    //form = url.parse(room.action, true);
-    var newQueryString = querystring.stringify(this.state);
 
+    var newQueryString = querystring.stringify(this.state);
     var newControllerUrl = window.location.pathname + '?' + newQueryString;
-    history.pushState({}, "", newControllerUrl);
-    vent.emit('popstate', {});
+
+    centralDispatch.navigateTo(newControllerUrl);
+  },
+
+  componentDidMount: function() {
+    var node = this.refs.focusTarget.getDOMNode();
+    node.focus();
   },
 
   render: function() {
     return (
       <form onSubmit={this.willJoinRoom}>
         name:
-        <input placeholder="name of discussion" value={this.state.id} onChange={this.handleRoomValidation}></input>
+        <input ref="focusTarget" placeholder="name of discussion" value={this.state.id} onChange={this.handleRoomValidation}></input>
         <button disabled={this.state.id.length == 0}>JOIN ROOM</button>
       </form>
     );

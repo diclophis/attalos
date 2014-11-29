@@ -1,7 +1,7 @@
 var React = require('react');
 var xmpp = require('stanza.io');
 var url = require('url');
-var vent = require('./vent').vent;
+var centralDispatch = require('./central-dispatch').singleton;
 var listenTo = require('react-listento');
 
 var Connect = React.createClass({
@@ -58,7 +58,7 @@ var Connect = React.createClass({
 
     this.setState({ loggedIn: true })
 
-    vent.emit("login", true);
+    centralDispatch.login(true);
   },
 
   onSessionDisconnected: function () {
@@ -66,11 +66,11 @@ var Connect = React.createClass({
 
     this.setState({ loggedIn: false, isConnecting: false })
 
-    vent.emit("logout", false);
+    centralDispatch.logout(false);
   },
 
   onChat: function(msg) {
-    vent.emit("recv", msg);
+    centralDispatch.message(msg);
   },
 
   willSendChat: function(msg) {
@@ -103,14 +103,15 @@ var Connect = React.createClass({
   },
 
   componentDidMount: function() {
+    //TODO: figure out a beter factorization of this
     this.listenTo(this.state.client, 'session:started', this.onSessionStarted);
     this.listenTo(this.state.client, 'disconnected', this.onSessionDisconnected);
     this.listenTo(this.state.client, 'chat', this.onChat);
     this.listenTo(this.state.client, 'groupchat', this.onChat);
     this.listenTo(this.state.client, '*', this.onDebug);
 
-    this.listenTo(vent, 'send', this.willSendChat);
-    this.listenTo(vent, 'room:join', this.willJoinRoom);
+    this.listenTo(centralDispatch, 'send', this.willSendChat);
+    this.listenTo(centralDispatch, 'room:join', this.willJoinRoom);
 
     if (this.state.autoConnect) {
       this.connect();

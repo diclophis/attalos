@@ -2,13 +2,12 @@
 
 var React = require('react');
 var url = require('url');
-var vent = require('./vent').vent;
+var centralDispatch = require('./central-dispatch').singleton;
 
 var Anchor = React.createClass({
   onClick: function(ev) {
     ev.preventDefault(ev);
-    history.pushState({}, "", ev.target.href);
-    vent.emit('popstate', {});
+    centralDispatch.navigateTo(ev.target.href);
   },
 
   render: function() {
