@@ -32,7 +32,6 @@ var Connect = React.createClass({
     var boshUrl = 'http://' + parts.hostname + ':' + parts.port + '/http-bind';
 
     if (typeof(sessionStorage) != 'undefined') {
-    console.log(sessionStorage);
       sessionStorage.setItem("autoConnect", autoConnect);
     }
 
@@ -51,8 +50,6 @@ var Connect = React.createClass({
   },
 
   onSessionStarted: function () {
-    console.log("connected");
-
     //this.state.client.getRoster();
     //this.state.client.sendPresence();
 
@@ -62,8 +59,6 @@ var Connect = React.createClass({
   },
 
   onSessionDisconnected: function () {
-    console.log("disconnected");
-
     this.setState({ loggedIn: false, isConnecting: false })
 
     centralDispatch.logout(false);
@@ -88,7 +83,7 @@ var Connect = React.createClass({
     if (this.state.loggedIn) {
       this.state.client.joinRoom(id, this.state.client.jid.local);
     } else {
-      console.warn("!loggedIn");
+      //console.warn("!loggedIn");
       //TODO: figure out the semantics of this memory leak
       //throw new Error('notLoggedIn');
       //var stateBridge = this.state;
@@ -125,8 +120,6 @@ var Connect = React.createClass({
       transport: 'bosh',
       boshURL: this.state.boshUrl
     };
-
-    console.log('connectin', opts);
 
     this.state.client.connect(opts);
     this.setState({ isConnecting: true });

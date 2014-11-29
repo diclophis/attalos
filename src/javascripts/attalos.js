@@ -44,7 +44,7 @@ var AttalosComponent = React.createClass({
     defaultState.roomLinks = [];
 
     //TODO: figure out a better way to manage global state?
-    defaultState.connectionComponent = <Connect />;
+    defaultState.connectionComponent = <Connect key="connect" />;
 
     return defaultState;
   },
@@ -56,7 +56,6 @@ var AttalosComponent = React.createClass({
   },
 
   onPopState: function(ev) {
-    //console.log("popstate", this.state, ev, history.state);
     var foo = getControllerFromHash();
     this.setState(foo);
   },
@@ -70,15 +69,15 @@ var AttalosComponent = React.createClass({
 
     switch (this.state.controller) {
       case 'join-room':
-        mainViewComponent = <JoinRoom />;
+        mainViewComponent = <JoinRoom key="join-room" />;
         break;
 
       case 'list-rooms':
-        mainViewComponent = <ListRooms />;
+        mainViewComponent = <ListRooms key="list-rooms" />;
         break;
 
       case 'room':
-        mainViewComponent = <Room id={this.state.id} client={this.state.connectionComponent} />;
+        mainViewComponent = <Room key="room" id={this.state.id} client={this.state.connectionComponent} />;
         break;
 
       default:
