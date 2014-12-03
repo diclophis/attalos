@@ -1,0 +1,3 @@
+#!/bin/sh
+
+node -p -e "require('./build/index.js').render(\"javascripts/application.js?$(shasum $1 | cut -f1 -d' ')\", \"stylesheets/application.css?$(shasum $2 | cut -f1 -d' ')\")"

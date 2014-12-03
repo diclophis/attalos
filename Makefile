@@ -32,37 +32,37 @@ debug:
 all: check dev dist
 
 check: $(node_modules) $(javascripts)
-	./node_modules/.bin/jest
+	./bin/test
 
 clean:
 	rm -Rf $(output_dirs)
 
-dist-clean:
+dist-clean: clean
 	rm -Rf node_modules
 
 build/npm-install.log: package.json
 	npm install
 
 public/stylesheets/application.min.css: $(debug_css)
-	./node_modules/.bin/lessc -x $< > $@
+	./bin/stylesheet_compress $< > $@
 
 $(debug_css): src/stylesheets/*.less
-	./node_modules/.bin/lessc $(src_less) > $@
+	./bin/stylesheet_compile $(src_less) > $@
 
 public/dev.html: $(node_modules) $(javascripts) $(debug_js) $(debug_css)
-	node -p -e "require('./build/index.js').render(\"javascripts/application.js?$(shell shasum $(debug_js) | cut -f1 -d' ')\", \"stylesheets/application.css?$(shell shasum $(debug_css) | cut -f1 -d' ')\")" > $@
+	./bin/render_html $(debug_js) $(debug_css) > $@
 
 public/index.html: $(node_modules) $(javascripts) $(dist_js) $(dist_css)
-	node -p -e "require('./build/index.js').render(\"javascripts/application.min.js?$(shell shasum $(dist_js) | cut -f1 -d' ')\", \"stylesheets/application.min.css?$(shell shasum $(dist_css) | cut -f1 -d' ')\")" > $@
+	./bin/render_html $(dist_js) $(dist_css) > $@
 
 $(output_dirs):
 	mkdir -p $@
 
 build/%: src/javascripts/%
-	./node_modules/.bin/jsx $< > $@
+	./bin/javascript_compile $< > $@
 
 $(debug_js): $(javascripts) package.json node_modules/**/*
-	./node_modules/.bin/browserify --standalone Attalos build/index.js > $@
+	./bin/javascript_package Attalos build/index.js > $@
 
 $(dist_js): $(debug_js)
-	ruby -r 'rubygems' -r 'closure-compiler' -e "puts Closure::Compiler.new(:warning_level => 'QUIET', :compilation_level => 'SIMPLE_OPTIMIZATIONS').compile(STDIN)" < $< > $@
+	./bin/javascript_compress $< > $@

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+./node_modules/.bin/browserify --standalone $1 $2
