@@ -86,7 +86,7 @@ var AttalosComponent = React.createClass({
     var extraAnchor = null;
 
     if (this.state.id && this.state.controller == 'room') {
-      extraAnchor = <Anchor href={"?controller=room&id=" + this.state.id}>{this.state.id.toUpperCase()}</Anchor>;
+      extraAnchor = <Anchor href={"?controller=room&id=" + this.state.id}><h2>{this.state.id}</h2></Anchor>;
     }
 
     if (!this.state.loggedIn) {
@@ -104,8 +104,14 @@ var AttalosComponent = React.createClass({
       <div className={this.state.loggedIn ? 'authenticated' : 'restricted'}>
         <div className="primary-anchors">
           <a href="?">#</a>
-          <Anchor href="?controller=list-rooms">LIST ROOMS</Anchor>
-          <Anchor href="?controller=join-room">JOIN ROOM</Anchor>
+          <ul>
+            <li>
+              <Anchor href="?controller=list-rooms">LIST-ROOMS</Anchor>
+            </li>
+            <li>
+              <Anchor href="?controller=join-room">JOIN-ROOM</Anchor>
+            </li>
+          </ul>
           {extraAnchor}
         </div>
         {bootstrappedComponents}

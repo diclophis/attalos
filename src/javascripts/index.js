@@ -16,8 +16,8 @@ var IndexComponent = React.createClass({
           <div id="main-container" className="static">
             <AttalosComponent bootstrapped={false}/>
           </div>
-          <script src={this.props.js}></script>
-          <script dangerouslySetInnerHTML={{__html:'window["Attalos"].attach("main-container");'}}></script>
+          <script type="text/javascript" src={this.props.js}></script>
+          <script type="text/javascript" dangerouslySetInnerHTML={{__html:'window["Attalos"].attach("main-container");'}}></script>
         </body>
       </html>
     );

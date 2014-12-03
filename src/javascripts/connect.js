@@ -162,24 +162,26 @@ var Connect = React.createClass({
 
   render: function() {
     return (
-      <form onSubmit={this.onConnect}>
-        <div className="connect">
-          jid:
-          <input id="jid" defaultValue={this.state.jid} onChange={this.handleJidValidation} disabled={this.state.isConnecting}></input>
-          password:
-          <input id="password" type="password" defaultValue="{this.state.password}" onChange={this.handlePasswordValidation} disabled={this.state.isConnecting}></input>
-          bosh:
-          <input id="bosh-url" defaultValue={this.state.boshUrl} onChange={this.handleBoshUrlValidation} disabled={this.state.isConnecting}></input>
-          <button disabled={this.state.isConnecting}>CONNECT</button>
-          <label htmlFor="auto-connect">
-            auto-connect?
-          </label>
-          <input id="auto-connect" type="checkbox" defaultChecked={this.state.autoConnect} onChange={this.handleAutoConnectValidation} disabled={this.state.isConnecting}></input>
-          <label htmlFor="connected">
-            currently-connected?
-          </label>
-          <input id="connected" type="checkbox" checked={this.state.loggedIn} onChange={this.handleConnectedValidation} disabled={!this.state.isConnecting}></input>
-        </div>
+      <form onSubmit={this.onConnect} className="connect">
+        <ul>
+          <li>
+            jid:
+            <input id="jid" defaultValue={this.state.jid} onChange={this.handleJidValidation} disabled={this.state.isConnecting}></input>
+            password:
+            <input id="password" type="password" defaultValue="{this.state.password}" onChange={this.handlePasswordValidation} disabled={this.state.isConnecting}></input>
+            bosh:
+            <input id="bosh-url" defaultValue={this.state.boshUrl} onChange={this.handleBoshUrlValidation} disabled={this.state.isConnecting}></input>
+            <button disabled={this.state.isConnecting}>CONNECT</button>
+            <label htmlFor="auto-connect">
+              auto-connect?
+            </label>
+            <input id="auto-connect" type="checkbox" defaultChecked={this.state.autoConnect} onChange={this.handleAutoConnectValidation} disabled={this.state.isConnecting}></input>
+            <label htmlFor="connected">
+              currently-connected?
+            </label>
+            <input id="connected" type="checkbox" checked={this.state.loggedIn} onChange={this.handleConnectedValidation} disabled={!this.state.isConnecting}></input>
+          </li>
+        </ul>
       </form>
     );
   }

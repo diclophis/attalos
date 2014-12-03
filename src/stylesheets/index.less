@@ -32,9 +32,9 @@ form {
 }
 
 .primary-anchors {
-  a {
-    margin: 1em;
-  }
+  //a {
+  //  margin: 1em;
+  //}
 }
 
 input, button {
@@ -46,12 +46,6 @@ input, button {
 
 html, body {
   height: 100%;
-}
-
-.room-messages {
-  ul {
-    margin: 0;
-  }
 }
 
 .room-input {
@@ -89,3 +83,20 @@ p {
 .connect {
   margin: 1em;
 }
+
+.bootstrapped {
+  .authenticated {
+    .connect {
+      display: none;
+    }
+  }
+}
+
+.bootstrapped {
+  .restricted {
+    .connect {
+    }
+  }
+}
+
+
