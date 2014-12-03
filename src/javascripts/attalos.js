@@ -7,39 +7,13 @@ var JoinRoom = require('./join-room');
 var ListRooms = require('./list-rooms');
 var Room = require('./room');
 var centralDispatch = require('./central-dispatch').singleton;
-var url = require('url');
 var listenTo = require('react-listento');
-var slug = require('./slug');
-
-//TODO: move to module, or internalize
-var getControllerFromHash = function() {
-  var newController = null;
-  var newId = null;
-
-  if (typeof(window) != 'undefined') {
-    var parts = url.parse(window.location.toString(), true);
-    if (parts.query.controller) {
-      newController = slug(parts.query.controller, 16);
-    }
-
-    if (parts.query.id) {
-      newId = slug(parts.query.id, 64);
-    }
-  }
-
-  return {
-    controller: newController,
-    action: 'index',
-    id: newId
-  };
-};
-
 
 var AttalosComponent = React.createClass({
   mixins: [listenTo],
 
   getInitialState: function() {
-    var defaultState = getControllerFromHash();
+    var defaultState = centralDispatch.getControllerFromHash();
 
     defaultState.roomLinks = [];
 
@@ -56,7 +30,7 @@ var AttalosComponent = React.createClass({
   },
 
   onPopState: function(ev) {
-    var foo = getControllerFromHash();
+    var foo = centralDispatch.getControllerFromHash();
     this.setState(foo);
   },
 

@@ -17,8 +17,6 @@ var Connect = React.createClass({
 
     if (typeof(window) === 'undefined') {
     } else {
-      // window.client = client;
-
       parts = url.parse(window.location.toString());
       parts.port = parseInt(parts.port) + 200;
 

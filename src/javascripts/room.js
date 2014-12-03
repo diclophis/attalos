@@ -46,8 +46,6 @@ var Room = React.createClass({
   },
 
   didReceiveMessage: function(msg, _) {
-    //console.log('didRec', (msg.to.bare === this.props.id), this.state.id, msg, _);
-
     if (msg.from && (msg.from.bare === this.props.id) && msg.body) {
       //TODO: figure out if this is a memory leak or not
       this.setState({ messages: [msg.body].concat(this.state.messages)});
