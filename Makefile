@@ -8,7 +8,7 @@ javascripts = $(patsubst $(javascript_src)/%,build/%, $(javascripts_jsx))
 javascripts_dir = $(patsubst $(javascript_src)%,build%, $(javascripts_jsx_dir))
 public_dirs = ./public ./public/javascripts ./public/stylesheets
 output_dirs = $(public_dirs) $(javascripts_dir)
-node_modules = ./node_modules
+node_modules = ./build/npm-install.log
 
 debug_js = ./public/javascripts/application.js
 debug_css = ./public/stylesheets/application.css
@@ -17,7 +17,7 @@ dist_css = ./public/stylesheets/application.min.css
 dev_html = ./public/dev.html
 dist_html = ./public/index.html
 
-.PHONY: all check clean
+.PHONY: all check clean dist-clean
 
 dev: $(output_dirs) $(dev_html)
 
@@ -29,19 +29,19 @@ debug:
 	echo $(javascripts)
 	echo $(javascripts_jsx)
 
-all: check dev dist
+all: dev check dist
 
-check: $(node_modules) $(javascripts)
+check: $(javascripts)
 	./bin/test
 
 clean:
 	rm -Rf $(output_dirs)
 
 dist-clean: clean
-	rm -Rf node_modules
+	rm -Rf node_modules $(node_modules)
 
-build/npm-install.log: package.json
-	npm install
+$(node_modules): package.json
+	npm install > $(node_modules) 2> ./build/npm-errors.log
 
 public/stylesheets/application.min.css: $(debug_css)
 	./bin/stylesheet_compress $< > $@
@@ -61,7 +61,7 @@ $(output_dirs):
 build/%: src/javascripts/%
 	./bin/javascript_compile $< > $@
 
-$(debug_js): $(javascripts) package.json node_modules/**/*
+$(debug_js): $(javascripts)
 	./bin/javascript_package Attalos build/index.js > $@
 
 $(dist_js): $(debug_js)
