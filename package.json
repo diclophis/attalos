@@ -8,6 +8,7 @@
   },
   "main": "/dev/null/index.js",
   "devDependencies": {
+    "json-loader": "^0.5.1",
     "webpack": "^1.4.14"
   },
   "jest": {
@@ -41,8 +42,5 @@
     "test": "node test.js"
   },
   "author": "Jon Bardin",
-  "license": "GPL",
-  "browser": {
-    "fs": false
-  }
+  "license": "GPL"
 }

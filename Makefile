@@ -65,4 +65,4 @@ $(debug_js): $(javascripts)
 	./bin/javascript_package Attalos build/index.js $@
 
 $(dist_js): $(debug_js)
-	./bin/javascript_compress $< > $@
+	./bin/javascript_compress $< $@

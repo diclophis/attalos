@@ -2,6 +2,8 @@
 
 set -e
 
-#./node_modules/.bin/browserify --standalone $1 $2 > $3
-
-./node_modules/.bin/webpack $2 $3 
+if [ -z $WEBPACK ]; then
+  ./node_modules/.bin/browserify --standalone $1 $2 > $3
+else
+  ./node_modules/.bin/webpack --display-error-details --module-bind json --output-library $1 --output-library-target umd $2 $3
+fi
