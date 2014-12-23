@@ -37,6 +37,7 @@ c2s.on('connect', function(client) {
 
   // Stanza handling
   client.on('stanza', function(stanza) {
+    console.log(stanza);
 
     // This re-broadcasts the stanza to all connected clients, in effect creating an echo chamber
     // at some point this will be replaced with specific logic based on different XEPs

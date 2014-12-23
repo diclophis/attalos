@@ -25,7 +25,7 @@ app.use(function(req, res, next) {
       if (0 === code) {
         next();
       } else {
-        res.send(standardError);
+        res.send('<pre>' + standardError + '</pre>');
       }
     });
   } else {
