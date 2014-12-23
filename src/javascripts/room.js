@@ -2,6 +2,7 @@ var React = require('react');
 var centralDispatch = require('./central-dispatch').singleton;
 var listenTo = require('react-listento');
 var marked = require('marked');
+var Rtc = require('./rtc');
 
 var Room = React.createClass({
   mixins: [listenTo],
@@ -10,6 +11,7 @@ var Room = React.createClass({
     marked.setOptions({ gfm: true, breaks: true });
 
     return {
+      meJoinedRoom: false,
       messages: [],
       message: ''
     };
@@ -46,15 +48,30 @@ var Room = React.createClass({
   },
 
   didReceiveMessage: function(msg, _) {
-    if (msg.from && (msg.from.bare === this.props.id) && msg.body) {
+    if (msg.from && (msg.from.bare === this.props.id + '' ) && msg.body) {
       //TODO: figure out if this is a memory leak or not
       this.setState({ messages: [msg.body].concat(this.state.messages)});
     }
   },
 
+  didJoinRoom: function(msg, _) {
+    //console.log("joined this room?", msg, centralDispatch.client);
+    if (msg.from.bare == this.props.id) {
+      if (msg.from.resource == centralDispatch.client.jid.local) {
+        //console.log("1 joined this room!");
+        this.setState({meJoinedRoom: true});
+      } else {
+        console.log(msg.from.resource, "joined", this.props.id);
+      }
+    }
+  },
+
   componentDidMount: function() {
     this.listenTo(centralDispatch, 'recv', this.didReceiveMessage);
+    this.listenTo(centralDispatch, 'joined:room', this.didJoinRoom);
+
     centralDispatch.joinRoom(this.props.id);
+
     var node = this.refs.focusTarget.getDOMNode();
     node.focus();
   },
@@ -90,12 +107,15 @@ var Room = React.createClass({
       <form onSubmit={this.willSend}>
         <div ref="allm" className="room">
           <div className="room-messages">
+            <div>
+              <Rtc id={this.props.id} />
+            </div>
             <ul>
               {messages}
             </ul>
           </div>
           <div ref="messages" className="room-input">
-            <textarea ref="focusTarget" defaultValue={this.state.message} value={this.state.message} onKeyDown={this.handleShiftKeyToggle} onChange={this.handleMessageValidation}></textarea>
+            <textarea disabled={this.state.meJoinedRoom == false} ref="focusTarget" defaultValue={this.state.message} value={this.state.message} onKeyDown={this.handleShiftKeyToggle} onChange={this.handleMessageValidation}></textarea>
             <button disabled={this.state.message.length == 0}>SEND</button>
           </div>
         </div>

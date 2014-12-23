@@ -3,8 +3,12 @@
 var EventEmitter = require('events').EventEmitter;
 var url = require('url');
 var slug = require('./slug'); //TODO: spec this
+var xmpp = require('stanza.io');
 
 var cd = new EventEmitter();
+
+cd.client = xmpp.createClient({
+});
 
 cd.navigateTo = function(href) {
   history.pushState({}, "", href);
@@ -29,6 +33,10 @@ cd.send = function(msg) {
 
 cd.joinRoom = function(roomName) {
   this.emit("room:join", roomName);
+};
+
+cd.joinedRoom = function(presenceStanza) {
+  this.emit("joined:room", presenceStanza);
 };
 
 cd.addLoginLogoutHandler = function(listener, fnCb) {

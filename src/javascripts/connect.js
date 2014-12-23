@@ -1,5 +1,4 @@
 var React = require('react');
-var xmpp = require('stanza.io');
 var url = require('url');
 var centralDispatch = require('./central-dispatch').singleton;
 var listenTo = require('react-listento');
@@ -7,13 +6,19 @@ var listenTo = require('react-listento');
 var Connect = React.createClass({
   mixins: [listenTo],
 
+  getDefaultProps: function() {
+    return {
+      roomMenuItems: []
+    };
+  },
+
   getInitialState: function() {
 
-    var client = xmpp.createClient({
-    });
 
     var parts = { hostname: 'localhost', port: 5200 };
     var autoConnect = true;
+    var jid = 'local-user@localhost';
+    var password = 'totally-secret';
 
     if (typeof(window) === 'undefined') {
     } else {
@@ -21,9 +26,20 @@ var Connect = React.createClass({
       parts.port = parseInt(parts.port) + 200;
 
       //TODO: add toBoolean
-      var fromSession = sessionStorage.getItem("autoConnect")
+      var fromSession = sessionStorage.getItem("autoConnect");
       if (fromSession) {
         autoConnect = fromSession === "true";
+      }
+
+      fromSession = sessionStorage.getItem("jid");
+      if (fromSession) {
+        //console.log(fromSession);
+        jid = fromSession;
+      }
+
+      fromSession = sessionStorage.getItem("password");
+      if (fromSession) {
+        password = fromSession;
       }
     }
 
@@ -31,10 +47,12 @@ var Connect = React.createClass({
 
     if (typeof(sessionStorage) != 'undefined') {
       sessionStorage.setItem("autoConnect", autoConnect);
+      sessionStorage.setItem("jid", jid);
+      sessionStorage.setItem("password", password);
     }
 
-    var jid = 'local-user@localhost';
-    var password = 'totally-secret';
+    roomMenuItems = [
+    ];
 
     return {
       loggedIn: false,
@@ -43,7 +61,7 @@ var Connect = React.createClass({
       jid: jid,
       password: password,
       boshUrl: boshUrl,
-      client: client
+      roomMenuItems: roomMenuItems
     };
   },
 
@@ -67,7 +85,19 @@ var Connect = React.createClass({
   },
 
   willSendChat: function(msg) {
-    this.state.client.sendMessage(msg);
+    //msg.from = this.state.jid;
+    centralDispatch.client.sendMessage(msg);
+
+    //var msg2 = {
+    //  to: "error0b@error0.xmpp.slack.com",
+    //  body: "from0",
+    //  type: 'chat'
+    //};
+    //this.state.client.sendMessage(msg2);
+  },
+
+  gotRoomRoster: function(ev) {
+    //console.log("roster!", ev, this);
   },
 
   willJoinRoom: function(id) {
@@ -79,7 +109,8 @@ var Connect = React.createClass({
     //console.log("JOIN", id, this.state.client.jid.local);
 
     if (this.state.loggedIn) {
-      this.state.client.joinRoom(id, this.state.client.jid.local);
+      centralDispatch.client.joinRoom(id, centralDispatch.client.jid.local);
+      // broken in slack! this.state.client.getRoomMembers(id, null, this.gotRoomRoster);
     } else {
       //console.warn("!loggedIn");
       //TODO: figure out the semantics of this memory leak
@@ -95,13 +126,31 @@ var Connect = React.createClass({
     //console.log(a, b);
   },
 
+  onPresence: function(msg) {
+    //TODO: better check here
+    if (msg.from.domain.indexOf("conference") != -1) {
+      //console.log("joined:room", msg.from.toString(), msg);
+      centralDispatch.joinedRoom(msg);
+    } else {
+      //console.log("presence", msg.from.toString(), msg);
+    }
+
+    //console.log(msg.from.resource);
+    //this.setProps({roomMenuItems: (this.props.roomMenuItems || []).concat({ payload: '?controller=room&id=' + msg.from.toString(), text: msg.from.local })});
+  },
+
+  //onAvailable: function(msg) {
+  //},
+
   componentDidMount: function() {
-    //TODO: figure out a beter factorization of this
-    this.listenTo(this.state.client, 'session:started', this.onSessionStarted);
-    this.listenTo(this.state.client, 'disconnected', this.onSessionDisconnected);
-    this.listenTo(this.state.client, 'chat', this.onChat);
-    this.listenTo(this.state.client, 'groupchat', this.onChat);
-    this.listenTo(this.state.client, '*', this.onDebug);
+    //TODO: figure out a better factorization of this
+    this.listenTo(centralDispatch.client, 'session:started', this.onSessionStarted);
+    this.listenTo(centralDispatch.client, 'disconnected', this.onSessionDisconnected);
+    this.listenTo(centralDispatch.client, 'chat', this.onChat);
+    this.listenTo(centralDispatch.client, 'groupchat', this.onChat);
+    //this.listenTo(this.state.client, 'available', this.onAvailable);
+    this.listenTo(centralDispatch.client, 'presence', this.onPresence);
+    this.listenTo(centralDispatch.client, '*', this.onDebug);
 
     this.listenTo(centralDispatch, 'send', this.willSendChat);
     this.listenTo(centralDispatch, 'room:join', this.willJoinRoom);
@@ -119,7 +168,7 @@ var Connect = React.createClass({
       boshURL: this.state.boshUrl
     };
 
-    this.state.client.connect(opts);
+    centralDispatch.client.connect(opts);
     this.setState({ isConnecting: true });
   },
 
@@ -130,7 +179,7 @@ var Connect = React.createClass({
   },
 
   componentWillUnmount: function() {
-    console.log("FUUUU");
+    //console.log("FUUUU");
   },
 
   handleBoshUrlValidation: function(ev) {
@@ -141,10 +190,12 @@ var Connect = React.createClass({
   },
 
   handleJidValidation: function(ev) {
+    sessionStorage.setItem("jid", ev.target.value);
     this.setState({ jid: ev.target.value });
   },
 
   handlePasswordValidation: function(ev) {
+    sessionStorage.setItem("password", ev.target.value);
     this.setState({ password: ev.target.value });
   },
 
@@ -154,7 +205,7 @@ var Connect = React.createClass({
 
   handleConnectedValidation: function(ev) {
     if (!ev.target.checked) {
-      this.state.client.disconnect();
+      centralDispatch.client.disconnect();
     }
   },
 

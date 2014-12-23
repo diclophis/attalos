@@ -47,11 +47,12 @@ var AttalosComponent = React.createClass({
         break;
 
       case 'list-rooms':
+        console.log(this.state.connectionComponent, "!!!!");
         mainViewComponent = <ListRooms key="list-rooms" />;
         break;
 
       case 'room':
-        mainViewComponent = <Room key="room" id={this.state.id} client={this.state.connectionComponent} />;
+        mainViewComponent = <Room key="room" id={this.state.id} nick={this.state.nick} />;
         break;
 
       default:
