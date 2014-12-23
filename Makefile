@@ -62,7 +62,7 @@ build/%: src/javascripts/%
 	./bin/javascript_compile $< > $@
 
 $(debug_js): $(javascripts)
-	./bin/javascript_package Attalos build/index.js > $@
+	./bin/javascript_package Attalos build/index.js $@
 
 $(dist_js): $(debug_js)
 	./bin/javascript_compress $< > $@

@@ -8,10 +8,13 @@
   },
   "main": "/dev/null/index.js",
   "devDependencies": {
+    "webpack": "^1.4.14"
   },
   "jest": {
     "testDirectoryName": "tests",
-    "unmockedModulePathPatterns": ["<rootDir>/node_modules/react"] 
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/react"
+    ]
   },
   "dependencies": {
     "react": "^0.12",
@@ -38,5 +41,8 @@
     "test": "node test.js"
   },
   "author": "Jon Bardin",
-  "license": "GPL"
+  "license": "GPL",
+  "browser": {
+    "fs": false
+  }
 }
