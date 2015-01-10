@@ -39,7 +39,7 @@ module.exports.render = function(packageModule, js, css, cb) {
       );
     }
   });
-  return React.renderToStaticMarkup(<IndexComponent js={js} css={css} />);
+  return '<!DOCTYPE HTML SYSTEM>' + React.renderToStaticMarkup(<IndexComponent js={js} css={css} />);
 };
 
 module.exports.attach = function(mainContainer) {
