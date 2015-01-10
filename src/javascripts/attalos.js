@@ -16,6 +16,7 @@ var AttalosComponent = React.createClass({
     var defaultState = centralDispatch.getControllerFromHash();
 
     defaultState.roomLinks = [];
+    defaultState.messages = {};
 
     //TODO: figure out a better way to manage global state?
     defaultState.connectionComponent = <Connect key="connect" />;
@@ -27,7 +28,35 @@ var AttalosComponent = React.createClass({
     centralDispatch.addLoginLogoutHandler(this, this.onLoggedInOrOut);
     centralDispatch.addPopStateHandler(this, this.onPopState);
 
+    this.listenTo(centralDispatch, 'recv', this.didReceiveMessage);
+    //this.listenTo(centralDispatch, 'joined:room', this.didJoinRoom);
   },
+
+  didReceiveMessage: function(msg, _) {
+    if (msg.from && msg.body) {
+      var newState = {};
+      newState[msg.from.bare+'.joined'] = true;
+      var a = (this.state[msg.from.bare] || [])
+      a.unshift(msg.body);
+      newState[msg.from.bare] = a;
+      this.setState(newState);
+    } else {
+      //console.log("?????", msg);
+    }
+  },
+
+/*
+  didJoinRoom: function(msg, _) {
+    console.log("joined this room?", msg, centralDispatch.client);
+    if (msg.from.bare == this.props.id) {
+      if (msg.from.resource == centralDispatch.client.jid.local) {
+        this.setState({meJoinedRoom: true});
+      } else {
+        console.log(msg.from.resource, "joined", this.props.id);
+      }
+    }
+  },
+*/
 
   onPopState: function(ev) {
     var foo = centralDispatch.getControllerFromHash();
@@ -36,6 +65,15 @@ var AttalosComponent = React.createClass({
 
   onLoggedInOrOut: function(loggedIn) {
     this.setState({ loggedIn: loggedIn });
+  },
+
+  componentDidUpdate: function() {
+    if (this.state.controller == "room") {
+      if (!this.state[this.state.id+'.joined']) {
+        //console.log("!@#", this.state);
+        centralDispatch.joinRoom(this.state.id);
+      }
+    }
   },
 
   render: function() {
@@ -47,12 +85,11 @@ var AttalosComponent = React.createClass({
         break;
 
       case 'list-rooms':
-        console.log(this.state.connectionComponent, "!!!!");
         mainViewComponent = <ListRooms key="list-rooms" />;
         break;
 
       case 'room':
-        mainViewComponent = <Room key="room" id={this.state.id} nick={this.state.nick} />;
+        mainViewComponent = <Room key="room" id={this.state.id} nick={this.state.nick} messages={this.state[this.state.id] || ["Please Wait ..."]} joined={this.state[this.state.id+'.joined']}/>;
         break;
 
       default:

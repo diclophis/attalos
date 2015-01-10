@@ -1,12 +1,9 @@
 var React = require('react');
 var centralDispatch = require('./central-dispatch').singleton;
-var listenTo = require('react-listento');
 var marked = require('marked');
 var Rtc = require('./rtc');
 
 var Room = React.createClass({
-  mixins: [listenTo],
-
   getInitialState: function() {
     marked.setOptions({ gfm: true, breaks: true });
 
@@ -23,7 +20,8 @@ var Room = React.createClass({
   },
 
   sendMessage: function() {
-    if (this.state.message.replace(/^\s+|\s+$/g, '').length > 0) {
+    //replace(/^\s+|\s+$/g, '')
+    if (this.state.message.length > 0) {
       centralDispatch.send({
         to: this.props.id,
         body: this.state.message,
@@ -47,31 +45,15 @@ var Room = React.createClass({
     }
   },
 
-  didReceiveMessage: function(msg, _) {
-    if (msg.from && (msg.from.bare === this.props.id + '' ) && msg.body) {
-      //TODO: figure out if this is a memory leak or not
-      this.setState({ messages: [msg.body].concat(this.state.messages)});
-    }
+  componentWillReceiveProps: function(nextProps) {
+    this.setState({messages: nextProps.messages, meJoinedRoom: nextProps.joined});
   },
 
-  didJoinRoom: function(msg, _) {
-    //console.log("joined this room?", msg, centralDispatch.client);
-    if (msg.from.bare == this.props.id) {
-      if (msg.from.resource == centralDispatch.client.jid.local) {
-        //console.log("1 joined this room!");
-        this.setState({meJoinedRoom: true});
-      } else {
-        console.log(msg.from.resource, "joined", this.props.id);
-      }
-    }
+  componentWillMount: function() {
+    this.setState({messages: this.props.messages});
   },
 
   componentDidMount: function() {
-    this.listenTo(centralDispatch, 'recv', this.didReceiveMessage);
-    this.listenTo(centralDispatch, 'joined:room', this.didJoinRoom);
-
-    centralDispatch.joinRoom(this.props.id);
-
     var node = this.refs.focusTarget.getDOMNode();
     node.focus();
   },
@@ -97,6 +79,7 @@ var Room = React.createClass({
     var slicedMessages = this.state.messages.slice(0, 32);
 
     for (var i=0; i<slicedMessages.length; i++) {
+      //NOTE: we allow the markdown formatted html to render un-escaped
       var message = marked(slicedMessages[i]);
       messages.unshift(
         <li key={i + '-message'} dangerouslySetInnerHTML={{__html: message}}></li>
@@ -115,7 +98,7 @@ var Room = React.createClass({
             </ul>
           </div>
           <div ref="messages" className="room-input">
-            <textarea disabled={this.state.meJoinedRoom == false} ref="focusTarget" defaultValue={this.state.message} value={this.state.message} onKeyDown={this.handleShiftKeyToggle} onChange={this.handleMessageValidation}></textarea>
+            <textarea disabled={!this.state.meJoinedRoom} ref="focusTarget" defaultValue={this.state.message} value={this.state.message} onKeyDown={this.handleShiftKeyToggle} onChange={this.handleMessageValidation}></textarea>
             <button disabled={this.state.message.length == 0}>SEND</button>
           </div>
         </div>

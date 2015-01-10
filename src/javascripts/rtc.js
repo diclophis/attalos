@@ -13,7 +13,7 @@ var Rtc = React.createClass({
   mixins: [listenTo],
 
   sendSignal: function(type, body) {
-    console.log("send", type, body);
+    //console.log("send", type, body);
 
     centralDispatch.send({
       to: this.props.id + "/rtc",
@@ -23,7 +23,7 @@ var Rtc = React.createClass({
   },
 
   recvSignal: function(msg) {
-    console.log("rcv", msg);
+    //console.log("rcv", msg);
 
     //if (msg.from.resource != "rtc") {
 
@@ -125,7 +125,7 @@ var Rtc = React.createClass({
   */
 
   onError: function(err) {
-    console.log(err.message);
+    //console.log("ERROR", err.message);
   },
 
   onOfferCreated: function(description) {
