@@ -1,5 +1,7 @@
 # Makefile see: https://www.gnu.org/prep/standards/html_node/Standard-Targets.html
 
+TARGET_MODULE=Attalos
+
 src_less = ./src/stylesheets/index.less
 javascript_src = ./src/javascripts
 javascripts_jsx = $(shell find $(javascript_src) -type f -name "*.js")
@@ -50,10 +52,10 @@ $(debug_css): src/stylesheets/*.less
 	./bin/stylesheet_compile $(src_less) > $@
 
 public/dev.html: $(node_modules) $(javascripts) $(debug_js) $(debug_css)
-	./bin/render_html $(debug_js) $(debug_css) > $@
+	./bin/render_html $(debug_js) $(debug_css) $(TARGET_MODULE) > $@
 
 public/index.html: $(node_modules) $(javascripts) $(dist_js) $(dist_css)
-	./bin/render_html $(dist_js) $(dist_css) > $@
+	./bin/render_html $(dist_js) $(dist_css) $(TARGET_MODULE) > $@
 
 $(output_dirs):
 	mkdir -p $@
@@ -62,7 +64,7 @@ build/%: src/javascripts/%
 	./bin/javascript_compile $< > $@
 
 $(debug_js): $(javascripts)
-	./bin/javascript_package Attalos build/index.js $@
+	./bin/javascript_package $(TARGET_MODULE) build/index.js $@
 
 $(dist_js): $(debug_js)
-	./bin/javascript_compress $< $@
+	./bin/javascript_compress $(TARGET_MODULE) $< $@

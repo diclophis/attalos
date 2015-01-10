@@ -1,7 +1,7 @@
 #!/bin/sh
 
-if [ -z $WEBPACK ]; then
-  ruby -r 'rubygems' -r 'closure-compiler' -e "puts Closure::Compiler.new(:warning_level => 'QUIET', :compilation_level => 'SIMPLE_OPTIMIZATIONS').compile(STDIN)" < $1 > $2
+if [ ! -z $BROWSERIFY ]; then
+  ruby -r 'rubygems' -r 'closure-compiler' -e "puts Closure::Compiler.new(:warning_level => 'QUIET', :compilation_level => 'SIMPLE_OPTIMIZATIONS').compile(STDIN)" < $2 > $3
 else
-  ./node_modules/.bin/webpack --optimize-minimize $1 $2
+  ./node_modules/.bin/webpack --optimize-minimize --output-library $1 --output-library-target umd $2 $3
 fi

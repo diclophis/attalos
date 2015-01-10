@@ -3,37 +3,45 @@
 var React = require('react');
 var AttalosComponent = require('./attalos');
 
-var IndexComponent = React.createClass({
-  render: function() {
-    return(
-      <html>
-        <head>
-          <meta httpEquiv="Content-Type" content="text/html;charset=utf-8" />
-          <title>Attalos Index</title>
-          <link href={this.props.css} media="all" rel="stylesheet" type="text/css" />
-        </head>
-        <body>
-          <div id="main-container" className="static">
-            <AttalosComponent bootstrapped={false}/>
-          </div>
-          <script type="text/javascript" src={this.props.js}></script>
-          <script type="text/javascript" dangerouslySetInnerHTML={{__html:'window["Attalos"].attach("main-container");'}}></script>
-        </body>
-      </html>
-    );
-  }
-});
+module.exports = {};
 
-module.exports = {
-  render: function(js, css, cb) {
-    return React.renderToStaticMarkup(<IndexComponent js={js} css={css} />);
-  },
+module.exports.bootstrap = function(exp, mainContainer) {
+  exp.attach(mainContainer);
+  mainContainer.className = "bootstrapped";
+};
 
-  attach: function(mainContainerId) {
-    document.addEventListener("DOMContentLoaded", function() {
-      var mainContainer = document.getElementById(mainContainerId);
-      React.render(<AttalosComponent bootstrapped={true}/>, mainContainer);
-      mainContainer.className = "bootstrapped";
-    });
-  }
+//module.exports.dataUrlEncode = function(string) {
+//  return ('data:text/html;charset=utf-8,' + encodeURIComponent(string));
+//};
+
+module.exports.render = function(packageModule, js, css, cb) {
+  var IndexComponent = React.createClass({
+    render: function() {
+      var mainContainerId = "attalos-container";
+      var rep = '(' + module.exports.bootstrap.toString() + ')';
+      var peat = '(window["' + packageModule + '"], document.getElementById("' + mainContainerId + '"))';
+      var bootstrapSource = rep + peat;
+      return(
+        <html>
+          <head>
+            <meta httpEquiv="Content-Type" content="text/html;charset=utf-8" />
+            <title>Attalos Index</title>
+            <link href={this.props.css} media="all" rel="stylesheet" type="text/css" />
+          </head>
+          <body>
+            <div id={mainContainerId} className="static">
+              <AttalosComponent bootstrapped={false}/>
+            </div>
+            <script type="text/javascript" src={this.props.js}></script>
+            <script type="text/javascript" dangerouslySetInnerHTML={{__html:bootstrapSource}}></script>
+          </body>
+        </html>
+      );
+    }
+  });
+  return React.renderToStaticMarkup(<IndexComponent js={js} css={css} />);
+};
+
+module.exports.attach = function(mainContainer) {
+  return React.render(<AttalosComponent bootstrapped={true}/>, mainContainer);
 };
