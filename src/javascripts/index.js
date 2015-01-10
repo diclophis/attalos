@@ -17,10 +17,10 @@ module.exports.bootstrap = function(exp, mainContainer) {
 module.exports.render = function(packageModule, js, css, cb) {
   var IndexComponent = React.createClass({
     render: function() {
-      var mainContainerId = "attalos-container";
+      var mainContainerId = packageModule.toLowerCase() + "-container";
       var rep = '(' + module.exports.bootstrap.toString() + ')';
-      var peat = '(window["' + packageModule + '"], document.getElementById("' + mainContainerId + '"))';
-      var bootstrapSource = rep + peat;
+      var peat = '(' + packageModule + ', document.getElementById("' + mainContainerId + '"));';
+      var bootstrapSource = (rep + peat).replace('\n', '');
       return(
         <html>
           <head>
