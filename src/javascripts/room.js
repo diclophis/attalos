@@ -86,12 +86,21 @@ var Room = React.createClass({
       );
     }
 
+    var localVideoSrc = null;
+    if (this.props.streams.length > 0) {
+      localVideoSrc = this.props.streams[0];
+    }
+
     return (
       <form onSubmit={this.willSend}>
         <div ref="allm" className="room">
           <div className="room-messages">
             <div>
-              <Rtc id={this.props.id} />
+              <div>
+                <video ref="localVideo" autoPlay src={localVideoSrc}></video>
+              </div>
+              <div ref="remoteVideos">
+              </div>
             </div>
             <ul>
               {messages}
