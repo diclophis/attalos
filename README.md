@@ -75,4 +75,7 @@ The `build` products are placed in `public/` it is possible to self-host these f
     DEFAULT_XMPP_PORT=5100 foreman start
 
 1. TODO: vagrant dev box
+
+    bundle exec foreman export upstart ansible/files/docker_init --root /home/vagrant/current -f ./Procfile
+
 1. TODO: docker image (think federations based on domain over a cluster of servers)
