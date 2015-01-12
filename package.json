@@ -30,7 +30,7 @@
     "node-xmpp-server": "https://github.com/node-xmpp/node-xmpp-server/tarball/535abf75c95c3e500ebb14a863b81bfa4da529db",
     "node-xmpp-core": "https://github.com/node-xmpp/node-xmpp-core/tarball/f7804dd63e5ea69919ebe20d53efe6f4e5093e85",
     "node-xmpp-bosh": "https://github.com/diclophis/node-xmpp-bosh/tarball/2211df11ae35200293687c7ceee8d36b1d83fd59",
-    "json-loader": "^0.5.1",
+    "json-loader": "0.5.1",
     "webpack": "^1.4.14"
   },
   "engines": {
