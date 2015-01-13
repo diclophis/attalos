@@ -51,7 +51,6 @@ This application is split into 2 main categories:
     
       Legacy networking adapter for enhanced client compatibility
 
-
 # Where to start
 
 This project uses `make` to coordinate all aspects of its development, the primary targets of interest are:
@@ -69,13 +68,18 @@ Source of both client and server logic is only in this repo
 
 The `build` products are placed in `public/` it is possible to self-host these files as long as you provide your own `BOSH` and `CHAT` servers!
 
-# Build it yourself
+## Local Development
 
     bundle
     DEFAULT_XMPP_PORT=5100 foreman start
 
-1. TODO: vagrant dev box
+## Build your own docker image (think federations based on domain over a cluster of servers)
 
-    bundle exec foreman export upstart ansible/files/docker_init --root /home/vagrant/current -f ./Procfile
+    vagrant up
+    ansible-playbook -i ansible/attalos.inventory ansible/attalos-playbook.yml
+    vagrant ssh
+    sudo docker run --detach=true -p 5000:5000 -v /tmp/attalos:/log precise /sbin/init --confdir /etc/docker_init --startup-event attalos-web --no-dbus --verbose --logdir /log
+    sudo docker run --detach=true -p 5100:5100 -v /tmp/attalos:/log precise /sbin/init --confdir /etc/docker_init --startup-event attalos-chat --no-dbus --verbose --logdir /log
+    sudo docker run --detach=true -p 5200:5200 -v /tmp/attalos:/log precise /sbin/init --confdir /etc/docker_init --startup-event attalos-bosh --no-dbus --verbose --logdir /log
 
-1. TODO: docker image (think federations based on domain over a cluster of servers)
+  This will produce a `620M` docker image at `~/precise.tar`
