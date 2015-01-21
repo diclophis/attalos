@@ -69,7 +69,7 @@ exports.config = {
 	//
 	firewall: {
 		// allow: [ /* 'jabber.org', /(.*\.)?jappix.com$/ */ ],
-    // allow: ['localhost']
+    allow: ['localhost', 'attalos.vagrant']
 		// deny:  [ /* 'gmail.com' */ ]
 	},
 
