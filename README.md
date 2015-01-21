@@ -85,3 +85,11 @@ The `build` products are placed in `public/` it is possible to self-host these f
   This will produce a `620M` docker image at `~/precise.tar`
 
     "node-stringprep": "git://github.com/node-xmpp/node-stringprep.git#704f6dc54fffdc0fa33aca13dbac8f575a06ab1b",
+
+# scratch space
+
+    module.exports.dataUrlEncode = function(string) {
+      return ('data:text/html;charset=utf-8,' + encodeURIComponent(string));
+    };
+
+    replace(/^\s+|\s+$/g, '')

@@ -11,7 +11,6 @@ var ListRooms = React.createClass({
   render: function() {
     var roomButtons = [];
 
-    //console.log(this);
     //for (var i=0; i<centralDispatch.client.roomMenuItems.length; i++) {
     //  var roomButtonData = this.state.roomMenuItems[i];
     //  roomButtons.push(<li key={i}><Anchor href={roomButtonData.payload}>{roomButtonData.text}</Anchor></li>);

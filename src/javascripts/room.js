@@ -1,7 +1,6 @@
 var React = require('react');
 var centralDispatch = require('./central-dispatch').singleton;
 var marked = require('marked');
-var Rtc = require('./rtc');
 
 var Room = React.createClass({
   getInitialState: function() {
@@ -20,7 +19,6 @@ var Room = React.createClass({
   },
 
   sendMessage: function() {
-    //replace(/^\s+|\s+$/g, '')
     if (this.state.message.length > 0) {
       centralDispatch.send({
         to: this.props.id,

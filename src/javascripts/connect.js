@@ -13,8 +13,6 @@ var Connect = React.createClass({
   },
 
   getInitialState: function() {
-
-
     var parts = { hostname: 'localhost', port: 5200 };
     var autoConnect = true;
     var jid = 'local-user@localhost';
@@ -33,7 +31,6 @@ var Connect = React.createClass({
 
       fromSession = sessionStorage.getItem("jid");
       if (fromSession) {
-        //console.log(fromSession);
         jid = fromSession;
       }
 
@@ -85,15 +82,7 @@ var Connect = React.createClass({
   },
 
   willSendChat: function(msg) {
-    //msg.from = this.state.jid;
     centralDispatch.client.sendMessage(msg);
-
-    //var msg2 = {
-    //  to: "error0b@error0.xmpp.slack.com",
-    //  body: "from0",
-    //  type: 'chat'
-    //};
-    //this.state.client.sendMessage(msg2);
   },
 
   gotRoomRoster: function(ev) {
@@ -106,19 +95,12 @@ var Connect = React.createClass({
     //  console.log("SADASD", a, b, c);
     //});
 
-    //console.log("JOIN", id, this.state.client.jid.local);
+    console.log("willJoinRoom", id, this.state);
 
     if (this.state.loggedIn) {
       centralDispatch.client.joinRoom(id, centralDispatch.client.jid.local);
       // broken in slack! this.state.client.getRoomMembers(id, null, this.gotRoomRoster);
     } else {
-      //console.warn("!loggedIn");
-      //TODO: figure out the semantics of this memory leak
-      //throw new Error('notLoggedIn');
-      //var stateBridge = this.state;
-      //vent.once("login", function(_) {
-      //  stateBridge.client.joinRoom(id, stateBridge.client.jid.local);
-      //});
     }
   },
 
@@ -135,12 +117,10 @@ var Connect = React.createClass({
       //console.log("presence", msg.from.toString(), msg);
     }
 
+    //TODO: figure out more presence info like list of rooms
     //console.log(msg.from.resource);
     //this.setProps({roomMenuItems: (this.props.roomMenuItems || []).concat({ payload: '?controller=room&id=' + msg.from.toString(), text: msg.from.local })});
   },
-
-  //onAvailable: function(msg) {
-  //},
 
   componentDidMount: function() {
     //TODO: figure out a better factorization of this
