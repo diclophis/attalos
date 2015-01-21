@@ -43,7 +43,6 @@
         - linux-image-generic
         - linux-headers-generic
         - console-setup
-        - vim
         - debootstrap
         - lxc-docker
         - postfix
@@ -51,34 +50,6 @@
         - rsyslog
         - nodejs
         - build-essential
-        #- npm
-        # - update-manager-core
-        # - update-notifier-common
-        # - git
-        # - screen
-        # - psmisc
-        # - curl
-        # - zip
-        # - rsync
-        # - wget
-        # - openjdk-7-jre
-        # - htop
-        # - tree
-        # - kbd
-        # - xkb-data
-        # - man-db
-        # - libc-bin
-        # - dnsutils
-        # - pv
-        # - libssl1.0.0
-        # - openssl
-        # - libssl-dev
-        # - nodejs
-        # - libpcap0.8
-        # - tcpdump
-        # - apache2-utils
-        # - libapr1
-        # - libaprutil1
 
     - name: install virtualbox system packages
       apt: pkg={{ item }} state=latest
@@ -88,7 +59,8 @@
       when: inventory_hostname in groups['virtualbox']
 
     - name: remove un-needed packages
-      apt: pkg={{ item }} state=absent purge=true
+      #apt: pkg={{ item }} state=absent purge=true
+      shell: echo '{{ item }}'
       sudo: true
       with_items:
         - libkms1
@@ -113,13 +85,7 @@
         - language-pack-gnome-en
         - language-pack-gnome-en-base
         - xfonts-base
-        - linux-firmware
-        - linux-image-generic
-        - linux-image-server
-        - linux-server
         - memtest86+
-        - ubuntu-standard
-        - virtualbox-guest-x11
         - xserver-xorg-core
         - libxfixes3
         - libxcomposite1
@@ -142,15 +108,6 @@
         - wireless-regdb
         - libnl-genl-3-200
         - crda
-        - linux-headers-3.2.0-74
-        - linux-headers-3.2.0-74-generic
-        - linux-headers-3.2.0-75
-        - linux-headers-3.2.0-75-generic
-        - linux-headers-generic
-        - linux-headers-server
-        - linux-image-3.2.0-23-generic
-        - linux-image-3.2.0-74-generic
-        - linux-image-3.2.0-75-generic
         - libicu48
         - libicu48-dbg
         - geoip-database
@@ -163,8 +120,13 @@
         - console-setup
         - kbd
         - keyboard-configuration
-        - ubuntu-minimal
+        - vim
         #NOTE: does not reboot!
+        #- linux-firmware
+        #- linux-server
+        #- ubuntu-standard
+        #- virtualbox-guest-x11
+        #- ubuntu-minimal
         #- libfreetype6
         #- libx11-6
         #- libxext6
@@ -204,10 +166,6 @@
       sudo: true
       service: name=postfix state=stopped enabled=true
 
-#    - name: ensure inn2 is started
-#      sudo: true
-#      service: name=inn2 state=stopped enabled=true
-
     - name: unset immutable attribute for etc/hostname file to allow modification
       sudo: true
       shell: chattr -i /etc/hostname
@@ -218,7 +176,7 @@
 
     - name: set etc/host for hostname
       sudo: true
-      lineinfile: dest=/etc/hosts line="127.0.0.1 {{ inventory_hostname }}"
+      lineinfile: dest=/etc/hosts line="127.0.0.1 {{ inventory_hostname }} attalos.vagrant"
 
     - name: set immutable attribute for etc/hostname file to prevent modification
       sudo: true
@@ -241,15 +199,11 @@
       shell: "{{ item }}"
       ignore_errors: true
       with_items:
-        - /etc/init.d/rsyslog stop
-        - /etc/init.d/postfix stop
-        - stop cron
-        - stop atd
         - test -e /proc/sys/kernel/yama/protected_nonaccess_hardlinks && echo 0 > /proc/sys/kernel/yama/protected_nonaccess_hardlinks
-        - rm -f /etc/init.d/ondemand
-        - rm -f /etc/rc2.d/S99ondemand
-        - rm -f /etc/rc4.d/S99ondemand
-        - rm -f /etc/rc5.d/S99ondemand
+        #- rm -f /etc/init.d/ondemand
+        #- rm -f /etc/rc2.d/S99ondemand
+        #- rm -f /etc/rc4.d/S99ondemand
+        #- rm -f /etc/rc5.d/S99ondemand
         - rm -f /home/provision/.bash_history
         - rm -f /root/.bash_history
         - docker ps -a | cut -d' ' -f1 | grep -v CONTAIN | xargs -I{} docker rm -f {}
@@ -299,3 +253,12 @@
           -cf precise.tar /
         - cat precise.tar | docker import - precise
         #- docker run --detach=true -p 4443:443 -p 8080:80 -p 4406:3306 -p 4407:3307 -p 2222:22 -p 9119:119 precise /sbin/init --confdir=/etc/docker_init --startup-event=filesystem --no-dbus --verbose
+
+    - name: run docker images
+      sudo: true
+      shell: '{{ item }}'
+      with_items:
+        - docker run --detach=true -p 5000:5000 -v /tmp/attalos:/log --add-host="attalos.vagrant:10.0.30.11" precise /sbin/init --confdir /etc/docker_init --startup-event attalos-web --no-dbus --verbose --logdir /log
+        - docker run --detach=true -p 5100:5100 -v /tmp/attalos:/log --add-host="attalos.vagrant:10.0.30.11" precise /sbin/init --confdir /etc/docker_init --startup-event attalos-chat --no-dbus --verbose --logdir /log
+        - docker run --detach=true -p 5200:5200 -v /tmp/attalos:/log --add-host="attalos.vagrant:10.0.30.11" precise /sbin/init --confdir /etc/docker_init --startup-event attalos-bosh --no-dbus --verbose --logdir /log
+        - docker run --detach=true -p 2345:22   -v /tmp/attalos:/log --add-host="attalos.vagrant:10.0.30.11" precise /sbin/init --confdir /etc/docker_init --startup-event ssh --no-dbus --verbose --logdir /log

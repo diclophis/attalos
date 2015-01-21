@@ -5,14 +5,15 @@ var centralDispatch = require('./central-dispatch').singleton;
 var Connect = React.createClass({
   getInitialState: function() {
     var parts = { hostname: 'localhost', port: 5200 };
+    parts = url.parse(window.location.toString());
+    parts.port = parseInt(parts.port) + 200;
+
     var autoConnect = true;
     var jid = 'local-user@' + parts.hostname;
     var password = 'totally-secret';
 
-    if (typeof(window) === 'undefined') {
-    } else {
-      parts = url.parse(window.location.toString());
-      parts.port = parseInt(parts.port) + 200;
+    //if (typeof(window) === 'undefined') {
+    //} else {
 
       //TODO: add toBoolean
       var fromSession = sessionStorage.getItem("autoConnect");
@@ -29,7 +30,7 @@ var Connect = React.createClass({
       if (fromSession) {
         password = fromSession;
       }
-    }
+    //}
 
     var boshUrl = 'http://' + parts.hostname + ':' + parts.port + '/http-bind';
 
