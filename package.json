@@ -25,12 +25,14 @@
     "marked": "~0.3.2",
     "express": "~4.8.4",
     "socket.io": "~1.0.6",
-    "node-stringprep": "https://github.com/node-xmpp/node-stringprep/tarball/704f6dc54fffdc0fa33aca13dbac8f575a06ab1b",
-    "stanza.io": "https://github.com/otalk/stanza.io/tarball/230cadc5adb822a6c6591d46fb625fd581014313",
-    "node-xmpp-server": "https://github.com/node-xmpp/node-xmpp-server/tarball/535abf75c95c3e500ebb14a863b81bfa4da529db",
-    "node-xmpp-core": "https://github.com/node-xmpp/node-xmpp-core/tarball/f7804dd63e5ea69919ebe20d53efe6f4e5093e85",
-    "node-xmpp-bosh": "https://github.com/diclophis/node-xmpp-bosh/tarball/2211df11ae35200293687c7ceee8d36b1d83fd59",
-    "json-loader": "0.5.1",
+
+    "node-stringprep": "git://github.com/node-xmpp/node-stringprep.git#704f6dc54fffdc0fa33aca13dbac8f575a06ab1b",
+    "stanza.io": "git://github.com/otalk/stanza.io.git#230cadc5adb822a6c6591d46fb625fd581014313",
+    "node-xmpp-server": "git://github.com/node-xmpp/node-xmpp-server.git#535abf75c95c3e500ebb14a863b81bfa4da529db",
+    "node-xmpp-core": "git://github.com/node-xmpp/node-xmpp-core.git#f7804dd63e5ea69919ebe20d53efe6f4e5093e85",
+    "node-xmpp-bosh": "git://github.com/diclophis/node-xmpp-bosh.git#2211df11ae35200293687c7ceee8d36b1d83fd59",
+
+    "json-loader": "^0.5.1",
     "webpack": "^1.4.14"
   },
   "engines": {

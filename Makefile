@@ -44,6 +44,8 @@ dist-clean: clean
 
 $(node_modules): package.json
 	npm install > $(node_modules) 2> ./build/npm-errors.log
+	rm -Rf node_modules/node-xmpp-core/node_modules/node-stringprep
+	rm -Rf node_modules//stanza.io/node_modules/xmpp-jid/node_modules/node-stringprep
 
 public/stylesheets/application.min.css: $(debug_css)
 	./bin/stylesheet_compress $< > $@
@@ -68,3 +70,7 @@ $(debug_js): $(javascripts)
 
 $(dist_js): $(debug_js)
 	./bin/javascript_compress $(TARGET_MODULE) $< $@
+
+docker:
+	vagrant up
+	ansible-playbook -i ansible/attalos.inventory ansible/attalos-playbook.yml
