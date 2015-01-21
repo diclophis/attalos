@@ -44,8 +44,6 @@ dist-clean: clean
 
 $(node_modules): package.json
 	npm install > $(node_modules) 2> ./build/npm-errors.log
-	rm -Rf node_modules/node-xmpp-core/node_modules/node-stringprep
-	rm -Rf node_modules//stanza.io/node_modules/xmpp-jid/node_modules/node-stringprep
 
 public/stylesheets/application.min.css: $(debug_css)
 	./bin/stylesheet_compress $< > $@

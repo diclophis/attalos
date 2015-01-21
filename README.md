@@ -83,3 +83,5 @@ The `build` products are placed in `public/` it is possible to self-host these f
     sudo docker run --detach=true -p 5200:5200 -v /tmp/attalos:/log precise /sbin/init --confdir /etc/docker_init --startup-event attalos-bosh --no-dbus --verbose --logdir /log
 
   This will produce a `620M` docker image at `~/precise.tar`
+
+    "node-stringprep": "git://github.com/node-xmpp/node-stringprep.git#704f6dc54fffdc0fa33aca13dbac8f575a06ab1b",
