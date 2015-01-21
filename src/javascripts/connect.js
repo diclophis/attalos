@@ -3,12 +3,6 @@ var url = require('url');
 var centralDispatch = require('./central-dispatch').singleton;
 
 var Connect = React.createClass({
-  getDefaultProps: function() {
-    return {
-      roomMenuItems: []
-    };
-  },
-
   getInitialState: function() {
     var parts = { hostname: 'localhost', port: 5200 };
     var autoConnect = true;
@@ -45,20 +39,15 @@ var Connect = React.createClass({
       sessionStorage.setItem("password", password);
     }
 
-    roomMenuItems = [
-    ];
-
     return {
       loggedIn: false,
       isConnecting: false,
       autoConnect: autoConnect,
       jid: jid,
       password: password,
-      boshUrl: boshUrl,
-      roomMenuItems: roomMenuItems
+      boshUrl: boshUrl
     };
   },
-
 
   componentDidMount: function() {
     if (this.state.autoConnect) {

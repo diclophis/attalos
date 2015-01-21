@@ -11,9 +11,12 @@ var Anchor = React.createClass({
   },
 
   render: function() {
+
+    // adds default class to all Anchor tags
     var classes = {
       'attalos-a': true
     }
+
     classes[this.props.className] = true;
 
     return (

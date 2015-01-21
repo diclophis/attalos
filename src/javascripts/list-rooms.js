@@ -3,11 +3,6 @@ var Anchor = require('./anchor');
 var centralDispatch = require('./central-dispatch').singleton;
 
 var ListRooms = React.createClass({
-  getInitialState: function() {
-    return {
-    };
-  },
-
   render: function() {
     var roomButtons = [];
 

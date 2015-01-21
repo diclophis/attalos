@@ -64,10 +64,6 @@ cd.onPresence = function(msg) {
   //this.setProps({roomMenuItems: (this.props.roomMenuItems || []).concat({ payload: '?controller=room&id=' + msg.from.toString(), text: msg.from.local })});
 };
 
-//  onDebug: function(a, b) {
-//    //console.log(a, b);
-//  },
-
 cd.willSendChat = function(msg) {
   cd.client.sendMessage(msg);
 };
