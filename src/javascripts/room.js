@@ -56,7 +56,13 @@ var Room = React.createClass({
   },
 
   componentWillReceiveProps: function(nextProps) {
-    this.setState({messages: nextProps.messages, meJoinedRoom: nextProps.joined});
+    var shouldFocusNow = false;
+
+    if (!this.state.meJoinedRoom && nextProps.joined) {
+      shouldFocusNow = true;
+    }
+      
+    this.setState({messages: nextProps.messages, meJoinedRoom: nextProps.joined, shouldFocusNow: shouldFocusNow});
   },
 
   componentWillMount: function() {
@@ -81,7 +87,9 @@ var Room = React.createClass({
     if (this.shouldScrollBottom) {
       var node = this.refs.focusRule.getDOMNode();
       node.scrollIntoView(false);
+    }
 
+    if (this.state.shouldFocusNow) {
       node = this.refs.focusTarget.getDOMNode();
       //node.scrollIntoView(false);
       node.focus();

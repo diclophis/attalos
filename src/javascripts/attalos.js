@@ -314,14 +314,7 @@ var AttalosComponent = React.createClass({
       extraAnchor = <Anchor href={"?controller=room&id=" + this.state.id}><h2>{this.state.id}</h2></Anchor>;
     }
 
-    if (!this.state.loggedIn) {
-      mainViewComponent = null;
-    }
-
     var bootstrappedComponents = [];
-
-    ////TODO: figure out a better way to manage global state?
-    //defaultState.connectionComponent = <Connect key="connect" />;
 
     if (this.props.bootstrapped) {
       if (!this.state.loggedIn) {
