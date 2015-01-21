@@ -98,3 +98,4 @@ The `build` products are placed in `public/` it is possible to self-host these f
     //window.client.getDiscoItems('conference.error0.xmpp.slack.com', null, function(a, b, c) {
     //  console.log("disco'd", a, b, c);
     //});
+    // broken in slack! this.state.client.getRoomMembers(id, null, this.gotRoomRoster);

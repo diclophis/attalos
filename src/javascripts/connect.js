@@ -62,65 +62,8 @@ var Connect = React.createClass({
     };
   },
 
-  onSessionStarted: function () {
-    //this.state.client.getRoster();
-    //this.state.client.sendPresence();
-
-    this.setState({ loggedIn: true })
-
-    centralDispatch.login(true);
-  },
-
-  onSessionDisconnected: function () {
-    this.setState({ loggedIn: false, isConnecting: false })
-
-    centralDispatch.logout(false);
-  },
-
-  onChat: function(msg) {
-    centralDispatch.message(msg);
-  },
-
-  willSendChat: function(msg) {
-    centralDispatch.client.sendMessage(msg);
-  },
-
-  gotRoomRoster: function(ev) {
-    //console.log("roster!", ev, this);
-  },
-
-  willJoinRoom: function(id) {
-
-    console.log("willJoinRoom", id, this.state);
-
-    if (this.state.loggedIn) {
-      centralDispatch.client.joinRoom(id, centralDispatch.client.jid.local);
-      // broken in slack! this.state.client.getRoomMembers(id, null, this.gotRoomRoster);
-    } else {
-    }
-  },
-
-  onDebug: function(a, b) {
-    //console.log(a, b);
-  },
-
-  onPresence: function(msg) {
-    //TODO: better check here
-    if (msg.from.domain.indexOf("conference") != -1) {
-      //console.log("joined:room", msg.from.toString(), msg);
-      centralDispatch.joinedRoom(msg);
-    } else {
-      //console.log("presence", msg.from.toString(), msg);
-    }
-
-    //TODO: figure out more presence info like list of rooms
-    //console.log(msg.from.resource);
-    //this.setProps({roomMenuItems: (this.props.roomMenuItems || []).concat({ payload: '?controller=room&id=' + msg.from.toString(), text: msg.from.local })});
-  },
 
   componentDidMount: function() {
-    centralDispatch.addMainHandler(this);
-
     if (this.state.autoConnect) {
       this.connect();
     }

@@ -7,6 +7,9 @@ var xmpp = require('stanza.io');
 
 var cd = new EventEmitter();
 
+cd.loggedIn = false;
+cd.isConnecting = false;
+
 cd.client = xmpp.createClient({
 });
 
@@ -16,15 +19,18 @@ cd.navigateTo = function(href) {
 }
 
 cd.login = function(loggedIn) {
+  this.loggedIn = loggedIn;
   this.emit('login', loggedIn);
 };
 
 cd.logout = function(loggedIn) {
+  this.loggedIn = loggedIn;
+  this.isConnecting = false;
   this.emit('logout', loggedIn);
 };
 
 cd.message = function(msg) {
-  this.emit("recv", msg);
+  cd.emit("recv", msg);
 };
 
 cd.send = function(msg) {
@@ -44,20 +50,50 @@ cd.addLoginLogoutHandler = function(listener, fnCb) {
   listener.listenTo(this, 'logout', fnCb);
 };
 
-//TODO: figure out a better factorization of this 2.0
-cd.addMainHandler = function(listener) {
-  listener.listenTo(this.client, 'session:started', listener.onSessionStarted);
-  listener.listenTo(this.client, 'disconnected', listener.onSessionDisconnected);
+cd.onPresence = function(msg) {
+  //TODO: better check here
+  if (msg.from.domain.indexOf("conference") != -1) {
+    //console.log("joined:room", msg.from.toString(), msg);
+    cd.joinedRoom(msg);
+  } else {
+    //console.log("presence", msg.from.toString(), msg);
+  }
 
-  // main connection between centralDispatch and client, this needs to be shifted
-  listener.listenTo(this.client, 'chat', listener.onChat);
-  listener.listenTo(this.client, 'groupchat', listener.onChat);
-  listener.listenTo(this.client, 'presence', listener.onPresence);
-  listener.listenTo(this.client, '*', listener.onDebug);
-
-  listener.listenTo(this, 'send', listener.willSendChat);
-  listener.listenTo(this, 'room:join', listener.willJoinRoom);
+  //TODO: figure out more presence info like list of rooms
+  //console.log(msg.from.resource);
+  //this.setProps({roomMenuItems: (this.props.roomMenuItems || []).concat({ payload: '?controller=room&id=' + msg.from.toString(), text: msg.from.local })});
 };
+
+//  onDebug: function(a, b) {
+//    //console.log(a, b);
+//  },
+
+cd.willSendChat = function(msg) {
+  cd.client.sendMessage(msg);
+};
+
+cd.willJoinRoom = function(id) {
+  if (cd.loggedIn) {
+    cd.client.joinRoom(id, cd.client.jid.local);
+  } else {
+    console.error("not logged in");
+  }
+};
+
+cd.onSessionStarted = function () {
+  //this.state.client.getRoster();
+  //this.state.client.sendPresence();
+  //this.setState({ loggedIn: true })
+
+  cd.login(true);
+};
+
+cd.onSessionDisconnected = function () {
+  //this.setState({ loggedIn: false, isConnecting: false })
+
+  cd.logout(false);
+};
+
 
 cd.addPopStateHandler = function(listener, fnCb) {
   listener.listenTo(this, 'popstate', fnCb);
@@ -88,3 +124,11 @@ cd.getControllerFromHash = function() {
 };
 
 exports.singleton = cd;
+
+cd.client.on('session:started', cd.onSessionStarted);
+cd.client.on('disconnected', cd.onSessionDisconnected);
+cd.client.on('chat', cd.message);
+cd.client.on('groupchat', cd.message);
+cd.client.on('presence', cd.onPresence);
+cd.on('send', cd.willSendChat);
+cd.on('room:join', cd.willJoinRoom);

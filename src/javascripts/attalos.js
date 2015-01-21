@@ -50,6 +50,7 @@ var AttalosComponent = React.createClass({
   },
 
   didReceiveMessage: function(msg, _) {
+
     var newState = {};
 
     if (msg.from && msg.body) {
