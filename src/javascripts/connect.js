@@ -90,10 +90,6 @@ var Connect = React.createClass({
   },
 
   willJoinRoom: function(id) {
-    //this.listenTo(window.client, '*', this.didReceiveMessage);
-    //window.client.getDiscoItems('conference.error0.xmpp.slack.com', null, function(a, b, c) {
-    //  console.log("SADASD", a, b, c);
-    //});
 
     console.log("willJoinRoom", id, this.state);
 
@@ -123,17 +119,7 @@ var Connect = React.createClass({
   },
 
   componentDidMount: function() {
-    //TODO: figure out a better factorization of this
-    this.listenTo(centralDispatch.client, 'session:started', this.onSessionStarted);
-    this.listenTo(centralDispatch.client, 'disconnected', this.onSessionDisconnected);
-    this.listenTo(centralDispatch.client, 'chat', this.onChat);
-    this.listenTo(centralDispatch.client, 'groupchat', this.onChat);
-    //this.listenTo(this.state.client, 'available', this.onAvailable);
-    this.listenTo(centralDispatch.client, 'presence', this.onPresence);
-    this.listenTo(centralDispatch.client, '*', this.onDebug);
-
-    this.listenTo(centralDispatch, 'send', this.willSendChat);
-    this.listenTo(centralDispatch, 'room:join', this.willJoinRoom);
+    centralDispatch.addMainHandler(this);
 
     if (this.state.autoConnect) {
       this.connect();

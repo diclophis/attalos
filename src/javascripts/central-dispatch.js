@@ -44,6 +44,21 @@ cd.addLoginLogoutHandler = function(listener, fnCb) {
   listener.listenTo(this, 'logout', fnCb);
 };
 
+//TODO: figure out a better factorization of this 2.0
+cd.addMainHandler = function(listener) {
+  listener.listenTo(this.client, 'session:started', listener.onSessionStarted);
+  listener.listenTo(this.client, 'disconnected', listener.onSessionDisconnected);
+
+  // main connection between centralDispatch and client, this needs to be shifted
+  listener.listenTo(this.client, 'chat', listener.onChat);
+  listener.listenTo(this.client, 'groupchat', listener.onChat);
+  listener.listenTo(this.client, 'presence', listener.onPresence);
+  listener.listenTo(this.client, '*', listener.onDebug);
+
+  listener.listenTo(this, 'send', listener.willSendChat);
+  listener.listenTo(this, 'room:join', listener.willJoinRoom);
+};
+
 cd.addPopStateHandler = function(listener, fnCb) {
   listener.listenTo(this, 'popstate', fnCb);
   listener.listenTo(window, 'popstate', fnCb);

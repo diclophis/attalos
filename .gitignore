@@ -8,3 +8,4 @@ public/javascripts/application.js
 public/javascripts/application.min.js
 public/stylesheets/application.css
 .vagrant
+npm-debug.log

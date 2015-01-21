@@ -2,6 +2,18 @@ var React = require('react');
 var centralDispatch = require('./central-dispatch').singleton;
 var marked = require('marked');
 
+function getPosition(element) {
+    var xPosition = 0;
+    var yPosition = 0;
+ 
+    while(element) {
+        xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
+        yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
+        element = element.offsetParent;
+    }
+    return { x: xPosition, y: yPosition };
+}
+
 var Room = React.createClass({
   getInitialState: function() {
     marked.setOptions({ gfm: true, breaks: true });
@@ -58,15 +70,20 @@ var Room = React.createClass({
 
   componentWillUpdate: function() {
     var node = this.refs.allm.getDOMNode();
+    var node2 = this.refs.videos.getDOMNode();
 
-    this.shouldScrollBottom = (window.innerHeight + window.scrollY) >= node.offsetHeight;
+    //console.log(window.innerHeight, window.scrollY, node.offsetHeight, getPosition(node), node2.scrollHeight);
+    //569 1008 1412 Object {x: 8, y: -843} 264
+    this.shouldScrollBottom = (node.offsetHeight + getPosition(node).y) == window.innerHeight;
   },
    
   componentDidUpdate: function() {
     if (this.shouldScrollBottom) {
-      var node = this.refs.messages.getDOMNode();
+      var node = this.refs.focusRule.getDOMNode();
       node.scrollIntoView(false);
+
       node = this.refs.focusTarget.getDOMNode();
+      //node.scrollIntoView(false);
       node.focus();
     }
   },
@@ -93,13 +110,6 @@ var Room = React.createClass({
       <form onSubmit={this.willSend}>
         <div ref="allm" className="room">
           <div className="room-messages">
-            <div>
-              <div>
-                <video ref="localVideo" autoPlay src={localVideoSrc}></video>
-              </div>
-              <div ref="remoteVideos">
-              </div>
-            </div>
             <ul>
               {messages}
             </ul>
@@ -108,6 +118,15 @@ var Room = React.createClass({
             <textarea disabled={!this.state.meJoinedRoom} ref="focusTarget" defaultValue={this.state.message} value={this.state.message} onKeyDown={this.handleShiftKeyToggle} onChange={this.handleMessageValidation}></textarea>
             <button disabled={this.state.message.length == 0}>SEND</button>
           </div>
+          <div ref="scrollRule"></div>
+          <div ref="videos">
+            <div>
+              <video ref="localVideo" autoPlay src={localVideoSrc}></video>
+            </div>
+            <div ref="remoteVideos">
+            </div>
+          </div>
+          <div ref="focusRule"></div>
         </div>
       </form>
     );

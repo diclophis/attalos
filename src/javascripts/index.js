@@ -5,22 +5,19 @@ var AttalosComponent = require('./attalos');
 
 module.exports = {};
 
+//=> var bootstrap = function(exportedPackageName, containerElement) {}
 module.exports.bootstrap = function(exp, mainContainer) {
   exp.attach(mainContainer);
   mainContainer.className = "bootstrapped";
 };
 
-//module.exports.dataUrlEncode = function(string) {
-//  return ('data:text/html;charset=utf-8,' + encodeURIComponent(string));
-//};
-
 module.exports.render = function(packageModule, js, css, cb) {
   var IndexComponent = React.createClass({
     render: function() {
       var mainContainerId = packageModule.toLowerCase() + "-container";
-      var rep = '(' + module.exports.bootstrap.toString() + ')';
-      var peat = '(' + packageModule + ', document.getElementById("' + mainContainerId + '"));';
-      var bootstrapSource = (rep + peat).replace('\n', '');
+      var bootstrapFunction = '(' + module.exports.bootstrap.toString() + ')';
+      var bootstrapInvokation = '(' + packageModule + ', document.getElementById("' + mainContainerId + '"));';
+      var bootstrapSource = (bootstrapFunction + bootstrapInvokation).replace('\n', ''); //=> bootstrap('ModulePackageName', document.getElementById('main-container');
       return(
         <html>
           <head>

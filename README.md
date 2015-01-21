@@ -93,3 +93,8 @@ The `build` products are placed in `public/` it is possible to self-host these f
     };
 
     replace(/^\s+|\s+$/g, '')
+
+    //this.listenTo(window.client, '*', this.didReceiveMessage);
+    //window.client.getDiscoItems('conference.error0.xmpp.slack.com', null, function(a, b, c) {
+    //  console.log("disco'd", a, b, c);
+    //});
