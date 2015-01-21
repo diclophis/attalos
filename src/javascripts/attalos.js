@@ -366,7 +366,7 @@ var AttalosComponent = React.createClass({
           <a href="?">#</a>
           <ul>
             <li>
-              <Anchor href="?controller=list-rooms">LIST-ROOMS</Anchor>
+              <Anchor href="?controller=list-rooms" className="list-rooms">LIST-ROOMS</Anchor>
             </li>
             <li>
               <Anchor href="?controller=join-room">JOIN-ROOM</Anchor>
