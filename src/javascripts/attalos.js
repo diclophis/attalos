@@ -30,8 +30,6 @@ var AttalosComponent = React.createClass({
     defaultState.roomLinks = [];
     defaultState.messages = {};
 
-    //TODO: figure out a better way to manage global state?
-    defaultState.connectionComponent = <Connect key="connect" />;
 
     defaultState.pc1 = null;
     defaultState.pc2 = null;
@@ -322,8 +320,14 @@ var AttalosComponent = React.createClass({
 
     var bootstrappedComponents = [];
 
+    ////TODO: figure out a better way to manage global state?
+    //defaultState.connectionComponent = <Connect key="connect" />;
+
     if (this.props.bootstrapped) {
-      bootstrappedComponents.push(this.state.connectionComponent);
+      if (!this.state.loggedIn) {
+        bootstrappedComponents.push(<Connect key="connect" />);
+      }
+
       bootstrappedComponents.push(mainViewComponent);
     }
 

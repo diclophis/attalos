@@ -1,11 +1,8 @@
 var React = require('react');
 var url = require('url');
 var centralDispatch = require('./central-dispatch').singleton;
-var listenTo = require('react-listento');
 
 var Connect = React.createClass({
-  mixins: [listenTo],
-
   getDefaultProps: function() {
     return {
       roomMenuItems: []
@@ -85,10 +82,6 @@ var Connect = React.createClass({
     ev.preventDefault();
 
     this.connect();
-  },
-
-  componentWillUnmount: function() {
-    //console.log("FUUUU");
   },
 
   handleBoshUrlValidation: function(ev) {
