@@ -6,7 +6,7 @@ var Connect = React.createClass({
   getInitialState: function() {
     var parts = { hostname: 'localhost', port: 5200 };
     var autoConnect = true;
-    var jid = 'local-user@localhost';
+    var jid = 'local-user@' + parts.hostname;
     var password = 'totally-secret';
 
     if (typeof(window) === 'undefined') {
