@@ -30,7 +30,7 @@
 
     - name: update and safe upgrade apt-get packages
       sudo: true
-      apt: update_cache=true cache_valid_time=3600 upgrade=safe
+      apt: update_cache=true cache_valid_time=43600 upgrade=safe
 
     - name: install main system packages
       apt: pkg={{ item }} state=present
@@ -59,8 +59,8 @@
       when: inventory_hostname in groups['virtualbox']
 
     - name: remove un-needed packages
-      #apt: pkg={{ item }} state=absent purge=true
-      shell: echo '{{ item }}'
+      apt: pkg={{ item }} state=absent purge=true
+      #shell: echo '{{ item }}'
       sudo: true
       with_items:
         - libkms1
@@ -108,8 +108,6 @@
         - wireless-regdb
         - libnl-genl-3-200
         - crda
-        - libicu48
-        - libicu48-dbg
         - geoip-database
         - mailutils # might be needed for sending mail
         - guile-1.8-libs # email?
@@ -122,6 +120,8 @@
         - keyboard-configuration
         - vim
         #NOTE: does not reboot!
+        #- libicu48
+        #- libicu48-dbg
         #- linux-firmware
         #- linux-server
         #- ubuntu-standard
@@ -192,7 +192,7 @@
         - cd ~/current && npm install
         - cd ~/current && make
         - cd ~/current && make dist
-        #- cd ~/current && make check
+        - cd ~ && ln -sf current release
 
     - name: bootstrap docker image
       sudo: true
@@ -200,10 +200,6 @@
       ignore_errors: true
       with_items:
         - test -e /proc/sys/kernel/yama/protected_nonaccess_hardlinks && echo 0 > /proc/sys/kernel/yama/protected_nonaccess_hardlinks
-        #- rm -f /etc/init.d/ondemand
-        #- rm -f /etc/rc2.d/S99ondemand
-        #- rm -f /etc/rc4.d/S99ondemand
-        #- rm -f /etc/rc5.d/S99ondemand
         - rm -f /home/provision/.bash_history
         - rm -f /root/.bash_history
         - docker ps -a | cut -d' ' -f1 | grep -v CONTAIN | xargs -I{} docker rm -f {}
@@ -229,6 +225,7 @@
           --exclude=/boot
           --exclude=/mnt
           --exclude=/srv
+          --exclude=/home/vagrant/current
           --exclude=/etc/rc3.d/S20virtualbox-guest-utils
           --exclude=/etc/rc3.d/S23ntp
           --exclude=/etc/rc3.d/S30vboxadd
@@ -258,7 +255,7 @@
       sudo: true
       shell: '{{ item }}'
       with_items:
-        - docker run --detach=true -p 5000:5000 -v /tmp/attalos:/log --add-host="attalos.vagrant:10.0.30.11" precise /sbin/init --confdir /etc/docker_init --startup-event attalos-web --no-dbus --verbose --logdir /log
-        - docker run --detach=true -p 5100:5100 -v /tmp/attalos:/log --add-host="attalos.vagrant:10.0.30.11" precise /sbin/init --confdir /etc/docker_init --startup-event attalos-chat --no-dbus --verbose --logdir /log
-        - docker run --detach=true -p 5200:5200 -v /tmp/attalos:/log --add-host="attalos.vagrant:10.0.30.11" precise /sbin/init --confdir /etc/docker_init --startup-event attalos-bosh --no-dbus --verbose --logdir /log
-        - docker run --detach=true -p 2345:22   -v /tmp/attalos:/log --add-host="attalos.vagrant:10.0.30.11" precise /sbin/init --confdir /etc/docker_init --startup-event ssh --no-dbus --verbose --logdir /log
+        - docker run --detach=true -p 5000:5000 -v /tmp/attalos:/log -v /home/vagrant/release:/home/vagrant/current --add-host="attalos.vagrant:10.0.30.11" precise /sbin/init --confdir /etc/docker_init --startup-event attalos-web --no-dbus --verbose --logdir /log
+        - docker run --detach=true -p 5100:5100 -v /tmp/attalos:/log -v /home/vagrant/release:/home/vagrant/current --add-host="attalos.vagrant:10.0.30.11" precise /sbin/init --confdir /etc/docker_init --startup-event attalos-chat --no-dbus --verbose --logdir /log
+        - docker run --detach=true -p 5200:5200 -v /tmp/attalos:/log -v /home/vagrant/release:/home/vagrant/current --add-host="attalos.vagrant:10.0.30.11" --env="DEFAULT_XMPP_PORT=5100" precise /sbin/init --confdir /etc/docker_init --startup-event attalos-bosh --no-dbus --verbose --logdir /log
+        - docker run --detach=true -p 2345:22   -v /tmp/attalos:/log -v /home/vagrant/release:/home/vagrant/current --add-host="attalos.vagrant:10.0.30.11" precise /sbin/init --confdir /etc/docker_init --startup-event ssh --no-dbus --verbose --logdir /log
