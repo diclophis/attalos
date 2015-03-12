@@ -16,20 +16,18 @@
     ]
   },
   "dependencies": {
-    "react": "^0.12",
+    "react": "^0.13",
     "react-tools": "*",
-    "less": "~2.0.0",
-    "stss": "~0.3.0",
-    "jest-cli": "~0.1.18",
     "react-listento": "~0.1.0",
-    "marked": "~0.3.2",
-    "express": "~4.8.4",
-    "socket.io": "~1.0.6",
+    "baobab": "0.4.0",
 
-    "stanza.io": "git://github.com/otalk/stanza.io.git#230cadc5adb822a6c6591d46fb625fd581014313",
-    "node-xmpp-server": "git://github.com/node-xmpp/node-xmpp-server.git#535abf75c95c3e500ebb14a863b81bfa4da529db",
-    "node-xmpp-core": "git://github.com/node-xmpp/node-xmpp-core.git#18a2542664cae823fff404c5b6e79a31c58b52b2",
-    "node-xmpp-bosh": "git://github.com/diclophis/node-xmpp-bosh.git#2211df11ae35200293687c7ceee8d36b1d83fd59",
+    "jest-cli": "~0.1.18",
+
+    "marked": "~0.3.2",
+
+    "express": "~4.8.4",
+
+    "strophe": "~1.2.0",
 
     "json-loader": "^0.5.1",
     "webpack": "^1.4.14"
