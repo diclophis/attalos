@@ -8,7 +8,7 @@ var Connect = React.createClass({
     parts = url.parse(window.location.toString());
     parts.port = parseInt(parts.port) + 200;
 
-    var autoConnect = true;
+    var autoConnect = false;
     var jid = 'local-user@' + parts.hostname;
     var password = 'totally-secret';
 
