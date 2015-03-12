@@ -1,6 +1,7 @@
 // primary entry point
 
 var React = require('react');
+
 var Anchor = require('./anchor');
 var Connect = require('./connect');
 var JoinRoom = require('./join-room');

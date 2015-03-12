@@ -19,6 +19,11 @@
         }
       }
     },
+    "classnames": {
+      "version": "1.1.4",
+      "from": "classnames@*",
+      "resolved": "https://registry.npmjs.org/classnames/-/classnames-1.1.4.tgz"
+    },
     "express": {
       "version": "4.8.8",
       "from": "https://registry.npmjs.org/express/-/express-4.8.8.tgz",

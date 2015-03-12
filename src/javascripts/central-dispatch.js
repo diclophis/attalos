@@ -3,15 +3,15 @@
 var EventEmitter = require('events').EventEmitter;
 var url = require('url');
 var slug = require('./slug'); //TODO: spec this
-var xmpp = require('stanza.io');
+var xmpp = {}; //require('stanza.io');
 
 var cd = new EventEmitter();
 
 cd.loggedIn = false;
 cd.isConnecting = false;
 
-cd.client = xmpp.createClient({
-});
+//cd.client = xmpp.createClient({
+//});
 
 cd.navigateTo = function(href) {
   history.pushState({}, "", href);
@@ -121,6 +121,7 @@ cd.getControllerFromHash = function() {
 
 exports.singleton = cd;
 
+/*
 cd.client.on('session:started', cd.onSessionStarted);
 cd.client.on('disconnected', cd.onSessionDisconnected);
 cd.client.on('chat', cd.message);
@@ -128,3 +129,4 @@ cd.client.on('groupchat', cd.message);
 cd.client.on('presence', cd.onPresence);
 cd.on('send', cd.willSendChat);
 cd.on('room:join', cd.willJoinRoom);
+*/

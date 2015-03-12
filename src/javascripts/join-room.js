@@ -1,5 +1,4 @@
 var React = require('react');
-var xmpp = require('stanza.io');
 var url = require('url');
 var querystring = require('querystring');
 var centralDispatch = require('./central-dispatch').singleton;

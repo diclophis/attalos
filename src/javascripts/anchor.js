@@ -1,6 +1,7 @@
 // more reactful form of <a href=...> tags
 
-var React = require('react/addons');
+var React = require('react');
+var classNames = require('classnames');
 var url = require('url');
 var centralDispatch = require('./central-dispatch').singleton;
 
@@ -20,7 +21,7 @@ var Anchor = React.createClass({
     classes[this.props.className] = true;
 
     return (
-      <a className={React.addons.classSet(classes)} href={this.props.href} onClick={this.onClick}>
+      <a className={classNames(classes)} href={this.props.href} onClick={this.onClick}>
         {this.props.children}
       </a>
     );

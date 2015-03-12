@@ -19,7 +19,9 @@
     "react": "^0.13",
     "react-tools": "*",
     "react-listento": "~0.1.0",
-    "baobab": "0.4.0",
+    "classnames": "~1.1.4",
+    "baobab": "~0.4.0",
+
 
     "jest-cli": "~0.1.18",
 
