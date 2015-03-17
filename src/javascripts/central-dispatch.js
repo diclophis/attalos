@@ -119,7 +119,7 @@ cd.getControllerFromHash = function() {
   };
 };
 
-exports.singleton = cd;
+module.exports.singleton = cd;
 
 /*
 cd.client.on('session:started', cd.onSessionStarted);

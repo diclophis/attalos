@@ -10,6 +10,8 @@ var Room = require('./room');
 var centralDispatch = require('./central-dispatch').singleton;
 var listenTo = require('react-listento');
 
+var stateTree = require('./state-tree');
+
 var PeerConnection = null;
 var IceCandidate = null;
 var SessionDescription = null;
@@ -291,6 +293,7 @@ var AttalosComponent = React.createClass({
   },
 
   render: function() {
+    /*
     var mainViewComponent = null;
 
     switch (this.state.controller) {
@@ -343,6 +346,13 @@ var AttalosComponent = React.createClass({
           {extraAnchor}
         </div>
         {bootstrappedComponents}
+      </div>
+    );
+    */
+    return (
+      <div>
+        <a href="?">#</a>
+        {stateTree.get('fromStorage') ? 'a' : 'b'}
       </div>
     );
   }
