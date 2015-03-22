@@ -3,7 +3,7 @@
 var React = require('react');
 
 var Anchor = require('./anchor');
-var Connect = require('./connect');
+var Connections = require('./connections');
 var JoinRoom = require('./join-room');
 var ListRooms = require('./list-rooms');
 var Room = require('./room');
@@ -352,7 +352,7 @@ var AttalosComponent = React.createClass({
     return (
       <div>
         <a href="?">#</a>
-        {stateTree.get('fromStorage') ? 'a' : 'b'}
+        <Connections />
       </div>
     );
   }

@@ -2,30 +2,39 @@
 
 var Baobab = require('baobab');
 
-var defaultStateTree = {
-  fromStorage: false,
-  views: [],
+var initialStateTree = {
+  defaults: {
+    connections: []
+  },
+  views: []
 };
 
-var stateTree = new Baobab(defaultStateTree);
-var storableCursor = stateTree.select('fromStorage', 'views');
+var stateTree = new Baobab(initialStateTree);
+var storableCursor = stateTree.select('defaults');
 
 if (typeof(window) === 'object' && typeof(navigator) == 'object') {
   window.addEventListener('beforeunload', function(e) {
+    storableCursor.set('lastSaved', new Date());
+    stateTree.commit();
     var jsonToStore = JSON.stringify(storableCursor.get());
-    console.log('save:', storableCursor, jsonToStore, storableCursor.get());
-  //  localStorage.setItem('stateTree', jsonToStore);
+    console.log(jsonToStore);
+    localStorage.setItem('defaults', jsonToStore);
   }, false);
 
-  //var storedStateTree = localStorage.getItem('stateTree');
+  var storedStateTree = localStorage.getItem('defaults');
 
-  console.log("wtf", storableCursor.get());
+  if (false && storedStateTree) {
+    var parsedStoredStateTree = JSON.parse(storedStateTree);
+    parsedStoredStateTree.lastLoad = new Date().toJSON();
+    storableCursor.merge(parsedStoredStateTree);
+    stateTree.commit();
+  }
 
-  //if (storedStateTree) {
-  //  var parsedStoredStateTree = JSON.parse(storedStateTree);
-  //  storableCursor.merge(parsedStoredStateTree);
-  //}
-  //console.log(JSON.stringify(stateTree));
+  //console.log("wtf", storableCursor.get());
+
+  //var defaultConnections = stateTree.select('defaults', 'connections');
+  //defaultConnections.push({foo: 'bar'});
 }
+
 
 module.exports = stateTree;
