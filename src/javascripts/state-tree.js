@@ -1,6 +1,7 @@
 //
 
 var Baobab = require('baobab');
+var ReactAddons = require('react/addons');
 
 var initialStateTree = {
   defaults: {
@@ -9,7 +10,15 @@ var initialStateTree = {
   views: []
 };
 
-var stateTree = new Baobab(initialStateTree);
+var stateTree = new Baobab(
+  initialStateTree,
+  {
+    mixins: [ReactAddons.PureRenderMixin],
+    shiftReferences: true,
+    autoCommit: true
+  }
+);
+
 var storableCursor = stateTree.select('defaults');
 
 if (typeof(window) === 'object' && typeof(navigator) == 'object') {
@@ -23,18 +32,12 @@ if (typeof(window) === 'object' && typeof(navigator) == 'object') {
 
   var storedStateTree = localStorage.getItem('defaults');
 
-  if (false && storedStateTree) {
+  if (true && storedStateTree) {
     var parsedStoredStateTree = JSON.parse(storedStateTree);
     parsedStoredStateTree.lastLoad = new Date().toJSON();
     storableCursor.merge(parsedStoredStateTree);
     stateTree.commit();
   }
-
-  //console.log("wtf", storableCursor.get());
-
-  //var defaultConnections = stateTree.select('defaults', 'connections');
-  //defaultConnections.push({foo: 'bar'});
 }
-
 
 module.exports = stateTree;

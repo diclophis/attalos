@@ -20,7 +20,8 @@
     "react-tools": "*",
     "react-listento": "~0.1.0",
     "classnames": "~1.1.4",
-    "baobab": "~0.4.0",
+    "baobab": "~0.4.1",
+    "node-uuid": "~1.4.2",
 
     "less": "~2.0.0",
 
