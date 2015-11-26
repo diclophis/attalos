@@ -25,14 +25,16 @@ if (typeof(window) === 'object' && typeof(navigator) == 'object') {
 }
 
 var AttalosComponent = React.createClass({
-  mixins: [listenTo],
+  mixins: [listenTo, stateTree.mixin],
+  cursors: {
+    connections: ['defaults', 'connections']
+  },
 
   getInitialState: function() {
     var defaultState = centralDispatch.getControllerFromHash();
 
     defaultState.roomLinks = [];
     defaultState.messages = {};
-
 
     defaultState.pc1 = null;
     defaultState.pc2 = null;
@@ -44,6 +46,20 @@ var AttalosComponent = React.createClass({
   },
 
   componentDidMount: function() {
+    if (centralDispatch.client) {
+      centralDispatch.client.disconnect();
+      var cursor = this.cursors.connections.select(0);
+      if (cursor) {
+        cursor.set('loggedIn', false);
+      }
+    }
+
+    var cursor = this.cursors.connections.select(0);
+    var isLoggedIn = cursor.get('loggedIn');
+    if (this.state.id && !isLoggedIn) {
+      this.state[this.state.id+'.joined'] = false;
+    }
+
     centralDispatch.addLoginLogoutHandler(this, this.onLoggedInOrOut);
     centralDispatch.addPopStateHandler(this, this.onPopState);
 
@@ -262,8 +278,14 @@ var AttalosComponent = React.createClass({
   },
 
   componentDidUpdate: function() {
+    var cursor = this.cursors.connections.select(0);
+    var isLoggedIn = cursor.get('loggedIn');
+    if (this.state.id && !isLoggedIn) {
+      this.state[this.state.id+'.joined'] = false;
+    }
+
     if (this.state.controller == "room") {
-      if (!this.state[this.state.id+'.joined']) {
+      if (isLoggedIn && (this.state.id && this.state.id.length > 0) && !this.state[this.state.id+'.joined']) {
         centralDispatch.joinRoom(this.state.id);
       }
     }

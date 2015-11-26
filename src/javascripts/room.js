@@ -1,6 +1,7 @@
 var React = require('react');
 var centralDispatch = require('./central-dispatch').singleton;
 var marked = require('marked');
+var stateTree = require('./state-tree');
 
 function getPosition(element) {
     var xPosition = 0;
@@ -15,6 +16,11 @@ function getPosition(element) {
 }
 
 var Room = React.createClass({
+  mixins: [stateTree.mixin],
+  cursors: {
+    connections: ['defaults', 'connections']
+  },
+
   getInitialState: function() {
     marked.setOptions({ gfm: true, breaks: true });
 
@@ -56,6 +62,7 @@ var Room = React.createClass({
   },
 
   componentWillReceiveProps: function(nextProps) {
+
     var shouldFocusNow = false;
 
     if (!this.state.meJoinedRoom && nextProps.joined) {
@@ -108,6 +115,7 @@ var Room = React.createClass({
         <li key={i + '-message'} dangerouslySetInnerHTML={{__html: message}}></li>
       );
     }
+
 
     var localVideoSrc = null;
     if (this.props.streams.length > 0) {

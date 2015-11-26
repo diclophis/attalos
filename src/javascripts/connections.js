@@ -21,18 +21,20 @@ var Connections = React.createClass({
   handleConnect: function(index, ev) {
     var cursor = this.cursors.connections.select(index);
     if (cursor) {
-      centralDispatch.client.disconnect();
+      if (cursor.get('loggedIn')) {
+        centralDispatch.client.disconnect();
+      } else {
+        var opts = {
+          jid: cursor.get('jid'),
+          password: cursor.get('password'),
+          transport: 'bosh',
+          boshURL: cursor.get('boshUrl')
+        };
 
-      var opts = {
-        jid: cursor.get('jid'),
-        password: cursor.get('password'),
-        transport: 'bosh',
-        boshURL: cursor.get('boshUrl')
-      };
+        //console.log(opts);
 
-      console.log(opts);
-
-      centralDispatch.client.connect(opts);
+        centralDispatch.client.connect(opts);
+      }
     }
   },
   

@@ -95,6 +95,8 @@ cd.onSessionDisconnected = function () {
   var cursor = stateTree.select('defaults', 'connections').select(0);
   cursor.set('loggedIn', false);
 
+  stateTree.commit();
+
   cd.logout(false);
 };
 
