@@ -34,6 +34,7 @@
 
     "node-xmpp-server": "~2.1.1",
     "node-xmpp-core": "~4.2.0",
+    "stanza.io": "~7.3.6",
 
     "strophe": "~1.2.0",
 

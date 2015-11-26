@@ -9,6 +9,23 @@ var Connections = React.createClass({
   cursors: {
     connections: ['defaults', 'connections']
   },
+
+  handleConnect: function(index, ev) {
+    centralDispatch.client.disconnect();
+
+    var cursor = this.cursors.connections.select(index);
+
+    var opts = {
+      jid: cursor.get('jid'),
+      password: cursor.get('password'),
+      transport: 'bosh',
+      boshURL: cursor.get('boshUrl')
+    };
+
+    console.log(opts);
+
+    centralDispatch.client.connect(opts);
+  },
   
   handleBoshUrlValidation: function(index, ev) {
     //var parts = url.parse(ev.target.value);
@@ -82,6 +99,7 @@ var Connections = React.createClass({
           currently-connected?
         </label>
         <input className="connected" type="checkbox" checked={connection.loggedIn} onChange={this.handleConnectedValidation} disabled={!connection.isConnecting}></input>
+        <input type="button" value="=" onClick={this.handleConnect.bind(this, index)}/>
         <input type="button" value="-" onClick={this.removeConnection.bind(this, index)}/>
       </li>
     );

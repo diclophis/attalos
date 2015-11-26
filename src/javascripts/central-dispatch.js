@@ -3,15 +3,17 @@
 var EventEmitter = require('events').EventEmitter;
 var url = require('url');
 var slug = require('./slug'); //TODO: spec this
-var xmpp = {}; //require('stanza.io');
+var xmpp = require('stanza.io');
+var stateTree = require('./state-tree');
 
 var cd = new EventEmitter();
 
 cd.loggedIn = false;
 cd.isConnecting = false;
 
-//cd.client = xmpp.createClient({
-//});
+cd.client = xmpp.createClient({
+});
+
 
 cd.navigateTo = function(href) {
   history.pushState({}, "", href);
@@ -21,6 +23,7 @@ cd.navigateTo = function(href) {
 cd.login = function(loggedIn) {
   this.loggedIn = loggedIn;
   this.emit('login', loggedIn);
+
 };
 
 cd.logout = function(loggedIn) {
@@ -81,11 +84,16 @@ cd.onSessionStarted = function () {
   //this.state.client.sendPresence();
   //this.setState({ loggedIn: true })
 
+  var cursor = stateTree.select('defaults', 'connections').select(0);
+  cursor.set('loggedIn', true);
+
   cd.login(true);
 };
 
 cd.onSessionDisconnected = function () {
   //this.setState({ loggedIn: false, isConnecting: false })
+  var cursor = stateTree.select('defaults', 'connections').select(0);
+  cursor.set('loggedIn', false);
 
   cd.logout(false);
 };
@@ -121,7 +129,6 @@ cd.getControllerFromHash = function() {
 
 module.exports.singleton = cd;
 
-/*
 cd.client.on('session:started', cd.onSessionStarted);
 cd.client.on('disconnected', cd.onSessionDisconnected);
 cd.client.on('chat', cd.message);
@@ -129,4 +136,3 @@ cd.client.on('groupchat', cd.message);
 cd.client.on('presence', cd.onPresence);
 cd.on('send', cd.willSendChat);
 cd.on('room:join', cd.willJoinRoom);
-*/

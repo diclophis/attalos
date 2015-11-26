@@ -348,11 +348,17 @@ var AttalosComponent = React.createClass({
         {bootstrappedComponents}
       </div>
     );
+        <Anchor href="?controller=list-rooms" className="list-rooms">LIST-ROOMS</Anchor>
+        <Anchor href="?controller=join-room">JOIN-ROOM</Anchor>
     */
     return (
       <div>
         <a href="?">#</a>
         <Connections />
+        <button onClick={this.addVideo}>video</button>
+        <JoinRoom key="join-room" />
+        <ListRooms key="list-rooms" />
+        <Room key="room" id={this.state.id} nick={this.state.nick} streams={this.state.streamSources} messages={this.state[this.state.id] || []} joined={this.state[this.state.id+'.joined']}/>
       </div>
     );
   }
