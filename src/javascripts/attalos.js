@@ -107,12 +107,18 @@ var AttalosComponent = React.createClass({
       } else {
 
         var a = (this.state[msg.from.bare] || []);
+        msg.body = "`" + msg.from.resource + String.fromCharCode(160) + String.fromCharCode(160) + "` " + msg.body;
         a.unshift(msg.body);
-        newState[msg.from.bare] = a;
+        newState[msg.from.bare] = a
 
       }
     } else {
+
+      //if ((msg.from.local != centralDispatch.client.jid.local) || (msg.from.resource != centralDispatch.client.jid.local)) {
       if (msg.from.resource != centralDispatch.client.jid.local) {
+
+        //console.log(msg.from.local, centralDispatch.client.jid.local);
+        //console.log("123", msg.from.local, centralDispatch.client.jid.local);
 
         console.log("got presence of other user, but currently offering to original, halt");
 
