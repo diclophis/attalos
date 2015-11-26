@@ -8,7 +8,7 @@ var JoinRoom = React.createClass({
   getInitialState: function() {
     return {
       controller: 'room',
-      id: ''
+      id: this.props.id
     };
   },
 
@@ -37,7 +37,7 @@ var JoinRoom = React.createClass({
           <li>
             name:
             <input ref="focusTarget" placeholder="name of discussion" value={this.state.id} onChange={this.handleRoomValidation}></input>
-            <button disabled={this.state.id.length == 0}>JOIN ROOM</button>
+            <button disabled={(this.state.id == null || (this.state.id && this.state.id.length == 0))}>JOIN ROOM</button>
           </li>
         </ul>
       </form>

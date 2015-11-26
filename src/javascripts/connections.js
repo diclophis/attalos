@@ -10,21 +10,30 @@ var Connections = React.createClass({
     connections: ['defaults', 'connections']
   },
 
-  handleConnect: function(index, ev) {
+  componentDidMount: function() {
     centralDispatch.client.disconnect();
+    var cursor = this.cursors.connections.select(0);
+    if (cursor && cursor.get('autoConnect')) {
+      this.handleConnect(0);
+    }
+  },
 
+  handleConnect: function(index, ev) {
     var cursor = this.cursors.connections.select(index);
+    if (cursor) {
+      centralDispatch.client.disconnect();
 
-    var opts = {
-      jid: cursor.get('jid'),
-      password: cursor.get('password'),
-      transport: 'bosh',
-      boshURL: cursor.get('boshUrl')
-    };
+      var opts = {
+        jid: cursor.get('jid'),
+        password: cursor.get('password'),
+        transport: 'bosh',
+        boshURL: cursor.get('boshUrl')
+      };
 
-    console.log(opts);
+      console.log(opts);
 
-    centralDispatch.client.connect(opts);
+      centralDispatch.client.connect(opts);
+    }
   },
   
   handleBoshUrlValidation: function(index, ev) {

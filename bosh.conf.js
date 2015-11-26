@@ -69,8 +69,9 @@ exports.config = {
 	//
 	firewall: {
 		// allow: [ /* 'jabber.org', /(.*\.)?jappix.com$/ */ ],
-    allow: ['localhost', 'attalos.vagrant']
+    //allow: ['localhost', 'attalos.vagrant', '192.168.1.104']
 		// deny:  [ /* 'gmail.com' */ ]
+    deny: []
 	},
 
 	// If the route attribute is set, allow connections ONLY if the

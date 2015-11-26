@@ -356,7 +356,7 @@ var AttalosComponent = React.createClass({
         <a href="?">#</a>
         <Connections />
         <button onClick={this.addVideo}>video</button>
-        <JoinRoom key="join-room" />
+        <JoinRoom key="join-room" id={this.state.id}/>
         <ListRooms key="list-rooms" />
         <Room key="room" id={this.state.id} nick={this.state.nick} streams={this.state.streamSources} messages={this.state[this.state.id] || []} joined={this.state[this.state.id+'.joined']}/>
       </div>
