@@ -26,7 +26,7 @@ if (typeof(window) === 'object' && typeof(navigator) == 'object') {
     storableCursor.set('lastSaved', new Date());
     stateTree.commit();
     var jsonToStore = JSON.stringify(storableCursor.get());
-    console.log(jsonToStore);
+    //console.log(jsonToStore);
     localStorage.setItem('defaults', jsonToStore);
   }, false);
 

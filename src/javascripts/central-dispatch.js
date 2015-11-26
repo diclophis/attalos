@@ -93,9 +93,11 @@ cd.onSessionStarted = function () {
 cd.onSessionDisconnected = function () {
   //this.setState({ loggedIn: false, isConnecting: false })
   var cursor = stateTree.select('defaults', 'connections').select(0);
-  cursor.set('loggedIn', false);
 
-  stateTree.commit();
+  if (cursor && cursor.get('loggedIn')) {
+    cursor.set('loggedIn', false);
+    stateTree.commit();
+  }
 
   cd.logout(false);
 };

@@ -10,10 +10,17 @@ var Connections = React.createClass({
     connections: ['defaults', 'connections']
   },
 
+  getInitialState: function() {
+    return({connectionAttempts: 0});
+  },
+
   componentDidMount: function() {
-    centralDispatch.client.disconnect();
+    //centralDispatch.client.disconnect();
     var cursor = this.cursors.connections.select(0);
     if (cursor && cursor.get('autoConnect')) {
+    //console.log(this.cursors.connections.length);
+    //  //cursor.set('loggedIn', false);
+    //  cursor.update({'loggedIn': false});
       this.handleConnect(0);
     }
   },
@@ -21,7 +28,8 @@ var Connections = React.createClass({
   handleConnect: function(index, ev) {
     var cursor = this.cursors.connections.select(index);
     if (cursor) {
-      if (cursor.get('loggedIn')) {
+      if (cursor.get('loggedIn') && this.state.connectionAttempts > 0) {
+        console.log("FOO");
         centralDispatch.client.disconnect();
       } else {
         var opts = {
@@ -31,9 +39,10 @@ var Connections = React.createClass({
           boshURL: cursor.get('boshUrl')
         };
 
-        //console.log(opts);
+        console.log(opts);
 
         centralDispatch.client.connect(opts);
+        this.setState({connectionAttempts: this.state.connectionAttempts+1});
       }
     }
   },
@@ -84,8 +93,13 @@ var Connections = React.createClass({
   },
 
   addNewConnection: function(ev) {
+    var newId = uuid.v1();
     this.cursors.connections.push({
-      id: uuid.v1()
+      id: newId,
+      jid: newId + '@' + this.props.boshHost,
+      password: 'qwerty',
+      autoConnect: false,
+      boshUrl: "http://" + this.props.boshHost + ":" + this.props.boshPort + "/http-bind"
     });
   },
 

@@ -42,14 +42,19 @@ var AttalosComponent = React.createClass({
     defaultState.answer = null;
     defaultState.streamSources = [];
 
+    defaultState.connectionAttempts = 0;
+
     return defaultState;
   },
 
   componentDidMount: function() {
     if (centralDispatch.client) {
-      centralDispatch.client.disconnect();
       var cursor = this.cursors.connections.select(0);
-      if (cursor) {
+      if (cursor && cursor.get('loggedIn')) {
+        if (this.state.connectionAttempts > 0) {
+          console.log("FOOOOO");
+          centralDispatch.client.disconnect();
+        }
         cursor.set('loggedIn', false);
       }
     }
@@ -193,7 +198,11 @@ var AttalosComponent = React.createClass({
   },
 
   onLoggedInOrOut: function(loggedIn) {
-    this.setState({ loggedIn: loggedIn });
+    var attempts = this.state.connectionAttempts;
+    if (loggedIn) {
+      attempts += 1;
+    }
+    this.setState({ loggedIn: loggedIn, connectionAttempts: attempts });
   },
 
   onAnswerCreated: function(description) {
@@ -378,11 +387,12 @@ var AttalosComponent = React.createClass({
     );
         <Anchor href="?controller=list-rooms" className="list-rooms">LIST-ROOMS</Anchor>
         <Anchor href="?controller=join-room">JOIN-ROOM</Anchor>
+        console.log(this.props.boshPort);
     */
     return (
       <div>
         <a href="?">#</a>
-        <Connections />
+        <Connections boshHost={this.props.boshHost} boshPort={this.props.boshPort}/>
         <button onClick={this.addVideo}>video</button>
         <JoinRoom key="join-room" id={this.state.id}/>
         <ListRooms key="list-rooms" />
