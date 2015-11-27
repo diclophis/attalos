@@ -44,8 +44,7 @@
     "webpack": "^1.4.14"
   },
   "engines": {
-    "node": "~4.2.1",
-    "npm": "~2.4.17"
+    "node": "~0.10.40"
   },
   "scripts": {
     "test": "node test.js"
