@@ -43,7 +43,7 @@
     "webpack": "^1.4.14"
   },
   "optionalDependencies": {
-    "stanza.io": "~7.3.6",
+    "stanza.io": "~7.3.6"
   },
   "engines": {
     "node": "~0.10.40"

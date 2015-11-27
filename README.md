@@ -99,3 +99,6 @@ The `build` products are placed in `public/` it is possible to self-host these f
     //  console.log("disco'd", a, b, c);
     //});
     // broken in slack! this.state.client.getRoomMembers(id, null, this.gotRoomRoster);
+
+https://github.com/ddollar/heroku-buildpack-apt.git
+https://github.com/heroku/heroku-buildpack-ruby.git
