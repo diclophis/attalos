@@ -1,1 +1,5 @@
 libicu-dev
+nodejs
+build-essential
+libicu48
+libicu48-dbg
