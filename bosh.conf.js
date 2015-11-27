@@ -4,7 +4,7 @@ exports.config = {
 	//host: '127.0.0.1', 
   port: process.env.PORT || 5280,
 	path: /^\/http-bind(\/+)?$/, 
-	logging: 'INFO',
+	logging: 'TRACE',
 	
 	// The maximum number of bytes that the BOSH server will 
 	// "hold" from the client

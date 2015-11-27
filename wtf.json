@@ -3,7 +3,8 @@
     "DEFAULT_BOSH_HOST": "attalos.app.dev.mavenlink.net",
     "DEFAULT_BOSH_PORT": "5200",
     "DEFAULT_XMPP_PORT": "5100",
-    "NPM_CONFIG_OPTIONAL": "false"
+    "NPM_CONFIG_OPTIONAL": "false",
+    "SLUG_URL": "http://blobstore.discoverd/07a5e6c8-34de-4935-a5fb-3369942cba6f.tgz"
   },
   "processes": {
     "bosh-web": {
