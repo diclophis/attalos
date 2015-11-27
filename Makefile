@@ -43,7 +43,7 @@ dist-clean: clean
 	rm -Rf node_modules $(node_modules)
 
 $(node_modules): package.json
-	npm install > $(node_modules) 2> ./build/npm-errors.log
+	npm install 2>&1 | tee -a $(node_modules)
 
 public/stylesheets/application.min.css: $(debug_css)
 	./bin/stylesheet_compress $< > $@
