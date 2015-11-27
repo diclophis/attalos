@@ -1,4 +1,4 @@
-https://github.com/ddollar/heroku-buildpack-apt?v=1#7954acd
-https://github.com/heroku/heroku-buildpack-ruby.git?v=1#154fab36
-https://github.com/heroku/heroku-buildpack-nodejs.git?v=1#b4921004
-https://github.com/heroku/heroku-buildpack-c#38bccbfde?v=12741e
+https://github.com/ddollar/heroku-buildpack-apt.git
+https://github.com/heroku/heroku-buildpack-ruby.git
+https://github.com/heroku/heroku-buildpack-nodejs.git
+https://github.com/heroku/heroku-buildpack-c
