@@ -21,6 +21,9 @@ dist_html = ./public/index.html
 
 .PHONY: all check clean dist-clean
 
+env:
+	env
+
 dev: $(output_dirs) $(dev_html)
 
 dist: $(output_dirs) $(dist_html)

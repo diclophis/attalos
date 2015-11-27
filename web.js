@@ -6,9 +6,12 @@ var spawn = require('child_process').spawn;
 // run make to update if request is for development
 app.use(function(req, res, next) {
   var isDev = (req.url.indexOf('dev.html') != -1);
-
+  var makeDist = 'dist';
   if (isDev) {
-    var make = spawn('make');
+    makeDist = 'dev';
+  }
+
+    var make = spawn('make', [makeDist]);
     var standardError = new String();
 
     make.stdout.on('data', function (data) {
@@ -28,9 +31,9 @@ app.use(function(req, res, next) {
         res.send('<pre>' + standardError + '</pre>');
       }
     });
-  } else {
-    next();
-  }
+  //} else {
+  //  next();
+  //}
 });
 
 // serve all files from public dir using built-in static file server
