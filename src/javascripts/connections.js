@@ -35,7 +35,7 @@ var Connections = React.createClass({
         var opts = {
           jid: cursor.get('jid'),
           password: cursor.get('password'),
-          transport: 'bosh',
+          transport: 'websocket', //'bosh', 'websocket',
           boshURL: cursor.get('boshUrl')
         };
 

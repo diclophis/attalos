@@ -1,7 +1,7 @@
 // -*-  tab-width:4  -*-
 
 exports.config = {
-	//host: '127.0.0.1', 
+	host: '0.0.0.0', 
   port: process.env.PORT || 5280,
 	path: /^\/http-bind(\/+)?$/, 
 	logging: 'TRACE',
@@ -17,7 +17,7 @@ exports.config = {
 	// Don't entertain more than 'max_bosh_connections' simultaneous 
 	// connections on any BOSH session. This is related to the 'hold'
 	// attribute
-	max_bosh_connections: 2, 
+	max_bosh_connections: 256,
 
 	// The maximum number of packets on either side of the current 'rid'
 	// that we are willing to accept.
@@ -25,16 +25,16 @@ exports.config = {
 
 	// How much time (in second) should we hold a response object 
 	// before sending and empty response on it?
-	default_inactivity: 70, 
+	default_inactivity: 70,
 
-	max_inactivity: 160, 
+	max_inactivity: 160,
 
 	// The value (in second) of keepalive to set on the HTTP response 
 	// socket
-	http_socket_keepalive: 60, 
+	http_socket_keepalive: 60,
 
 	// The maximum number of active streams allowed per BOSH session
-	max_streams_per_session: 8, 
+	max_streams_per_session: 16, 
 
 	http_headers: { 
     //'Access-Control-Allow-Origin': "http://localhost:5000"
