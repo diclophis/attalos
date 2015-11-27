@@ -22,9 +22,11 @@ dist_html = ./public/index.html
 .PHONY: all check clean dist-clean
 
 env:
+	nslookup attalos.app.dev.mavenlink.net
 	env
 
 dev: $(output_dirs) $(dev_html)
+	nslookup attalos.app.dev.mavenlink.net
 
 dist: $(output_dirs) $(dist_html)
 
