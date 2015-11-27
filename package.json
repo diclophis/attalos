@@ -15,6 +15,7 @@
       "<rootDir>/node_modules/react"
     ]
   },
+  "optional": false,
   "dependencies": {
     "react": "^0.13",
     "react-tools": "*",
