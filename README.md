@@ -71,7 +71,7 @@ The `build` products are placed in `public/` it is possible to self-host these f
 ## Local Development
 
     bundle
-    DEFAULT_XMPP_PORT=5100 foreman start
+    DEFAULT_XMPP_PORT=5100 DEFAULT_BOSH_HOST=localhost DEFAULT_BOSH_PORT=5200 foreman start
 
 ## Build your own docker image (think federations based on domain over a cluster of servers)
 

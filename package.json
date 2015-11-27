@@ -37,6 +37,7 @@
     "node-xmpp-server": "~2.1.1",
     "node-xmpp-core": ">=5.0.0",
 
+    "node-stringprep": "git://github.com/node-xmpp/node-stringprep.git#704f6dc54fffdc0fa33aca13dbac8f575a06ab1b",
     "stanza.io": "~7.3.6",
 
     "strophe": "~1.2.0",
