@@ -1,1 +1,96 @@
-{"artifact":"207850de-a03b-43cb-a4ea-87d087eac023","env":{"DEFAULT_BOSH_HOST":"attalos.app.dev.mavenlink.net","DEFAULT_BOSH_PORT":"5200","DEFAULT_XMPP_PORT":"5100","NPM_CONFIG_OPTIONAL":"false","SLUG_URL":"http://blobstore.discoverd/168c1206-00eb-49db-a26d-3c7f3ed267a8.tgz"},"processes":{"bosh-web":{"cmd":["start","bosh-web"],"ports":[{"port":8080,"proto":"tcp","service":{"name":"attalos-bosh-web","create":true,"check":{"type":"tcp","status.omitempty":0}}}],"resources":{"max_fd":{"request":10000,"limit":10000},"memory":{"request":1073741824,"limit":1073741824}}},"chat-web":{"cmd":["start","chat-web"],"ports":[{"port":8080,"proto":"tcp","service":{"name":"attalos-chat-web","create":true}}],"resources":{"max_fd":{"request":10000,"limit":10000},"memory":{"request":1073741824,"limit":1073741824}}},"web":{"cmd":["start","web"],"ports":[{"port":8080,"proto":"tcp","service":{"name":"attalos-web","create":true,"check":{"type":"tcp","status.omitempty":0}}}],"resources":{"max_fd":{"request":10000,"limit":10000},"memory":{"request":1073741824,"limit":1073741824}}}},"created_at":"2015-11-27T22:17:29.738791Z"}
+{
+  "env": {
+    "DEFAULT_BOSH_HOST": "attalos.app.dev.mavenlink.net",
+    "DEFAULT_BOSH_PORT": "5200",
+    "DEFAULT_XMPP_PORT": "5100",
+    "NPM_CONFIG_OPTIONAL": "false"
+  },
+  "processes": {
+    "bosh-web": {
+      "cmd": [
+        "start",
+        "bosh-web"
+      ],
+      "ports": [
+        {
+          "port": 8080,
+          "proto": "tcp",
+          "service": {
+            "name": "attalos-bosh-web",
+            "create": true,
+            "check": {
+              "type": "tcp",
+              "status.omitempty": 0
+            }
+          }
+        }
+      ],
+      "resources": {
+        "max_fd": {
+          "request": 10000,
+          "limit": 10000
+        },
+        "memory": {
+          "request": 1073741824,
+          "limit": 1073741824
+        }
+      }
+    },
+    "chat-web": {
+      "cmd": [
+        "start",
+        "chat-web"
+      ],
+      "ports": [
+        {
+          "port": 8080,
+          "proto": "tcp",
+          "service": {
+            "name": "attalos-chat-web",
+            "create": true
+          }
+        }
+      ],
+      "resources": {
+        "max_fd": {
+          "request": 10000,
+          "limit": 10000
+        },
+        "memory": {
+          "request": 1073741824,
+          "limit": 1073741824
+        }
+      }
+    },
+    "web": {
+      "cmd": [
+        "start",
+        "web"
+      ],
+      "ports": [
+        {
+          "port": 8080,
+          "proto": "tcp",
+          "service": {
+            "name": "attalos-web",
+            "create": true,
+            "check": {
+              "type": "tcp",
+              "status.omitempty": 0
+            }
+          }
+        }
+      ],
+      "resources": {
+        "max_fd": {
+          "request": 10000,
+          "limit": 10000
+        },
+        "memory": {
+          "request": 1073741824,
+          "limit": 1073741824
+        }
+      }
+    }
+  }
+}
