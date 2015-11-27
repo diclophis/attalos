@@ -1,7 +1,7 @@
 // listens for XMPP connections, and dispatches events based on stanza data
 
 var C2SServer = require('node-xmpp-server').C2SServer;
-var Message = require('node-xmpp-core').Stanza.Message
+var Message = require('node-xmpp-core').Stanza.Message;
 
 // Sets up the server.
 var c2s = new C2SServer({
