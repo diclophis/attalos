@@ -13,6 +13,7 @@ var clients = new Array();
 
 // On Connect event. When a client connects.
 c2s.on('connect', function(client) {
+  console.log('CONNECT', client);
 
   // That's the way you add mods to a given server.
   // Allows the developer to register the jid against anything they want
@@ -69,7 +70,6 @@ c2s.on('connect', function(client) {
   client.on('disconnect', function() {
     console.log('DISCONNECT');
   });
-
 });
 
 console.log('Listening on port: ' + c2s.options.port);

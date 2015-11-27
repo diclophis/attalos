@@ -6,11 +6,16 @@ var spawn = require('child_process').spawn;
 // run make to update if request is for development
 app.use(function(req, res, next) {
   var isDev = (req.url.indexOf('dev.html') != -1);
-  var makeDist = 'dist';
+  var isDist = (req.url.indexOf('index.html') != -1);
+  var makeDist = '';
   if (isDev) {
     makeDist = 'dev';
   }
+  if (isDist) {
+    makeDist = 'dist';
+  }
 
+  if (isDev || isDist) {
     var make = spawn('make', [makeDist]);
     var standardError = new String();
 
@@ -31,9 +36,9 @@ app.use(function(req, res, next) {
         res.send('<pre>' + standardError + '</pre>');
       }
     });
-  //} else {
-  //  next();
-  //}
+  } else {
+    next();
+  }
 });
 
 // serve all files from public dir using built-in static file server
