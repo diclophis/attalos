@@ -4,7 +4,7 @@
     "DEFAULT_BOSH_PORT": "5200",
     "DEFAULT_XMPP_PORT": "5100",
     "NPM_CONFIG_OPTIONAL": "false",
-    "SLUG_URL": "http://blobstore.discoverd/6148b18c-fde7-4e9b-aa25-a51a75ff92bf.tgz"
+    "SLUG_URL": "http://blobstore.discoverd/29743bb3-616d-488c-82d2-06ea26cc9c91.tgz"
   },
   "processes": {
     "bosh-web": {

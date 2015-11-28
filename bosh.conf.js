@@ -21,7 +21,7 @@ exports.config = {
 
 	// The maximum number of packets on either side of the current 'rid'
 	// that we are willing to accept.
-	window_size: 10, 
+	window_size: 1024,
 
 	// How much time (in second) should we hold a response object 
 	// before sending and empty response on it?
