@@ -22,22 +22,18 @@
     "react-tools": "*",
     "react-listento": "~0.1.0",
     "classnames": "~1.1.4",
+    "marked": "~0.3.5",
     "baobab": "~0.4.1",
     "node-uuid": "~1.4.2",
 
-    "less": "~2.0.0",
-
     "jest-cli": "~0.1.18",
 
-    "marked": "~0.3.5",
-
+    "less": "~2.0.0",
     "express": "~4.8.4",
-    "node-xmpp-bosh": "git://github.com/diclophis/node-xmpp-bosh.git#d77fac0c48502d1a51232842f103f7f6752faa1b",
 
-    "node-xmpp-client": "^2.1.0",
+    "node-xmpp-bosh": "git://github.com/diclophis/node-xmpp-bosh.git#d77fac0c48502d1a51232842f103f7f6752faa1b",
     "node-xmpp-server": "~2.1.1",
     "node-xmpp-core": "~4.2.0",
-
     "strophe": "~1.2.0",
 
     "json-loader": "^0.5.1",
@@ -52,6 +48,5 @@
   "scripts": {
     "test": "node test.js"
   },
-  "author": "Jon Bardin",
-  "license": "GPL"
+  "author": "Jon Bardin"
 }

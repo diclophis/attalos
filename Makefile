@@ -21,7 +21,7 @@ dist_html = ./public/index.html
 
 .PHONY: all check clean dist-clean
 
-env:
+env: $(node_modules)
 	nslookup attalos.app.dev.mavenlink.net
 	echo '<?xml version="1.0"?>  <stream:stream to="foo.com" xmlns="jabber:client" xmlns:stream="http://etherx.jabber.org/streams" version="1.0">' | nc attalos.app.dev.mavenlink.net 5100
 	env
