@@ -35,7 +35,7 @@
 
     "node-xmpp-client": "^2.1.0",
     "node-xmpp-server": "~2.1.1",
-    "node-xmpp-core": ">=5.0.0",
+    "node-xmpp-core": "~4.2.0",
 
     "strophe": "~1.2.0",
 
