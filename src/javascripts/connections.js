@@ -33,11 +33,11 @@ var Connections = React.createClass({
         centralDispatch.client.disconnect();
       } else {
         var opts = {
-          transport: 'websocket',
-          wsURL: cursor.get('boshUrl'),
+          //transport: 'websocket',
+          //wsURL: cursor.get('boshUrl'),
 
-          //transport: 'bosh',
-          //boshURL: cursor.get('boshUrl'),
+          transport: 'bosh',
+          boshURL: cursor.get('boshUrl'),
 
           jid: cursor.get('jid'),
           password: cursor.get('password')

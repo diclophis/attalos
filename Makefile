@@ -23,9 +23,11 @@ dist_html = ./public/index.html
 
 env:
 	nslookup attalos.app.dev.mavenlink.net
+	echo '<?xml version="1.0"?>  <stream:stream to="foo.com" xmlns="jabber:client" xmlns:stream="http://etherx.jabber.org/streams" version="1.0">' | nc attalos.app.dev.mavenlink.net 5100
 	env
 
 dev: $(output_dirs) $(dev_html)
+	echo '<?xml version="1.0"?>  <stream:stream to="foo.com" xmlns="jabber:client" xmlns:stream="http://etherx.jabber.org/streams" version="1.0">' | nc attalos.app.dev.mavenlink.net 5100
 	nslookup attalos.app.dev.mavenlink.net
 
 dist: $(output_dirs) $(dist_html)
