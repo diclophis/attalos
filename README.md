@@ -82,23 +82,4 @@ The `build` products are placed in `public/` it is possible to self-host these f
     sudo docker run --detach=true -p 5100:5100 -v /tmp/attalos:/log precise /sbin/init --confdir /etc/docker_init --startup-event attalos-chat --no-dbus --verbose --logdir /log
     sudo docker run --detach=true -p 5200:5200 -v /tmp/attalos:/log precise /sbin/init --confdir /etc/docker_init --startup-event attalos-bosh --no-dbus --verbose --logdir /log
 
-  This will produce a `620M` docker image at `~/precise.tar`
-
-    "node-stringprep": "git://github.com/node-xmpp/node-stringprep.git#704f6dc54fffdc0fa33aca13dbac8f575a06ab1b",
-
-# scratch space
-
-    module.exports.dataUrlEncode = function(string) {
-      return ('data:text/html;charset=utf-8,' + encodeURIComponent(string));
-    };
-
-    replace(/^\s+|\s+$/g, '')
-
-    //this.listenTo(window.client, '*', this.didReceiveMessage);
-    //window.client.getDiscoItems('conference.error0.xmpp.slack.com', null, function(a, b, c) {
-    //  console.log("disco'd", a, b, c);
-    //});
-    // broken in slack! this.state.client.getRoomMembers(id, null, this.gotRoomRoster);
-
-https://github.com/ddollar/heroku-buildpack-apt.git
-https://github.com/heroku/heroku-buildpack-ruby.git
+    This will produce a `620M` docker image at `~/precise.tar`
