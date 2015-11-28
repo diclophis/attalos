@@ -49,7 +49,7 @@ clean:
 dist-clean: clean
 	rm -Rf node_modules $(node_modules)
 
-$(node_modules): package.json
+$(node_modules): package.json $(output_dirs)
 	NPM_CONFIG_OPTIONAL=false npm install 2>&1 | tee -a $(node_modules)
 
 public/stylesheets/application.min.css: $(debug_css)
