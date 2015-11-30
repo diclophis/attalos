@@ -254,8 +254,8 @@
     - name: run docker images
       sudo: true
       shell: '{{ item }}'
-      with_items:
-        - docker run --detach=true -p 5000:5000 -v /tmp/attalos:/log -v /home/vagrant/release:/home/vagrant/current --add-host="attalos.vagrant:10.0.30.11" precise /sbin/init --confdir /etc/docker_init --startup-event attalos-web --no-dbus --verbose --logdir /log
-        - docker run --detach=true -p 5100:5100 -v /tmp/attalos:/log -v /home/vagrant/release:/home/vagrant/current --add-host="attalos.vagrant:10.0.30.11" precise /sbin/init --confdir /etc/docker_init --startup-event attalos-chat --no-dbus --verbose --logdir /log
-        - docker run --detach=true -p 5200:5200 -v /tmp/attalos:/log -v /home/vagrant/release:/home/vagrant/current --add-host="attalos.vagrant:10.0.30.11" --env="DEFAULT_XMPP_PORT=5100" precise /sbin/init --confdir /etc/docker_init --startup-event attalos-bosh --no-dbus --verbose --logdir /log
-        - docker run --detach=true -p 2345:22   -v /tmp/attalos:/log -v /home/vagrant/release:/home/vagrant/current --add-host="attalos.vagrant:10.0.30.11" precise /sbin/init --confdir /etc/docker_init --startup-event ssh --no-dbus --verbose --logdir /log
+      with_items: #DEFAULT_XMPP_PORT=5100 DEFAULT_BOSH_HOST=localhost DEFAULT_BOSH_PORT=5200
+        - docker run --detach=true -p 5000:5000 -v /tmp/attalos:/log -v /home/vagrant/release:/home/vagrant/current --add-host="attalos.vagrant:10.0.30.11" --env="DEFAULT_XMPP_PORT=5100 DEFAULT_BOSH_HOST=10.0.30.11 DEFAULT_BOSH_PORT=5200" precise /sbin/init --confdir /etc/docker_init --startup-event attalos-web --no-dbus --verbose --logdir /log
+        - docker run --detach=true -p 5100:5100 -v /tmp/attalos:/log -v /home/vagrant/release:/home/vagrant/current --add-host="attalos.vagrant:10.0.30.11" --env="DEFAULT_XMPP_PORT=5100 DEFAULT_BOSH_HOST=10.0.30.11 DEFAULT_BOSH_PORT=5200" precise /sbin/init --confdir /etc/docker_init --startup-event attalos-chat --no-dbus --verbose --logdir /log
+        - docker run --detach=true -p 5200:5200 -v /tmp/attalos:/log -v /home/vagrant/release:/home/vagrant/current --add-host="attalos.vagrant:10.0.30.11" --env="DEFAULT_XMPP_PORT=5100 DEFAULT_BOSH_HOST=10.0.30.11 DEFAULT_BOSH_PORT=5200" precise /sbin/init --confdir /etc/docker_init --startup-event attalos-bosh --no-dbus --verbose --logdir /log
+        - docker run --detach=true -p 2345:22   -v /tmp/attalos:/log -v /home/vagrant/release:/home/vagrant/current --add-host="attalos.vagrant:10.0.30.11" --env="DEFAULT_XMPP_PORT=5100 DEFAULT_BOSH_HOST=10.0.30.11 DEFAULT_BOSH_PORT=5200" precise /sbin/init --confdir /etc/docker_init --startup-event ssh --no-dbus --verbose --logdir /log

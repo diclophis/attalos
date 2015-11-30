@@ -77,9 +77,7 @@ The `build` products are placed in `public/` it is possible to self-host these f
 
     vagrant up
     ansible-playbook -i ansible/attalos.inventory ansible/attalos-playbook.yml
-    vagrant ssh
-    sudo docker run --detach=true -p 5000:5000 -v /tmp/attalos:/log precise /sbin/init --confdir /etc/docker_init --startup-event attalos-web --no-dbus --verbose --logdir /log
-    sudo docker run --detach=true -p 5100:5100 -v /tmp/attalos:/log precise /sbin/init --confdir /etc/docker_init --startup-event attalos-chat --no-dbus --verbose --logdir /log
-    sudo docker run --detach=true -p 5200:5200 -v /tmp/attalos:/log precise /sbin/init --confdir /etc/docker_init --startup-event attalos-bosh --no-dbus --verbose --logdir /log
 
-    This will produce a `620M` docker image at `~/precise.tar`
+This will produce a `620M` docker image at `~/precise.tar`
+
+    open http://10.0.30.11:5000/dev.html
