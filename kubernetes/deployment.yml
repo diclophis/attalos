@@ -16,6 +16,22 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  name: attalos-bardin-haus-chat
+  namespace: default
+spec:
+  type: NodePort
+  ports:
+  - nodePort: 32100
+    port: 5100
+    targetPort: 5100
+    protocol: TCP
+    name: http
+  selector:
+    name: attalos
+---
+apiVersion: v1
+kind: Service
+metadata:
   name: attalos-bardin-haus-bosh
   labels:
     ttl: '16'
@@ -78,7 +94,7 @@ spec:
     spec:
       containers:
       - name: attalos-bardin-haus-web
-        image: localhost/naked:4a985b082d0e383467dc78f8496627300259d2b8
+        image: localhost/naked:fa43a4e9f5e05f92e1a20ff57bc893c0f88b4b02
         ports:
         - containerPort: 5000
         resources:
@@ -98,11 +114,11 @@ spec:
         - name: PORT
           value: "5000"
         - name: DEFAULT_XMPP_PORT
-          value: "5100"
+          value: "32100"
         - name: DEFAULT_BOSH_PORT
-          value: "5200"
+          value: "80"
       - name: attalos-bardin-haus-chat
-        image: localhost/naked:4a985b082d0e383467dc78f8496627300259d2b8
+        image: localhost/naked:fa43a4e9f5e05f92e1a20ff57bc893c0f88b4b02
         ports:
         - containerPort: 5100
         resources:
@@ -120,29 +136,29 @@ spec:
         - name: DEFAULT_BOSH_HOST
           value: "localhost"
         - name: DEFAULT_XMPP_PORT
-          value: "5100"
+          value: "32100"
         - name: DEFAULT_BOSH_PORT
-          value: "5200"
+          value: "80"
       - name: attalos-bardin-haus-bosh
-        image: localhost/naked:4a985b082d0e383467dc78f8496627300259d2b8
+        image: localhost/naked:fa43a4e9f5e05f92e1a20ff57bc893c0f88b4b02
         ports:
-        - containerPort: 5100
+        - containerPort: 5200
         resources:
           requests:
             memory: 100Mi
             cpu: 20m
         command:
-        - sleep
-        - "9999"
-        #- ./node_modules/.bin/bosh-server
-        #- "--port=5200"
-        #- "--config=../../bosh.conf.js"
+        #- sleep
+        #- "9999"
+        - ./node_modules/.bin/bosh-server
+        - "--port=5200"
+        - "--config=../../bosh.conf.js"
         env:
         - name: PORT
           value: "5200"
         - name: DEFAULT_BOSH_HOST
           value: "localhost"
         - name: DEFAULT_XMPP_PORT
-          value: "5100"
+          value: "32100"
         - name: DEFAULT_BOSH_PORT
-          value: "5200"
+          value: "80"
