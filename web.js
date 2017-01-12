@@ -6,11 +6,13 @@ var spawn = require('child_process').spawn;
 // run make to update if request is for development
 app.use(function(req, res, next) {
   var isDev = (req.url.indexOf('dev.html') != -1);
-  var isDist = (req.url.indexOf('index.html') != -1);
+  var isDist = false; //(req.url.indexOf('index.html') != -1);
   var makeDist = '';
+
   if (isDev) {
     makeDist = 'dev';
   }
+
   if (isDist) {
     makeDist = 'dist';
   }

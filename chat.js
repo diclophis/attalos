@@ -3,7 +3,7 @@
 var C2SServer = require('node-xmpp-server').C2SServer;
 var Message = require('node-xmpp-core').Stanza.Message;
 
-// Sets up the server.
+// Sets up the server..
 var c2s = new C2SServer({
   domain: 'localhost',
   port: process.env.PORT || 5222

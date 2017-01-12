@@ -60,7 +60,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: foo
+  name: attalos
   labels:
     ttl: '16'
 spec:
@@ -78,7 +78,7 @@ spec:
     spec:
       containers:
       - name: attalos-bardin-haus-web
-        image: ###
+        image: localhost/naked:4a985b082d0e383467dc78f8496627300259d2b8
         ports:
         - containerPort: 5000
         resources:
@@ -86,9 +86,11 @@ spec:
             memory: 100Mi
             cpu: 20m
         command:
+        #- sleep
+        #- "9999"
         - nodejs
         - web.js
-        env: &1
+        env:
         - name: APP_ENV
           value: production
         - name: DEFAULT_BOSH_HOST
@@ -100,7 +102,7 @@ spec:
         - name: DEFAULT_BOSH_PORT
           value: "5200"
       - name: attalos-bardin-haus-chat
-        image: ###
+        image: localhost/naked:4a985b082d0e383467dc78f8496627300259d2b8
         ports:
         - containerPort: 5100
         resources:
@@ -108,13 +110,21 @@ spec:
             memory: 100Mi
             cpu: 20m
         command:
+        #- sleep
+        #- "9999"
         - nodejs
         - chat.js
-        env: *1
+        env:
         - name: PORT
           value: "5100"
+        - name: DEFAULT_BOSH_HOST
+          value: "localhost"
+        - name: DEFAULT_XMPP_PORT
+          value: "5100"
+        - name: DEFAULT_BOSH_PORT
+          value: "5200"
       - name: attalos-bardin-haus-bosh
-        image: ###
+        image: localhost/naked:4a985b082d0e383467dc78f8496627300259d2b8
         ports:
         - containerPort: 5100
         resources:
@@ -122,9 +132,17 @@ spec:
             memory: 100Mi
             cpu: 20m
         command:
-        - ./node_modules/.bin/bosh-server
-        - "--port=5200"
-        - "--config=../../bosh.conf.js"
-        env: *1
+        - sleep
+        - "9999"
+        #- ./node_modules/.bin/bosh-server
+        #- "--port=5200"
+        #- "--config=../../bosh.conf.js"
+        env:
         - name: PORT
+          value: "5200"
+        - name: DEFAULT_BOSH_HOST
+          value: "localhost"
+        - name: DEFAULT_XMPP_PORT
+          value: "5100"
+        - name: DEFAULT_BOSH_PORT
           value: "5200"

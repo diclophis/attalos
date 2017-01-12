@@ -23,7 +23,7 @@ dist_html = ./public/index.html
 #NOTE: override these at execution time
 REPO ?= localhost/
 IMAGE_NAME ?= naked
-IMAGE_TAG ?= $(strip $(shell find Gemfile Gemfile.lock -type f | xargs shasum | sort | shasum | cut -f1 -d" "))
+IMAGE_TAG ?= $(strip $(shell find Gemfile Gemfile.lock *.js -type f | xargs shasum | sort | shasum | cut -f1 -d" "))
 IMAGE = $(REPO)$(IMAGE_NAME):$(IMAGE_TAG)
 
 BUILD=build
@@ -95,6 +95,7 @@ $(dist_js): $(debug_js)
 
 image:
 	docker build -f Dockerfile.attalos -t $(IMAGE) .
+	echo built $(IMAGE)
 
 $(BUILD)/$(IMAGE_TAG): image
 	touch $(BUILD)/$(IMAGE_TAG)

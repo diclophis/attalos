@@ -11,7 +11,7 @@ RUN useradd --home-dir /home/app --create-home --shell /bin/bash app
 
 ADD package.json /home/app/
 ADD npm-shrinkwrap.json /home/app/
-ADD node_modules /home/app/
+ADD node_modules /home/app/node_modules
 
 RUN chown -R app. /home/app
 
@@ -19,8 +19,9 @@ WORKDIR /home/app
 USER app
 RUN NPM_CONFIG_OPTIONAL=false npm install
 
-ADD chat.js /home/app/
-ADD web.js /home/app/
-ADD public /home/app/
+ADD bosh.conf.js /home/app
+ADD chat.js /home/app
+ADD web.js /home/app
+ADD public /home/app/public
 
 CMD ["true"]
