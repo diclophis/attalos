@@ -94,7 +94,7 @@ $(dist_js): $(debug_js)
 # Makefile for besoked installation
 
 image:
-	docker build -f Dockerfile.naked -t $(IMAGE) .
+	docker build -f Dockerfile.attalos -t $(IMAGE) .
 
 $(BUILD)/$(IMAGE_TAG): image
 	touch $(BUILD)/$(IMAGE_TAG)
