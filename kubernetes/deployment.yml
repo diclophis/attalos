@@ -1,0 +1,130 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: attalos-bardin-haus-web
+  labels:
+    ttl: '16'
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5000
+    protocol: TCP
+  selector:
+    name: attalos
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: attalos-bardin-haus-bosh
+  labels:
+    ttl: '16'
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5200
+    protocol: TCP
+  selector:
+    name: attalos
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: attalos-bardin-haus-vhost
+  labels:
+    ttl: '16'
+spec:
+  rules:
+  - host: attalos.bardin.haus
+    http:
+      paths:
+      - backend:
+          serviceName: attalos-bardin-haus-web
+          servicePort: 5000
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: attalos-bosh-bardin-haus-vhost
+  labels:
+    ttl: '16'
+spec:
+  rules:
+  - host: attalos-bosh.bardin.haus
+    http:
+      paths:
+      - backend:
+          serviceName: attalos-bardin-haus-bosh
+          servicePort: 5200
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: foo
+  labels:
+    ttl: '16'
+spec:
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: attalos
+        ttl: '16'
+    spec:
+      containers:
+      - name: attalos-bardin-haus-web
+        image: ###
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            memory: 100Mi
+            cpu: 20m
+        command:
+        - nodejs
+        - web.js
+        env: &1
+        - name: APP_ENV
+          value: production
+        - name: DEFAULT_BOSH_HOST
+          value: "localhost"
+        - name: PORT
+          value: "5000"
+        - name: DEFAULT_XMPP_PORT
+          value: "5100"
+        - name: DEFAULT_BOSH_PORT
+          value: "5200"
+      - name: attalos-bardin-haus-chat
+        image: ###
+        ports:
+        - containerPort: 5100
+        resources:
+          requests:
+            memory: 100Mi
+            cpu: 20m
+        command:
+        - nodejs
+        - chat.js
+        env: *1
+        - name: PORT
+          value: "5100"
+      - name: attalos-bardin-haus-bosh
+        image: ###
+        ports:
+        - containerPort: 5100
+        resources:
+          requests:
+            memory: 100Mi
+            cpu: 20m
+        command:
+        - ./node_modules/.bin/bosh-server
+        - "--port=5200"
+        - "--config=../../bosh.conf.js"
+        env: *1
+        - name: PORT
+          value: "5200"

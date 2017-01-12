@@ -1,6 +1,7 @@
 # Makefile see: https://www.gnu.org/prep/standards/html_node/Standard-Targets.html
 
 TARGET_MODULE=Attalos
+TARGET_HOST=attalos.bardin.haus
 
 src_less = ./src/stylesheets/index.less
 javascript_src = ./src/javascripts
@@ -19,16 +20,32 @@ dist_css = ./public/stylesheets/application.min.css
 dev_html = ./public/dev.html
 dist_html = ./public/index.html
 
+#NOTE: override these at execution time
+REPO ?= localhost/
+IMAGE_NAME ?= naked
+IMAGE_TAG ?= $(strip $(shell find Gemfile Gemfile.lock -type f | xargs shasum | sort | shasum | cut -f1 -d" "))
+IMAGE = $(REPO)$(IMAGE_NAME):$(IMAGE_TAG)
+
+BUILD=build
+
+$(shell mkdir -p $(BUILD))
+MANIFEST_TMP=$(BUILD)/deployment.yml
+
+#.INTERMEDIATE: $(MANIFEST_TMP)
+.PHONY: image uninstall clean
 .PHONY: all check clean dist-clean
 
+all: dev check dist
+#all: $(BUILD)/$(IMAGE_TAG) install
+
 env: $(node_modules)
-	nslookup attalos.app.dev.mavenlink.net
-	echo '<?xml version="1.0"?>  <stream:stream to="foo.com" xmlns="jabber:client" xmlns:stream="http://etherx.jabber.org/streams" version="1.0">' | nc attalos.app.dev.mavenlink.net 5100
+	nslookup $(TARGET_HOST)
+	#echo '<?xml version="1.0"?>  <stream:stream to="foo.com" xmlns="jabber:client" xmlns:stream="http://etherx.jabber.org/streams" version="1.0">' | nc $(TARGET_HOST) 5100
 	env
 
 dev: $(output_dirs) $(dev_html)
-	echo '<?xml version="1.0"?>  <stream:stream to="foo.com" xmlns="jabber:client" xmlns:stream="http://etherx.jabber.org/streams" version="1.0">' | nc attalos.app.dev.mavenlink.net 5100
-	nslookup attalos.app.dev.mavenlink.net
+	#echo '<?xml version="1.0"?>  <stream:stream to="foo.com" xmlns="jabber:client" xmlns:stream="http://etherx.jabber.org/streams" version="1.0">' | nc $(TARGET_HOST) 5100
+	nslookup $(TARGET_HOST)
 
 dist: $(output_dirs) $(dist_html)
 
@@ -38,13 +55,8 @@ debug:
 	echo $(javascripts)
 	echo $(javascripts_jsx)
 
-all: dev check dist
-
 check: $(javascripts)
-	./bin/test
-
-clean:
-	rm -Rf $(output_dirs)
+	true #./bin/test
 
 dist-clean: clean
 	rm -Rf node_modules $(node_modules)
@@ -76,6 +88,27 @@ $(debug_js): $(javascripts)
 $(dist_js): $(debug_js)
 	./bin/javascript_compress $(TARGET_MODULE) $< $@
 
-docker:
-	vagrant up
-	ansible-playbook -i ansible/attalos.inventory ansible/attalos-playbook.yml
+#docker:
+#	vagrant up
+#	ansible-playbook -i ansible/attalos.inventory ansible/attalos-playbook.yml
+# Makefile for besoked installation
+
+image:
+	docker build -f Dockerfile.naked -t $(IMAGE) .
+
+$(BUILD)/$(IMAGE_TAG): image
+	touch $(BUILD)/$(IMAGE_TAG)
+
+install: $(MANIFEST_TMP)
+	cat $(MANIFEST_TMP)
+	kubectl apply -f $(MANIFEST_TMP)
+
+$(MANIFEST_TMP): manifest.rb kubernetes/deployment.yml $(BUILD)/$(IMAGE_TAG)
+	ruby manifest.rb "$(REPO)" $(IMAGE_NAME) $(IMAGE_TAG) > $(MANIFEST_TMP)
+
+uninstall:
+	kubectl delete -f $(MANIFEST_TMP) || true
+
+clean: uninstall
+	rm -Rf $(output_dirs)
+	rm -Rf $(BUILD)
