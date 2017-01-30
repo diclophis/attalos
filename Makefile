@@ -21,14 +21,14 @@ dist_html = ./public/index.html
 
 .PHONY: all check clean dist-clean
 
-env: $(node_modules)
-	nslookup attalos.app.dev.mavenlink.net
-	echo '<?xml version="1.0"?>  <stream:stream to="foo.com" xmlns="jabber:client" xmlns:stream="http://etherx.jabber.org/streams" version="1.0">' | nc attalos.app.dev.mavenlink.net 5100
-	env
-
+#env: $(node_modules)
+#	#nslookup attalos.app.dev.mavenlink.net
+#	#echo '<?xml version="1.0"?>  <stream:stream to="foo.com" xmlns="jabber:client" xmlns:stream="http://etherx.jabber.org/streams" version="1.0">' | nc attalos.app.dev.mavenlink.net 5100
+#	env
+#
 dev: $(output_dirs) $(dev_html)
-	echo '<?xml version="1.0"?>  <stream:stream to="foo.com" xmlns="jabber:client" xmlns:stream="http://etherx.jabber.org/streams" version="1.0">' | nc attalos.app.dev.mavenlink.net 5100
-	nslookup attalos.app.dev.mavenlink.net
+#	#echo '<?xml version="1.0"?>  <stream:stream to="foo.com" xmlns="jabber:client" xmlns:stream="http://etherx.jabber.org/streams" version="1.0">' | nc attalos.app.dev.mavenlink.net 5100
+#	#nslookup attalos.app.dev.mavenlink.net
 
 dist: $(output_dirs) $(dist_html)
 
@@ -50,7 +50,7 @@ dist-clean: clean
 	rm -Rf node_modules $(node_modules)
 
 $(node_modules): package.json $(output_dirs)
-	NPM_CONFIG_OPTIONAL=false npm install 2>&1 | tee -a $(node_modules)
+	NPM_CONFIG_OPTIONAL=false npm install --link 2>&1 | tee -a $(node_modules)
 
 public/stylesheets/application.min.css: $(debug_css)
 	./bin/stylesheet_compress $< > $@
