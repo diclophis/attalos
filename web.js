@@ -1,7 +1,10 @@
-var express = require('express'),
-    app = express();
+// serves static files, in dev also re-makes project
 
+var express = require('express');
 var spawn = require('child_process').spawn;
+
+
+var app = express();
 
 // run make to update if request is for development
 app.use(function(req, res, next) {
@@ -50,7 +53,5 @@ app.use(express.static(__dirname + '/public'));
 
 var port = process.env.PORT || 3001;
 var expressServer = app.listen(port);
-
-//var io = require('socket.io').listen(expressServer);
 
 console.log('Listening for web on port', port);

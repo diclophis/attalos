@@ -75,9 +75,4 @@ The `build` products are placed in `public/` it is possible to self-host these f
 
 ## Build your own docker image (think federations based on domain over a cluster of servers)
 
-    vagrant up
-    ansible-playbook -i ansible/attalos.inventory ansible/attalos-playbook.yml
-
-This will produce a `620M` docker image at `~/precise.tar`
-
-    open http://10.0.30.11:5000/dev.html
+    make image

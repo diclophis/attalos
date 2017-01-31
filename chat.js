@@ -3,13 +3,14 @@
 var C2SServer = require('node-xmpp-server').C2SServer;
 var Message = require('node-xmpp-core').Stanza.Message;
 
+// collection of connected clients
+var clients = new Array();
+
 // Sets up the server..
 var c2s = new C2SServer({
   domain: 'localhost',
   port: process.env.PORT || 5222
 });
-
-var clients = new Array();
 
 // On Connect event. When a client connects.
 c2s.on('connect', function(client) {
@@ -71,5 +72,6 @@ c2s.on('connect', function(client) {
     console.log('DISCONNECT');
   });
 });
+
 
 console.log('Listening on port: ' + c2s.options.port);
