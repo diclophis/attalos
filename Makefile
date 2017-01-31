@@ -31,12 +31,11 @@ BUILD=build
 $(shell mkdir -p $(BUILD))
 MANIFEST_TMP=$(BUILD)/deployment.yml
 
-#.INTERMEDIATE: $(MANIFEST_TMP)
+.INTERMEDIATE: $(MANIFEST_TMP)
 .PHONY: image uninstall clean
 .PHONY: all check clean dist-clean
 
-all: dev check dist
-#all: $(BUILD)/$(IMAGE_TAG) install
+all: dev check dist $(BUILD)/$(IMAGE_TAG) install
 
 env: $(node_modules)
 	nslookup $(TARGET_HOST)
