@@ -4,6 +4,7 @@ var centralDispatch = require('./central-dispatch').singleton;
 var stateTree = require('./state-tree');
 var uuid = require('node-uuid');
 
+
 var Connections = React.createClass({
   mixins: [stateTree.mixin],
   cursors: {
@@ -15,27 +16,30 @@ var Connections = React.createClass({
   },
 
   componentDidMount: function() {
-    //centralDispatch.client.disconnect();
-    var cursor = this.cursors.connections.select(0);
-    if (cursor && cursor.get('autoConnect')) {
-    //console.log(this.cursors.connections.length);
-    //  //cursor.set('loggedIn', false);
-    //  cursor.update({'loggedIn': false});
+    var firstConnection = this.firstConnection();
+
+    if (firstConnection && firstConnection.get('autoConnect')) {
       this.handleConnect(0);
     }
+  },
+
+  firstConnection: function() {
+    var connections = this.cursors.connections.get();
+    
+    if (connections && 0 === connections.length) {
+      this.addNewConnection();
+    }
+
+    return this.cursors.connections.select(0);
   },
 
   handleConnect: function(index, ev) {
     var cursor = this.cursors.connections.select(index);
     if (cursor) {
       if (cursor.get('loggedIn') && this.state.connectionAttempts > 0) {
-        console.log("FOO");
         centralDispatch.client.disconnect();
       } else {
         var opts = {
-          //transport: 'websocket',
-          //wsURL: cursor.get('boshUrl'),
-
           transport: 'bosh',
           boshURL: cursor.get('boshUrl'),
 
@@ -52,8 +56,6 @@ var Connections = React.createClass({
   },
   
   handleBoshUrlValidation: function(index, ev) {
-    //var parts = url.parse(ev.target.value);
-    //var boshUrl = 'http://' + (parts.hostname) + ':' + (parts.port) +  '/http-bind';
     var cursor = this.cursors.connections.select(index);
     cursor.update({
       boshUrl: {
@@ -96,15 +98,20 @@ var Connections = React.createClass({
   handleConnectedValidation: function(ev) {
   },
 
-  addNewConnection: function(ev) {
+  addNewConnection: function(_ev) {
     var newId = uuid.v1();
-    this.cursors.connections.push({
+    var newConnection = {
       id: newId,
       jid: newId + '@' + this.props.boshHost,
       password: 'qwerty',
-      autoConnect: false,
+      autoConnect: true,
       boshUrl: "http://" + this.props.boshHost + ":" + this.props.boshPort + "/http-bind"
-    });
+    };
+
+    this.cursors.connections.push(newConnection);
+    stateTree.commit();
+
+    return newConnection;
   },
 
   removeConnection: function(index, ev) {

@@ -16,12 +16,12 @@ module.exports.render = function(packageModule, js, css, cb) {
     render: function() {
       var boshHost = "";
       if (typeof(process) === "object" && typeof(process.env) === "object") {
-        boshHost = process.env.DEFAULT_BOSH_HOST;
+        boshHost = process.env.DEFAULT_BOSH_HOST || "attalos-bosh.bardin.haus";
       }
 
       var boshPort = 0;
       if (typeof(process) === "object" && typeof(process.env) === "object") {
-        boshPort = parseInt(process.env.DEFAULT_BOSH_PORT);
+        boshPort = parseInt(process.env.DEFAULT_BOSH_PORT) || "80";
       }
 
       var mainContainerId = packageModule.toLowerCase() + "-container";
