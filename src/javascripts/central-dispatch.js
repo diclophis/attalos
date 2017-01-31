@@ -8,12 +8,12 @@ var stateTree = require('./state-tree');
 
 var cd = new EventEmitter();
 
+
 cd.loggedIn = false;
 cd.isConnecting = false;
 
 cd.client = xmpp.createClient({
 });
-
 
 cd.navigateTo = function(href) {
   history.pushState({}, "", href);
@@ -23,7 +23,6 @@ cd.navigateTo = function(href) {
 cd.login = function(loggedIn) {
   this.loggedIn = loggedIn;
   this.emit('login', loggedIn);
-
 };
 
 cd.logout = function(loggedIn) {
@@ -131,7 +130,9 @@ cd.getControllerFromHash = function() {
   };
 };
 
+
 module.exports.singleton = cd;
+
 
 cd.client.on('session:started', cd.onSessionStarted);
 cd.client.on('disconnected', cd.onSessionDisconnected);

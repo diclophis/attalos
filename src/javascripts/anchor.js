@@ -2,8 +2,9 @@
 
 var React = require('react');
 var classNames = require('classnames');
-var url = require('url');
+
 var centralDispatch = require('./central-dispatch').singleton;
+
 
 var Anchor = React.createClass({
   onClick: function(ev) {
@@ -12,7 +13,6 @@ var Anchor = React.createClass({
   },
 
   render: function() {
-
     // adds default class to all Anchor tags
     var classes = {
       'attalos-a': true
@@ -27,5 +27,6 @@ var Anchor = React.createClass({
     );
   }
 });
+
 
 module.exports = Anchor;

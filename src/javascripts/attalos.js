@@ -1,14 +1,13 @@
 // primary entry point
 
 var React = require('react');
+var listenTo = require('react-listento');
 
-var Anchor = require('./anchor');
 var Connections = require('./connections');
 var JoinRoom = require('./join-room');
 var ListRooms = require('./list-rooms');
 var Room = require('./room');
 var centralDispatch = require('./central-dispatch').singleton;
-var listenTo = require('react-listento');
 
 var stateTree = require('./state-tree');
 
@@ -16,6 +15,7 @@ var PeerConnection = null;
 var IceCandidate = null;
 var SessionDescription = null;
 
+//TODO: move this into a module???
 // upgrade RTC modules into real objects
 if (typeof(window) === 'object' && typeof(navigator) == 'object') {
   PeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
@@ -23,6 +23,7 @@ if (typeof(window) === 'object' && typeof(navigator) == 'object') {
   SessionDescription = window.mozRTCSessionDescription || window.RTCSessionDescription;
   navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
 }
+
 
 var AttalosComponent = React.createClass({
   mixins: [listenTo, stateTree.mixin],
@@ -85,11 +86,9 @@ var AttalosComponent = React.createClass({
 
           if (this.state.pc1) {
 
-            //console.log("DEAD ECHO ???");
+            //NOTE: this is an unknown state
 
           } else {
-
-            console.log("setting my remoteDescript to rtc offer", parsedMsg, msg.from.full);
 
             var pc1 = this.makePc();
             var offer = new SessionDescription(parsedMsg.body);
@@ -105,12 +104,13 @@ var AttalosComponent = React.createClass({
 
           if (this.state.offerRecv) {
 
-            //console.log("dead end echo 2");
+            //NOTE: this is an unknown state
 
           } else {
 
             var answer = new SessionDescription(parsedMsg.body);
             this.state.pc1.setRemoteDescription(answer, this.onRemoteDescriptionSet, this.onRtcError);
+
           }
 
         } else if ("icecandidate" === parsedMsg.type) {
@@ -120,11 +120,17 @@ var AttalosComponent = React.createClass({
             this.state.pc1.addIceCandidate(new IceCandidate(parsedMsg.body));
 
           } else {
-            //console.log("????", msg.from.full, parsedMsg);
+
+            //NOTE: this is an unknown state
+
           }
+
         } else {
-          //console.log("???", msg.from.full, parsedMsg);
+
+          //NOTE: this is an unknown state
+
         }
+
       } else {
 
         var a = (this.state[msg.from.bare] || []);
@@ -135,13 +141,7 @@ var AttalosComponent = React.createClass({
       }
     } else {
 
-      //if ((msg.from.local != centralDispatch.client.jid.local) || (msg.from.resource != centralDispatch.client.jid.local)) {
       if (msg.from.resource != centralDispatch.client.jid.local) {
-
-        //console.log(msg.from.local, centralDispatch.client.jid.local);
-        //console.log("123", msg.from.local, centralDispatch.client.jid.local);
-
-        console.log("got presence of other user, but currently offering to original, halt");
 
       } else {
 
@@ -160,27 +160,6 @@ var AttalosComponent = React.createClass({
         {url: "stun:stun2.l.google.com:19302"},
         {url: "stun:stun3.l.google.com:19302"},
         {url: "stun:stun4.l.google.com:19302"}
-        /*
-        stun.l.google.com:19302
-        stun1.l.google.com:19302
-        stun2.l.google.com:19302
-        stun3.l.google.com:19302
-        stun4.l.google.com:19302
-        stun01.sipphone.com
-        stun.ekiga.net
-        stun.fwdnet.net
-        stun.ideasip.com
-        stun.iptel.org
-        stun.rixtelecom.se
-        stun.schlund.de
-        stunserver.org
-        stun.softjoys.com
-        stun.voiparound.com
-        stun.voipbuster.com
-        stun.voipstunt.com
-        stun.voxgratia.org
-        stun.xten.com
-        */
       ]
     };
 
@@ -211,42 +190,28 @@ var AttalosComponent = React.createClass({
   },
 
   onRemoteDescriptionSet: function() {
-    //console.log('OnRemoteDescriptSet Yay, we finished signaling offers and answers');
-    //console.log(this.state.pc1.signalingState);
   },
 
   onLocalDescriptionSet: function() {
-    //console.log("onLocalDescriptionSet... where are ICE?");
-    //console.log(this.state.pc1.signalingState);
-    // if i recvd offer
-    // set remoteDescript to recvdOffer
-    //if (this.state.offerRecv) {
-    //  //this.state.pc1.setRemoteDescription(this.state.offerRecv, this.onRemoteDescriptionSet, this.onRtcError);
-    //}
-    //  // after this function returns, pc1 will start firing icecandidate events
-    //  this.state.pc2.setRemoteDescription(this.state.offer, this.onPc2RemoteDescriptionSet, this.onRtcError);
   },
 
   onCreateStream: function(stream) {
     if (!this.state.pc1) {
-      console.log("got presence without pc, sending offer");
-      //rtc
 
       var pc1 = this.makePc();
       this.setState({pc1: pc1});
 
       pc1.addStream(stream);
 
-      //pc1.createOffer(this.onOfferCreated, this.onRtcError, {mandatory:{OfferToReceiveAudio:true, OfferToReceiveVideo:true}});
       pc1.createOffer(this.onOfferCreated, this.onRtcError, {mandatory:{"offerToReceiveAudio":true,"offerToReceiveVideo":true}});
       
-      //var mediaOptions = { video: true, audio: true };
-      //getUserMedia(mediaOptions, this.onCreateStream, this.onRtcError);
-
       this.addStream(stream);
+
     } else {
+
       this.state.pc1.addStream(stream);
       this.addStream(stream);
+
     }
   },
 
@@ -265,8 +230,6 @@ var AttalosComponent = React.createClass({
   },
 
   onAddStream: function(ev, retries) {
-    //console.log("otherStream", ev);
-
     if ("undefined" === typeof(retries)) {
       retries = 1;
     }
@@ -280,10 +243,6 @@ var AttalosComponent = React.createClass({
         console.log("lost stream");
       }
     }
-
-    //<video id="otherPeer" autoplay></video>
-    //var otherPeer = document.getElementById("otherPeer");
-    //otherPeer.src = URL.createObjectURL(e.stream);
   },
 
   componentDidUpdate: function() {
@@ -305,7 +264,6 @@ var AttalosComponent = React.createClass({
   },
 
   onOfferCreated: function(description) {
-    //console.log("onOfferCreate, setting my localDescript to result, sending it as offer");
 
     this.state.pc1.setLocalDescription(description, this.onLocalDescriptionSet, this.onRtcError);
     this.sendSignal("offer", description);
@@ -315,7 +273,7 @@ var AttalosComponent = React.createClass({
   sendSignal: function(type, body) {
 
     var to = this.state.id + "/" + centralDispatch.client.jid.local + "?rtc";
-    //console.log("send", to, type, body);
+
     centralDispatch.send({
       to: to,
       body: JSON.stringify({ type: type, body: body }),
@@ -330,65 +288,6 @@ var AttalosComponent = React.createClass({
   },
 
   render: function() {
-    /*
-    var mainViewComponent = null;
-
-    switch (this.state.controller) {
-      case 'join-room':
-        mainViewComponent = <JoinRoom key="join-room" />;
-        break;
-
-      case 'list-rooms':
-        mainViewComponent = <ListRooms key="list-rooms" />;
-        break;
-
-      case 'room':
-        mainViewComponent = <Room key="room" id={this.state.id} nick={this.state.nick} streams={this.state.streamSources} messages={this.state[this.state.id] || []} joined={this.state[this.state.id+'.joined']}/>;
-        break;
-
-      default:
-    }
-
-    var extraAnchor = null;
-
-    if (this.state.id && this.state.controller == 'room') {
-      extraAnchor = <Anchor href={"?controller=room&id=" + this.state.id}><h2>{this.state.id}</h2></Anchor>;
-    }
-
-    var bootstrappedComponents = [];
-
-    if (this.props.bootstrapped) {
-      if (!this.state.loggedIn) {
-        bootstrappedComponents.push(<Connect key="connect" />);
-      }
-
-      bootstrappedComponents.push(mainViewComponent);
-    }
-
-    return (
-      <div className={this.state.loggedIn ? 'authenticated' : 'restricted'}>
-        <div className="primary-anchors">
-          <a href="?">#</a>
-          <ul>
-            <li>
-              <Anchor href="?controller=list-rooms" className="list-rooms">LIST-ROOMS</Anchor>
-            </li>
-            <li>
-              <Anchor href="?controller=join-room">JOIN-ROOM</Anchor>
-            </li>
-            <li>
-              <button onClick={this.addVideo}>video</button>
-            </li>
-          </ul>
-          {extraAnchor}
-        </div>
-        {bootstrappedComponents}
-      </div>
-    );
-        <Anchor href="?controller=list-rooms" className="list-rooms">LIST-ROOMS</Anchor>
-        <Anchor href="?controller=join-room">JOIN-ROOM</Anchor>
-        console.log(this.props.boshPort);
-    */
     return (
       <div>
         <a href="?">#</a>
@@ -401,5 +300,6 @@ var AttalosComponent = React.createClass({
     );
   }
 });
+
 
 module.exports = AttalosComponent;

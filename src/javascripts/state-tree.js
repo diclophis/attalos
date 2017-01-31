@@ -3,6 +3,7 @@
 var Baobab = require('baobab');
 var ReactAddons = require('react/addons');
 
+
 var initialStateTree = {
   defaults: {
     connections: []
@@ -26,7 +27,6 @@ if (typeof(window) === 'object' && typeof(navigator) == 'object') {
     storableCursor.set('lastSaved', new Date());
     stateTree.commit();
     var jsonToStore = JSON.stringify(storableCursor.get());
-    //console.log(jsonToStore);
     localStorage.setItem('defaults', jsonToStore);
   }, false);
 
@@ -39,5 +39,6 @@ if (typeof(window) === 'object' && typeof(navigator) == 'object') {
     stateTree.commit();
   }
 }
+
 
 module.exports = stateTree;

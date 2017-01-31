@@ -1,7 +1,9 @@
 var React = require('react');
-var centralDispatch = require('./central-dispatch').singleton;
 var marked = require('marked');
+
+var centralDispatch = require('./central-dispatch').singleton;
 var stateTree = require('./state-tree');
+
 
 function getPosition(element) {
     var xPosition = 0;
@@ -14,6 +16,7 @@ function getPosition(element) {
     }
     return { x: xPosition, y: yPosition };
 }
+
 
 var Room = React.createClass({
   mixins: [stateTree.mixin],
@@ -148,5 +151,6 @@ var Room = React.createClass({
     );
   }
 });
+
 
 module.exports = Room;

@@ -3,6 +3,7 @@
 var crypto = require('crypto');
 var fs = require('fs');
 
+
 module.exports = function(fn, cb) {
   var shasum = crypto.createHash('sha1');
   var s = fs.ReadStream(fn);

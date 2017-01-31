@@ -1,9 +1,11 @@
 var React = require('react');
 var url = require('url');
 var querystring = require('querystring');
+
 var centralDispatch = require('./central-dispatch').singleton;
 var slug = require('./slug');
 var stateTree = require('./state-tree');
+
 
 var JoinRoom = React.createClass({
   mixins: [stateTree.mixin],
@@ -48,9 +50,7 @@ var JoinRoom = React.createClass({
   },
 
   render: function() {
-    //var cursor = stateTree.select('defaults', 'connections').select(0);
     var cursor = this.cursors.connections.select(0);
-    //console.log(cursor.get('loggedIn'));
 
     var disabled = !cursor.get('loggedIn');
     var disabled2 = (this.state.id == null || (this.state.id && this.state.id.length == 0));
@@ -67,5 +67,6 @@ var JoinRoom = React.createClass({
     );
   }
 });
+
 
 module.exports = JoinRoom;

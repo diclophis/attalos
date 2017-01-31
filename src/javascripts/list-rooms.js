@@ -1,6 +1,8 @@
 var React = require('react');
+
 var Anchor = require('./anchor');
 var centralDispatch = require('./central-dispatch').singleton;
+
 
 var ListRooms = React.createClass({
   render: function() {
@@ -20,5 +22,6 @@ var ListRooms = React.createClass({
     );
   }
 });
+
 
 module.exports = ListRooms;

@@ -1,7 +1,9 @@
 // Isomorphic Single Page Javascript Application
 
 var React = require('react');
+
 var AttalosComponent = require('./attalos');
+
 
 module.exports = {};
 
