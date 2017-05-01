@@ -76,3 +76,4 @@ The `build` products are placed in `public/` it is possible to self-host these f
 ## Build your own docker image (think federations based on domain over a cluster of servers)
 
     make image
+
