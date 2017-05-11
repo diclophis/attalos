@@ -47,8 +47,6 @@ var Connections = React.createClass({
           password: cursor.get('password')
         };
 
-        console.log(opts);
-
         centralDispatch.client.connect(opts);
         this.setState({connectionAttempts: this.state.connectionAttempts+1});
       }
@@ -96,6 +94,7 @@ var Connections = React.createClass({
   },
 
   handleConnectedValidation: function(ev) {
+    //TODO
   },
 
   addNewConnection: function(_ev) {
@@ -135,19 +134,19 @@ var Connections = React.createClass({
           currently-connected?
         </label>
         <input className="connected" type="checkbox" checked={connection.loggedIn} onChange={this.handleConnectedValidation} disabled={!connection.isConnecting}></input>
-        <input type="button" value="=" onClick={this.handleConnect.bind(this, index)}/>
+        <input type="button" value="!" onClick={this.handleConnect.bind(this, index)}/>
         <input type="button" value="-" onClick={this.removeConnection.bind(this, index)}/>
       </li>
     );
   },
 
   render: function() {
+    //<input type="button" value="+" onClick={this.addNewConnection}/>
     return (
       <form onSubmit={this.onConnect} className="connect">
-        <input type="button" value="+" onClick={this.addNewConnection}/>
-        <ol>
+        <ul>
           {this.cursors.connections.get().map(this.renderConnection)}
-        </ol>
+        </ul>
       </form>
     );
   }

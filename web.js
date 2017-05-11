@@ -6,6 +6,7 @@ var spawn = require('child_process').spawn;
 
 var app = express();
 
+/*
 // run make to update if request is for development
 app.use(function(req, res, next) {
   var isDev = (req.url.indexOf('dev.html') != -1);
@@ -47,6 +48,7 @@ app.use(function(req, res, next) {
     next();
   }
 });
+*/
 
 // serve all files from public dir using built-in static file server
 app.use(express.static(__dirname + '/public'));
