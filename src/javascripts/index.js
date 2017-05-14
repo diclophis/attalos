@@ -23,7 +23,7 @@ module.exports.render = function(packageModule, js, css, cb) {
 
       var boshPort = 0;
       if (typeof(process) === "object" && typeof(process.env) === "object") {
-        boshPort = parseInt(process.env.DEFAULT_BOSH_PORT) || "80";
+        boshPort = parseInt(process.env.DEFAULT_BOSH_PORT) || "443";
       }
 
       var mainContainerId = packageModule.toLowerCase() + "-container";

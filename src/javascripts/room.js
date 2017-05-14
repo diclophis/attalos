@@ -135,7 +135,6 @@ var Room = React.createClass({
           </div>
           <div ref="messages" className="room-input">
             <textarea disabled={!this.state.meJoinedRoom} ref="focusTarget" defaultValue={this.state.message} value={this.state.message} onKeyDown={this.handleShiftKeyToggle} onChange={this.handleMessageValidation}></textarea>
-            <button disabled={this.state.message.length == 0}>SEND</button>
           </div>
           <div ref="scrollRule"></div>
           <div ref="videos">

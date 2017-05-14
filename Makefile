@@ -23,7 +23,7 @@ dist_html = ./public/index.html
 #NOTE: override these at execution time
 REPO ?= localhost/
 IMAGE_NAME ?= naked
-IMAGE_TAG ?= $(strip $(shell find Dockerfile.attalos Gemfile Gemfile.lock *.js public/**/* public/* -type f | xargs shasum | sort | shasum | cut -f1 -d" "))
+IMAGE_TAG ?= $(strip $(shell test -d public && find Dockerfile.attalos Gemfile Gemfile.lock *.js public/**/* public/* -type f | xargs shasum | sort | shasum | cut -f1 -d" "))
 IMAGE = $(REPO)$(IMAGE_NAME):$(IMAGE_TAG)
 
 BUILD=build
@@ -31,7 +31,7 @@ BUILD=build
 $(shell mkdir -p $(BUILD))
 MANIFEST_TMP=$(BUILD)/deployment.yml
 
-.INTERMEDIATE: $(MANIFEST_TMP)
+#.INTERMEDIATE: $(MANIFEST_TMP)
 .PHONY: image uninstall clean
 .PHONY: all check clean dist-clean
 
@@ -106,7 +106,7 @@ install: $(MANIFEST_TMP)
 $(MANIFEST_TMP): manifest.rb kubernetes/deployment.yml $(BUILD)/$(IMAGE_TAG)
 	ruby manifest.rb "$(REPO)" $(IMAGE_NAME) $(IMAGE_TAG) > $(MANIFEST_TMP)
 
-uninstall:
+uninstall: $(MANIFEST_TMP)
 	kubectl delete -f $(MANIFEST_TMP) || true
 
 clean: uninstall
