@@ -47,7 +47,7 @@ var Connections = React.createClass({
           password: cursor.get('password')
         };
 
-        centralDispatch.client.connect(opts);
+        centralDispatch.clientConnect(opts); // this.handleConnect(0);
         this.setState({connectionAttempts: this.state.connectionAttempts+1});
       }
     }

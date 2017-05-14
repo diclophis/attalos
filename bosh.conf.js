@@ -25,16 +25,16 @@ exports.config = {
 
 	// How much time (in second) should we hold a response object 
 	// before sending and empty response on it?
-	default_inactivity: 70,
+	default_inactivity: 10,
 
-	max_inactivity: 160,
+	max_inactivity: 3600,
 
 	// The value (in second) of keepalive to set on the HTTP response 
 	// socket
-	http_socket_keepalive: 60,
+	http_socket_keepalive: 5,
 
 	// The maximum number of active streams allowed per BOSH session
-	max_streams_per_session: 16, 
+	max_streams_per_session: 2, 
 
 	http_headers: { 
     //'Access-Control-Allow-Origin': "http://localhost:5000"
@@ -106,5 +106,5 @@ exports.config = {
 	// client. If a client fails to respond with a pong frame twice in a row,
 	// the connection will be closed.
 	// Set to 0 to disable sending of WebSocket pings.
-	websocket_ping_interval: 30
+	websocket_ping_interval: 15
 };

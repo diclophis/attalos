@@ -7,6 +7,8 @@ var xmpp = require('stanza.io');
 var stateTree = require('./state-tree');
 
 var cd = new EventEmitter();
+var lastOpts = null;
+
 
 
 cd.loggedIn = false;
@@ -15,12 +17,33 @@ cd.isConnecting = false;
 cd.client = xmpp.createClient({
 });
 
+cd.clientConnect = function(opts) {
+  if (lastOpts == null) {
+    //TODO: keep-alive ping check, ugh
+    setInterval(function() {
+      cd.send({
+        to: "ping",
+        body: "",
+        type: 'groupchat'
+      });
+    }, 5000);
+  }
+
+  if (opts) {
+    lastOpts = opts;
+  }
+
+
+  cd.client.connect(lastOpts);
+};
+
 cd.navigateTo = function(href) {
   history.pushState({}, "", href);
   this.emit('popstate', {});
 }
 
 cd.login = function(loggedIn) {
+  console.log("wtF");
   this.loggedIn = loggedIn;
   this.emit('login', loggedIn);
 };
@@ -38,6 +61,7 @@ cd.message = function(msg) {
 cd.send = function(msg) {
   this.emit("send", msg);
 };
+
 
 cd.joinRoom = function(roomName) {
   this.emit("room:join", roomName);
@@ -82,6 +106,7 @@ cd.onSessionStarted = function () {
   //this.state.client.getRoster();
   //this.state.client.sendPresence();
   //this.setState({ loggedIn: true })
+  console.log("cd.onSessionStarted");
 
   var cursor = stateTree.select('defaults', 'connections').select(0);
   cursor.set('loggedIn', true);
@@ -99,8 +124,11 @@ cd.onSessionDisconnected = function () {
   }
 
   cd.logout(false);
-};
 
+  console.log("BOLLOCKS");
+
+  //cd.clientConnect(null);
+};
 
 cd.addPopStateHandler = function(listener, fnCb) {
   listener.listenTo(this, 'popstate', fnCb);

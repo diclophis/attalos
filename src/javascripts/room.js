@@ -85,23 +85,22 @@ var Room = React.createClass({
   },
 
   componentWillUpdate: function() {
-    var node = this.refs.allm.getDOMNode();
-    var node2 = this.refs.videos.getDOMNode();
-
-    //console.log(window.innerHeight, window.scrollY, node.offsetHeight, getPosition(node), node2.scrollHeight);
-    //569 1008 1412 Object {x: 8, y: -843} 264
-    this.shouldScrollBottom = (node.offsetHeight + getPosition(node).y) == window.innerHeight;
+    //var node = this.refs.allm.getDOMNode();
+    //var node2 = this.refs.videos.getDOMNode();
+    ////console.log(window.innerHeight, window.scrollY, node.offsetHeight, getPosition(node), node2.scrollHeight);
+    ////569 1008 1412 Object {x: 8, y: -843} 264
+    //this.shouldScrollBottom = (node.offsetHeight + getPosition(node).y) == window.innerHeight;
   },
    
   componentDidUpdate: function() {
-    if (this.shouldScrollBottom) {
-      var node = this.refs.focusRule.getDOMNode();
-      node.scrollIntoView(false);
-    }
+    //if (this.shouldScrollBottom) {
+    //  var node = this.refs.focusRule.getDOMNode();
+    //  node.scrollIntoView(false);
+    //}
+    //////node.scrollIntoView(false);
 
     if (this.state.shouldFocusNow) {
       node = this.refs.focusTarget.getDOMNode();
-      //node.scrollIntoView(false);
       node.focus();
     }
   },
@@ -119,11 +118,20 @@ var Room = React.createClass({
       );
     }
 
-
     var localVideoSrc = null;
     if (this.props.streams.length > 0) {
       localVideoSrc = this.props.streams[0];
     }
+
+    /*
+          <div ref="videos">
+            <div>
+              <video ref="localVideo" autoPlay src={localVideoSrc}></video>
+            </div>
+            <div ref="remoteVideos">
+            </div>
+          </div>
+    */
 
     return (
       <form onSubmit={this.willSend}>
@@ -137,13 +145,6 @@ var Room = React.createClass({
             <textarea disabled={!this.state.meJoinedRoom} ref="focusTarget" defaultValue={this.state.message} value={this.state.message} onKeyDown={this.handleShiftKeyToggle} onChange={this.handleMessageValidation}></textarea>
           </div>
           <div ref="scrollRule"></div>
-          <div ref="videos">
-            <div>
-              <video ref="localVideo" autoPlay src={localVideoSrc}></video>
-            </div>
-            <div ref="remoteVideos">
-            </div>
-          </div>
           <div ref="focusRule"></div>
         </div>
       </form>

@@ -92,6 +92,7 @@ spec:
         name: attalos
         ttl: '16'
     spec:
+      terminationGracePeriodSeconds: 1
       containers:
       - name: attalos-bardin-haus-web
         image: localhost/naked:fa43a4e9f5e05f92e1a20ff57bc893c0f88b4b02
