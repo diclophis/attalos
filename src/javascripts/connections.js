@@ -104,7 +104,7 @@ var Connections = React.createClass({
       jid: newId + '@' + this.props.boshHost,
       password: 'qwerty',
       autoConnect: true,
-      boshUrl: "http://" + this.props.boshHost + ":" + this.props.boshPort + "/http-bind"
+      boshUrl: "https://" + this.props.boshHost + ":" + this.props.boshPort + "/http-bind"
     };
 
     this.cursors.connections.push(newConnection);

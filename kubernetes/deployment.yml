@@ -116,7 +116,7 @@ spec:
         - name: DEFAULT_XMPP_PORT
           value: "32100"
         - name: DEFAULT_BOSH_PORT
-          value: "80"
+          value: "443"
       - name: attalos-bardin-haus-chat
         image: localhost/naked:fa43a4e9f5e05f92e1a20ff57bc893c0f88b4b02
         ports:
@@ -138,7 +138,7 @@ spec:
         - name: DEFAULT_XMPP_PORT
           value: "32100"
         - name: DEFAULT_BOSH_PORT
-          value: "80"
+          value: "443"
       - name: attalos-bardin-haus-bosh
         image: localhost/naked:fa43a4e9f5e05f92e1a20ff57bc893c0f88b4b02
         ports:
@@ -161,4 +161,4 @@ spec:
         - name: DEFAULT_XMPP_PORT
           value: "32100"
         - name: DEFAULT_BOSH_PORT
-          value: "80"
+          value: "443"
