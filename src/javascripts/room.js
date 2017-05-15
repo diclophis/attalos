@@ -18,6 +18,9 @@ function getPosition(element) {
 }
 
 
+var lastMessageCount = 0;
+
+
 var Room = React.createClass({
   mixins: [stateTree.mixin],
   cursors: {
@@ -65,7 +68,6 @@ var Room = React.createClass({
   },
 
   componentWillReceiveProps: function(nextProps) {
-
     var shouldFocusNow = false;
 
     if (!this.state.meJoinedRoom && nextProps.joined) {
@@ -85,23 +87,82 @@ var Room = React.createClass({
   },
 
   componentWillUpdate: function() {
-    //var node = this.refs.allm.getDOMNode();
+    var node = this.refs.allm.getDOMNode();
     //var node2 = this.refs.videos.getDOMNode();
     ////console.log(window.innerHeight, window.scrollY, node.offsetHeight, getPosition(node), node2.scrollHeight);
     ////569 1008 1412 Object {x: 8, y: -843} 264
-    //this.shouldScrollBottom = (node.offsetHeight + getPosition(node).y) == window.innerHeight;
+
+    if (this.state.messages.length != lastMessageCount) {
+      lastMessageCount = this.state.messages.length;
+      this.shouldScrollBottom = true; //(node.offsetHeight + getPosition(node).y) == window.innerHeight;
+    } else {
+      this.shouldScrollBottom = false; //(node.offsetHeight + getPosition(node).y) == window.innerHeight;
+    }
   },
    
   componentDidUpdate: function() {
-    //if (this.shouldScrollBottom) {
-    //  var node = this.refs.focusRule.getDOMNode();
-    //  node.scrollIntoView(false);
-    //}
+    if (this.shouldScrollBottom) {
+      var node = this.refs.focusRule.getDOMNode();
+      node.scrollIntoView(false);
+    }
     //////node.scrollIntoView(false);
 
     if (this.state.shouldFocusNow) {
       node = this.refs.focusTarget.getDOMNode();
       node.focus();
+    }
+  },
+
+  haltEvent: function(event) {
+    event.stopPropagation();
+    event.preventDefault();
+  },
+
+  dropEvent: function(event) {
+    this.haltEvent(event);
+
+    var dataTransfer = event.dataTransfer;
+
+    for (var i = 0; i < dataTransfer.files.length; i++) {
+      var fileIn = dataTransfer.files[i];
+      var fileNameIn = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+      });
+      var uploadUrlIn =  "https://webdav.bardin.haus/incoming/" + fileNameIn;
+      var fileTypeIn = fileIn.type;
+
+      (function(tharse, file, uploadUrl, fileName, fileType) {
+        var xhr    = new XMLHttpRequest();
+        var fileUpload = xhr.upload;
+
+        fileUpload.addEventListener("progress", function(event) {
+          if (event.lengthComputable) {
+            var percentage = Math.round((event.loaded * 100) / event.total);
+            if (percentage < 100) {
+              console.log("percent complete", percentage);
+            }
+          }
+        }, false);
+
+        fileUpload.addEventListener("load", function(event) {
+          console.log("upload: finished");
+          if (fileType.indexOf("image") === 0) {
+            var imgMarkdown = String.fromCharCode(13) + '![alt](' + uploadUrl + ' "alt")';
+            this.setState({
+              message: this.state.message + imgMarkdown
+            });
+          }
+        }.bind(tharse), false);
+
+        fileUpload.addEventListener("error", function(event) {
+          console.log("error", event);
+        }, false);
+
+        xhr.open('PUT', uploadUrl, true);
+        xhr.setRequestHeader('X-Filename', fileName);
+        xhr.send(file);
+      })(this, fileIn, uploadUrlIn, fileNameIn, fileTypeIn);
     }
   },
 
@@ -141,8 +202,13 @@ var Room = React.createClass({
               {messages}
             </ul>
           </div>
-          <div ref="messages" className="room-input">
-            <textarea disabled={!this.state.meJoinedRoom} ref="focusTarget" defaultValue={this.state.message} value={this.state.message} onKeyDown={this.handleShiftKeyToggle} onChange={this.handleMessageValidation}></textarea>
+          <div 
+            onDragEnter={this.haltEvent}
+            onDragOver={this.haltEvent}
+            onDrop={this.dropEvent}
+            ref="messages" className="room-input">
+            <textarea 
+              disabled={!this.state.meJoinedRoom} ref="focusTarget" defaultValue={this.state.message} value={this.state.message} onKeyDown={this.handleShiftKeyToggle} onChange={this.handleMessageValidation}></textarea>
           </div>
           <div ref="scrollRule"></div>
           <div ref="focusRule"></div>
