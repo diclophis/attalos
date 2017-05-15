@@ -73,23 +73,14 @@ var AttalosComponent = React.createClass({
   },
 
   didReceiveMessage: function(msg, _) {
-
     var newState = {};
-
     if (msg.from && msg.body) {
-
       if (msg.from.resource.indexOf("rtc") != -1) {
-
         parsedMsg = JSON.parse(msg.body);
-  
         if ("offer" === parsedMsg.type) {
-
           if (this.state.pc1) {
-
             //NOTE: this is an unknown state
-
           } else {
-
             var pc1 = this.makePc();
             var offer = new SessionDescription(parsedMsg.body);
 
@@ -98,55 +89,34 @@ var AttalosComponent = React.createClass({
 
             newState.pc1 = pc1;
             newState.offerRecv = offer;
-
           }
         } else if ("answer" == parsedMsg.type) {
-
           if (this.state.offerRecv) {
-
             //NOTE: this is an unknown state
-
           } else {
-
             var answer = new SessionDescription(parsedMsg.body);
             this.state.pc1.setRemoteDescription(answer, this.onRemoteDescriptionSet, this.onRtcError);
-
           }
-
         } else if ("icecandidate" === parsedMsg.type) {
-
           if ((this.state.id + "/" + centralDispatch.client.jid.local + "?rtc") != msg.from.full) {
-
             this.state.pc1.addIceCandidate(new IceCandidate(parsedMsg.body));
-
           } else {
-
             //NOTE: this is an unknown state
-
           }
-
         } else {
-
           //NOTE: this is an unknown state
-
         }
-
       } else {
-
         var a = (this.state[msg.from.bare] || []);
-        msg.body = "`" + msg.from.resource + String.fromCharCode(160) + String.fromCharCode(160) + "` " + msg.body;
+        msg.body = "`" + msg.from.resource + "`" + String.fromCharCode(13) + msg.body;
         a.unshift(msg.body);
         newState[msg.from.bare] = a
-
       }
     } else {
-
       if (msg.from.resource != centralDispatch.client.jid.local) {
-
+        //TODO:?
       } else {
-
         newState[msg.from.bare+'.joined'] = true;
-
       }
     }
 
@@ -287,12 +257,13 @@ var AttalosComponent = React.createClass({
     navigator.getUserMedia(mediaOptions, this.onCreateStream, this.onRtcError);
   },
 
+  //<button onClick={this.addVideo}>video</button>
+
   render: function() {
     return (
       <div>
-        <a href="?">#</a>
+        <a href="?">###</a>
         <Connections boshHost={this.props.boshHost} boshPort={this.props.boshPort}/>
-        <button onClick={this.addVideo}>video</button>
         <JoinRoom key="join-room" id={this.state.id}/>
         <ListRooms key="list-rooms" />
         <Room key="room" id={this.state.id} nick={this.state.nick} streams={this.state.streamSources} messages={this.state[this.state.id] || []} joined={this.state[this.state.id+'.joined']}/>
