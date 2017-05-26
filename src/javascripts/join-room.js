@@ -58,7 +58,7 @@ var JoinRoom = React.createClass({
       <form onSubmit={this.willJoinRoom}>
         <ul>
           <li>
-            name:
+            room:
             <input disabled={disabled} ref="focusTarget" placeholder="name of discussion" value={this.state.id} onChange={this.handleRoomValidation}></input>
             <button disabled={disabled2}>JOIN ROOM</button>
           </li>

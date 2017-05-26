@@ -118,8 +118,9 @@ var Connections = React.createClass({
   },
 
   renderConnection: function(connection, index) {
+    var jidStyle = {display: 'none'};
     return (
-      <li key={connection.id}>
+      <li style={jidStyle} key={connection.id}>
         jid:
         <input className="jid" defaultValue={connection.jid} onChange={this.handleJidValidation.bind(this, index)} disabled={connection.isConnecting}></input>
         password:

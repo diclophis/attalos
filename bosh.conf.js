@@ -34,7 +34,7 @@ exports.config = {
 	http_socket_keepalive: 5,
 
 	// The maximum number of active streams allowed per BOSH session
-	max_streams_per_session: 2, 
+	max_streams_per_session: 32,
 
 	http_headers: { 
     //'Access-Control-Allow-Origin': "http://localhost:5000"
