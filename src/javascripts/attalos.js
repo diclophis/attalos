@@ -85,7 +85,8 @@ var AttalosComponent = React.createClass({
             var offer = new SessionDescription(parsedMsg.body);
 
             pc1.setRemoteDescription(offer, this.onRemoteDescriptionSet, this.onRtcError);
-            pc1.createAnswer(this.onAnswerCreated, this.onRtcError, {mandatory:{OfferToReceiveAudio:true, OfferToReceiveVideo:true}});
+            pc1.createAnswer(this.onAnswerCreated, this.onRtcError, {offerToReceiveAudio:true, offerToReceiveVideo:true});
+            //sdpOptions = { offerToReceiveAudio: true,  offerToReceiveVideo: false};
 
             newState.pc1 = pc1;
             newState.offerRecv = offer;
@@ -126,10 +127,10 @@ var AttalosComponent = React.createClass({
   makePc: function() {
     var options = {
       iceServers: [
-        {url: "stun:stun1.l.google.com:19302"},
-        {url: "stun:stun2.l.google.com:19302"},
-        {url: "stun:stun3.l.google.com:19302"},
-        {url: "stun:stun4.l.google.com:19302"}
+        {urls: "stun:stun1.l.google.com:19302"},
+        {urls: "stun:stun2.l.google.com:19302"},
+        {urls: "stun:stun3.l.google.com:19302"},
+        {urls: "stun:stun4.l.google.com:19302"}
       ]
     };
 
@@ -173,7 +174,7 @@ var AttalosComponent = React.createClass({
 
       pc1.addStream(stream);
 
-      pc1.createOffer(this.onOfferCreated, this.onRtcError, {mandatory:{"offerToReceiveAudio":true,"offerToReceiveVideo":true}});
+      pc1.createOffer(this.onOfferCreated, this.onRtcError, {offerToReceiveAudio:true, offerToReceiveVideo:true});
       
       this.addStream(stream);
 
@@ -257,15 +258,15 @@ var AttalosComponent = React.createClass({
     navigator.getUserMedia(mediaOptions, this.onCreateStream, this.onRtcError);
   },
 
-  //<button onClick={this.addVideo}>video</button>
 
   render: function() {
     return (
       <div>
-        <a href="?">###</a>
+        <a href="?">### wtf</a>
         <Connections boshHost={this.props.boshHost} boshPort={this.props.boshPort}/>
         <JoinRoom key="join-room" id={this.state.id}/>
         <ListRooms key="list-rooms" />
+        <button onClick={this.addVideo}>video</button>
         <Room key="room" id={this.state.id} nick={this.state.nick} streams={this.state.streamSources} messages={this.state[this.state.id] || []} joined={this.state[this.state.id+'.joined']}/>
       </div>
     );

@@ -4,7 +4,6 @@ kind: Service
 metadata:
   name: attalos-bardin-haus-web
   labels:
-    ttl: '16'
 spec:
   type: ClusterIP
   ports:
@@ -12,29 +11,28 @@ spec:
     protocol: TCP
   selector:
     name: attalos
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: attalos-bardin-haus-chat
-  namespace: default
-spec:
-  type: NodePort
-  ports:
-  - nodePort: 32100
-    port: 5100
-    targetPort: 5100
-    protocol: TCP
-    name: http
-  selector:
-    name: attalos
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: attalos-bardin-haus-chat
+#  namespace: default
+#spec:
+#  type: NodePort
+#  ports:
+#  - nodePort: 32100
+#    port: 5100
+#    targetPort: 5100
+#    protocol: TCP
+#    name: http
+#  selector:
+#    name: attalos
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: attalos-bardin-haus-bosh
   labels:
-    ttl: '16'
 spec:
   type: ClusterIP
   ports:
@@ -48,7 +46,6 @@ kind: Ingress
 metadata:
   name: attalos-bardin-haus-vhost
   labels:
-    ttl: '16'
 spec:
   rules:
   - host: attalos.bardin.haus
@@ -63,7 +60,6 @@ kind: Ingress
 metadata:
   name: attalos-bosh-bardin-haus-vhost
   labels:
-    ttl: '16'
 spec:
   rules:
   - host: attalos-bosh.bardin.haus
@@ -78,7 +74,6 @@ kind: Deployment
 metadata:
   name: attalos
   labels:
-    ttl: '16'
 spec:
   revisionHistoryLimit: 5
   strategy:
@@ -90,12 +85,13 @@ spec:
     metadata:
       labels:
         name: attalos
-        ttl: '16'
     spec:
-      terminationGracePeriodSeconds: 1
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      terminationGracePeriodSeconds: 5
       containers:
       - name: attalos-bardin-haus-web
-        image: localhost/naked:fa43a4e9f5e05f92e1a20ff57bc893c0f88b4b02
+        image: fart
         ports:
         - containerPort: 5000
         resources:
@@ -113,20 +109,19 @@ spec:
         - name: PORT
           value: "5000"
         - name: DEFAULT_XMPP_PORT
-          value: "32100"
+          value: "5200"
         - name: DEFAULT_BOSH_PORT
           value: "443"
       - name: attalos-bardin-haus-chat
-        image: localhost/naked:fa43a4e9f5e05f92e1a20ff57bc893c0f88b4b02
+        image: fart
         ports:
-        - containerPort: 5100
+        - hostPort: 5100
+          containerPort: 5100
         resources:
           requests:
             memory: 100Mi
             cpu: 20m
         command:
-        #- sleep
-        #- "9999"
         - nodejs
         - chat.js
         env:
@@ -135,20 +130,19 @@ spec:
         - name: DEFAULT_BOSH_HOST
           value: "localhost"
         - name: DEFAULT_XMPP_PORT
-          value: "32100"
+          value: "5100"
         - name: DEFAULT_BOSH_PORT
           value: "443"
       - name: attalos-bardin-haus-bosh
-        image: localhost/naked:fa43a4e9f5e05f92e1a20ff57bc893c0f88b4b02
+        image: fart
         ports:
-        - containerPort: 5200
+        - hostPort: 5200
+          containerPort: 5200
         resources:
           requests:
             memory: 100Mi
             cpu: 20m
         command:
-        #- sleep
-        #- "9999"
         - ./node_modules/.bin/bosh-server
         - "--port=5200"
         - "--config=../../bosh.conf.js"
@@ -158,6 +152,6 @@ spec:
         - name: DEFAULT_BOSH_HOST
           value: "localhost"
         - name: DEFAULT_XMPP_PORT
-          value: "32100"
+          value: "5100"
         - name: DEFAULT_BOSH_PORT
           value: "443"

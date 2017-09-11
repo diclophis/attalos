@@ -161,6 +161,7 @@ var Room = React.createClass({
 
         xhr.open('PUT', uploadUrl, true);
         xhr.setRequestHeader('X-Filename', fileName);
+        xhr.setRequestHeader('Authorization', 'Basic Z3Vlc3Q6Z3Vlc3Q=');
         xhr.send(file);
       })(this, fileIn, uploadUrlIn, fileNameIn, fileTypeIn);
     }
@@ -185,6 +186,11 @@ var Room = React.createClass({
     }
 
     /*
+    */
+
+    return (
+      <form onSubmit={this.willSend}>
+        <div ref="allm" className="room">
           <div ref="videos">
             <div>
               <video ref="localVideo" autoPlay src={localVideoSrc}></video>
@@ -192,11 +198,6 @@ var Room = React.createClass({
             <div ref="remoteVideos">
             </div>
           </div>
-    */
-
-    return (
-      <form onSubmit={this.willSend}>
-        <div ref="allm" className="room">
           <div className="room-messages">
             <ul>
               {messages}

@@ -22,7 +22,7 @@ dist_html = ./public/index.html
 
 #NOTE: override these at execution time
 REPO ?= localhost/
-IMAGE_NAME ?= naked
+IMAGE_NAME ?= attalos
 IMAGE_TAG ?= $(strip $(shell test -d public && find Dockerfile.attalos Gemfile Gemfile.lock *.js public/**/* public/* -type f | xargs shasum | sort | shasum | cut -f1 -d" "))
 IMAGE = $(REPO)$(IMAGE_NAME):$(IMAGE_TAG)
 
