@@ -2,6 +2,8 @@
 
 var React = require('react');
 var listenTo = require('react-listento');
+var createReactClass = require('create-react-class');
+
 
 var Connections = require('./connections');
 var JoinRoom = require('./join-room');
@@ -25,7 +27,7 @@ if (typeof(window) === 'object' && typeof(navigator) == 'object') {
 }
 
 
-var AttalosComponent = React.createClass({
+var AttalosComponent = createReactClass({
   mixins: [listenTo, stateTree.mixin],
   cursors: {
     connections: ['defaults', 'connections']
@@ -76,7 +78,7 @@ var AttalosComponent = React.createClass({
     var newState = {};
     if (msg.from && msg.body) {
       if (msg.from.resource.indexOf("rtc") != -1) {
-        parsedMsg = JSON.parse(msg.body);
+        var parsedMsg = JSON.parse(msg.body);
         if ("offer" === parsedMsg.type) {
           if (this.state.pc1) {
             //NOTE: this is an unknown state
@@ -85,7 +87,7 @@ var AttalosComponent = React.createClass({
             var offer = new SessionDescription(parsedMsg.body);
 
             pc1.setRemoteDescription(offer, this.onRemoteDescriptionSet, this.onRtcError);
-            pc1.createAnswer(this.onAnswerCreated, this.onRtcError, {offerToReceiveAudio:true, offerToReceiveVideo:true});
+            pc1.createAnswer(this.onAnswerCreated, this.onRtcError); //, {offerToReceiveAudio:true, offerToReceiveVideo:true});
             //sdpOptions = { offerToReceiveAudio: true,  offerToReceiveVideo: false};
 
             newState.pc1 = pc1;
@@ -134,7 +136,7 @@ var AttalosComponent = React.createClass({
       ]
     };
 
-    pc = new PeerConnection(options);
+    var pc = new PeerConnection(options);
 
     this.listenTo(pc, 'icecandidate', this.onIceCandidate);
     this.listenTo(pc, 'addstream', this.onAddStream);
@@ -174,7 +176,7 @@ var AttalosComponent = React.createClass({
 
       pc1.addStream(stream);
 
-      pc1.createOffer(this.onOfferCreated, this.onRtcError, {offerToReceiveAudio:true, offerToReceiveVideo:true});
+      pc1.createOffer(this.onOfferCreated, this.onRtcError); //, {offerToReceiveAudio:true, offerToReceiveVideo:true});
       
       this.addStream(stream);
 
@@ -208,7 +210,7 @@ var AttalosComponent = React.createClass({
     if (ev.target.iceConnectionState === "connected") { 
       this.addStream(ev.stream);
     } else {
-      if (retries < 10) {
+      if (retries < 100) {
         setTimeout(this.onAddStream, 100, ev, (retries + 1));
       } else {
         console.log("lost stream");

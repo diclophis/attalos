@@ -2,11 +2,12 @@
 
 var React = require('react');
 var classNames = require('classnames');
+var createReactClass = require('create-react-class');
 
 var centralDispatch = require('./central-dispatch').singleton;
 
 
-var Anchor = React.createClass({
+var Anchor = createReactClass({
   onClick: function(ev) {
     ev.preventDefault(ev);
     centralDispatch.navigateTo(ev.target.href);

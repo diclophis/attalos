@@ -1,6 +1,11 @@
 // Isomorphic Single Page Javascript Application
 
 var React = require('react');
+var createReactClass = require('create-react-class');
+
+var ReactDOMServer = require('react-dom/server')
+var ReactDOM = require('react-dom')
+
 
 var AttalosComponent = require('./attalos');
 
@@ -14,7 +19,7 @@ module.exports.bootstrap = function(exp, boshHost, boshPort, mainContainer) {
 };
 
 module.exports.render = function(packageModule, js, css, cb) {
-  var IndexComponent = React.createClass({
+  var IndexComponent = createReactClass({
     render: function() {
       var boshHost = "";
       if (typeof(process) === "object" && typeof(process.env) === "object") {
@@ -50,9 +55,9 @@ module.exports.render = function(packageModule, js, css, cb) {
       );
     }
   });
-  return '<!DOCTYPE html>' + React.renderToStaticMarkup(<IndexComponent js={js} css={css} />);
+  return '<!DOCTYPE html>' + ReactDOMServer.renderToStaticMarkup(<IndexComponent js={js} css={css} />);
 };
 
 module.exports.attach = function(boshHost, boshPort, mainContainer) {
-  return React.render(<AttalosComponent boshHost={boshHost} boshPort={boshPort} bootstrapped={true} />, mainContainer);
+  return ReactDOM.render(<AttalosComponent boshHost={boshHost} boshPort={boshPort} bootstrapped={true} />, mainContainer);
 };

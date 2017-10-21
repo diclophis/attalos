@@ -23,7 +23,7 @@ dist_html = ./public/index.html
 #NOTE: override these at execution time
 REPO ?= localhost/
 IMAGE_NAME ?= attalos
-IMAGE_TAG ?= $(strip $(shell test -d public && find Dockerfile.attalos Gemfile Gemfile.lock *.js public/**/* public/* -type f | xargs shasum | sort | shasum | cut -f1 -d" "))
+IMAGE_TAG ?= $(strip $(shell test -d public && find build/*.js Dockerfile.attalos Gemfile Gemfile.lock *.js public/**/* public/* -type f | xargs shasum | sort | shasum | cut -f1 -d" "))
 IMAGE = $(REPO)$(IMAGE_NAME):$(IMAGE_TAG)
 
 BUILD=build
@@ -79,7 +79,7 @@ $(output_dirs):
 	mkdir -p $@
 
 build/%: src/javascripts/%
-	./bin/javascript_compile $< > $@
+	./bin/javascript_compile $< $@
 
 $(debug_js): $(javascripts)
 	./bin/javascript_package $(TARGET_MODULE) build/index.js $@

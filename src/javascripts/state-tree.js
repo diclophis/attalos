@@ -1,8 +1,9 @@
 //
 
 var Baobab = require('baobab');
-var ReactAddons = require('react/addons');
 
+//var ReactAddons = require('react/addons');
+//mixins: [ReactAddons.PureRenderMixin],
 
 var initialStateTree = {
   defaults: {
@@ -14,7 +15,6 @@ var initialStateTree = {
 var stateTree = new Baobab(
   initialStateTree,
   {
-    mixins: [ReactAddons.PureRenderMixin],
     shiftReferences: true,
     autoCommit: true
   }

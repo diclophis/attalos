@@ -41,8 +41,8 @@ c2s.on('connect', function(client) {
   client.on('stanza', function(stanza) {
     console.log(stanza);
 
-    var fff = stanza.getFrom();
-    var ttt = stanza.getTo();
+    var fff = stanza.attrs.from;
+    var ttt = stanza.attrs.to;
     console.log(fff, ttt);
 
     // This re-broadcasts the stanza to all connected clients, in effect creating an echo chamber
@@ -57,7 +57,7 @@ c2s.on('connect', function(client) {
       } else if (stanza.name == "presence") {
         msg = new Message({ type: stanza.type, from: stanza.to });
       } else {
-        msg = new Message({ type: stanza.type, from: stanza.to + "/" + fff.user });
+        msg = new Message({ type: stanza.type, from: stanza.to + "/" + fff });
       }
 
       console.log(msg);

@@ -1,4 +1,5 @@
 var React = require('react');
+var createReactClass = require('create-react-class');
 var marked = require('marked');
 
 var centralDispatch = require('./central-dispatch').singleton;
@@ -21,7 +22,7 @@ function getPosition(element) {
 var lastMessageCount = 0;
 
 
-var Room = React.createClass({
+var Room = createReactClass({
   mixins: [stateTree.mixin],
   cursors: {
     connections: ['defaults', 'connections']
@@ -82,12 +83,12 @@ var Room = React.createClass({
   },
 
   componentDidMount: function() {
-    var node = this.refs.focusTarget.getDOMNode();
+    var node = this.refs.focusTarget;
     node.focus();
   },
 
   componentWillUpdate: function() {
-    var node = this.refs.allm.getDOMNode();
+    var node = this.refs.allm;
     //var node2 = this.refs.videos.getDOMNode();
     ////console.log(window.innerHeight, window.scrollY, node.offsetHeight, getPosition(node), node2.scrollHeight);
     ////569 1008 1412 Object {x: 8, y: -843} 264
@@ -102,13 +103,13 @@ var Room = React.createClass({
    
   componentDidUpdate: function() {
     if (this.shouldScrollBottom) {
-      var node = this.refs.focusRule.getDOMNode();
+      var node = this.refs.focusRule;
       node.scrollIntoView(false);
     }
     //////node.scrollIntoView(false);
 
     if (this.state.shouldFocusNow) {
-      node = this.refs.focusTarget.getDOMNode();
+      node = this.refs.focusTarget;
       node.focus();
     }
   },
@@ -209,7 +210,7 @@ var Room = React.createClass({
             onDrop={this.dropEvent}
             ref="messages" className="room-input">
             <textarea 
-              disabled={!this.state.meJoinedRoom} ref="focusTarget" defaultValue={this.state.message} value={this.state.message} onKeyDown={this.handleShiftKeyToggle} onChange={this.handleMessageValidation}></textarea>
+              disabled={!this.state.meJoinedRoom} ref="focusTarget" value={this.state.message} onKeyDown={this.handleShiftKeyToggle} onChange={this.handleMessageValidation}></textarea>
           </div>
           <div ref="scrollRule"></div>
           <div ref="focusRule"></div>

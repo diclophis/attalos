@@ -18,9 +18,19 @@
   },
   "optional": false,
   "dependencies": {
-    "react": "^0.13",
-    "react-tools": "*",
-    "react-listento": "~0.1.0",
+    "babel-cli": "^6.0",
+    "babel-core": "^6.0",
+    "babel-loader": "^6.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.0",
+    "babel-preset-es2015": "^6.0",
+    "babel-preset-react": "^6.0",
+
+    "react": "^16.0",
+    "react-dom": "^16.0",
+    "react-addons": "*",
+    "react-listento": "*",
+    "create-react-class": "^15.0",
+
     "classnames": "~1.1.4",
     "marked": "~0.3.5",
     "baobab": "~0.4.1",

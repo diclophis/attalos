@@ -1,10 +1,11 @@
 var React = require('react');
+var createReactClass = require('create-react-class');
 
 var Anchor = require('./anchor');
 var centralDispatch = require('./central-dispatch').singleton;
 
 
-var ListRooms = React.createClass({
+var ListRooms = createReactClass({
   render: function() {
     var roomButtons = [];
 

@@ -1,4 +1,5 @@
 var React = require('react');
+var createReactClass = require('create-react-class');
 var url = require('url');
 var querystring = require('querystring');
 
@@ -7,7 +8,7 @@ var slug = require('./slug');
 var stateTree = require('./state-tree');
 
 
-var JoinRoom = React.createClass({
+var JoinRoom = createReactClass({
   mixins: [stateTree.mixin],
   cursors: {
     connections: ['defaults', 'connections']
@@ -16,7 +17,7 @@ var JoinRoom = React.createClass({
   getInitialState: function() {
     return {
       controller: 'room',
-      id: this.props.id
+      id: this.props.id || ''
     };
   },
 
@@ -34,7 +35,7 @@ var JoinRoom = React.createClass({
   },
 
   componentDidUpdate: function() {
-    var node = this.refs.focusTarget.getDOMNode();
+    var node = this.refs.focusTarget; //.getDOMNode();
     var cursor = this.cursors.connections.select(0);
     if (cursor.get('loggedIn') && (this.state.id == null || (this.state.id && this.state.id.length == 0))) {
       node.focus();
@@ -42,7 +43,7 @@ var JoinRoom = React.createClass({
   },
 
   componentDidMount: function() {
-    var node = this.refs.focusTarget.getDOMNode();
+    var node = this.refs.focusTarget; //.getDOMNode();
     var cursor = this.cursors.connections.select(0);
     if (cursor.get('loggedIn') && (this.state.id == null || (this.state.id && this.state.id.length == 0))) {
       node.focus();

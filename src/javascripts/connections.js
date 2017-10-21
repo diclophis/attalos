@@ -1,11 +1,12 @@
 var React = require('react');
+var createReactClass = require('create-react-class');
 var url = require('url');
 var centralDispatch = require('./central-dispatch').singleton;
 var stateTree = require('./state-tree');
 var uuid = require('node-uuid');
 
 
-var Connections = React.createClass({
+var Connections = createReactClass({
   mixins: [stateTree.mixin],
   cursors: {
     connections: ['defaults', 'connections']
@@ -118,7 +119,7 @@ var Connections = React.createClass({
   },
 
   renderConnection: function(connection, index) {
-    var jidStyle = {display: 'none'};
+    var jidStyle = {}; //{display: 'none'};
     return (
       <li style={jidStyle} key={connection.id}>
         jid:
