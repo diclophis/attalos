@@ -102,7 +102,7 @@ var Connections = createReactClass({
     var newId = uuid.v1();
     var newConnection = {
       id: newId,
-      jid: newId + '@' + this.props.boshHost,
+      jid: newId + '@' + 'attalos-bardin-haus-chat', //this.props.boshHost,
       password: 'qwerty',
       autoConnect: true,
       boshUrl: "https://" + this.props.boshHost + ":" + this.props.boshPort + "/http-bind"

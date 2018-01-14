@@ -2,7 +2,7 @@
 
 exports.config = {
 	host: '0.0.0.0', 
-  port: process.env.PORT || 5280,
+  port: process.env.PORT || 5200,
 	path: /^\/http-bind(\/+)?$/, 
 	logging: 'TRACE',
 	
@@ -21,20 +21,20 @@ exports.config = {
 
 	// The maximum number of packets on either side of the current 'rid'
 	// that we are willing to accept.
-	window_size: 1024,
+	window_size: 10240,
 
 	// How much time (in second) should we hold a response object 
 	// before sending and empty response on it?
-	default_inactivity: 10,
+	default_inactivity: 1024,
 
-	max_inactivity: 3600,
+	max_inactivity: 1024,
 
 	// The value (in second) of keepalive to set on the HTTP response 
 	// socket
 	http_socket_keepalive: 5,
 
 	// The maximum number of active streams allowed per BOSH session
-	max_streams_per_session: 32,
+	max_streams_per_session: 128,
 
 	http_headers: { 
     //'Access-Control-Allow-Origin': "http://localhost:5000"

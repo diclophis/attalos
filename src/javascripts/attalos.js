@@ -82,6 +82,7 @@ var AttalosComponent = createReactClass({
         if ("offer" === parsedMsg.type) {
           if (this.state.pc1) {
             //NOTE: this is an unknown state
+            console.log("UNKNOWN STATE offer");
           } else {
             var pc1 = this.makePc();
             var offer = new SessionDescription(parsedMsg.body);
@@ -96,6 +97,7 @@ var AttalosComponent = createReactClass({
         } else if ("answer" == parsedMsg.type) {
           if (this.state.offerRecv) {
             //NOTE: this is an unknown state
+            console.log("UNKNOWN STATE answer");
           } else {
             var answer = new SessionDescription(parsedMsg.body);
             this.state.pc1.setRemoteDescription(answer, this.onRemoteDescriptionSet, this.onRtcError);
@@ -105,9 +107,11 @@ var AttalosComponent = createReactClass({
             this.state.pc1.addIceCandidate(new IceCandidate(parsedMsg.body));
           } else {
             //NOTE: this is an unknown state
+            console.log("UNKNOWN STATE icec");
           }
         } else {
           //NOTE: this is an unknown state
+          console.log("UNKNOWN STATE else");
         }
       } else {
         var a = (this.state[msg.from.bare] || []);
@@ -259,7 +263,6 @@ var AttalosComponent = createReactClass({
     var mediaOptions = { video: true, audio: true };
     navigator.getUserMedia(mediaOptions, this.onCreateStream, this.onRtcError);
   },
-
 
   render: function() {
     return (

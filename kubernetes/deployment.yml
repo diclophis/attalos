@@ -11,22 +11,19 @@ spec:
     protocol: TCP
   selector:
     name: attalos
-#---
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  name: attalos-bardin-haus-chat
-#  namespace: default
-#spec:
-#  type: NodePort
-#  ports:
-#  - nodePort: 32100
-#    port: 5100
-#    targetPort: 5100
-#    protocol: TCP
-#    name: http
-#  selector:
-#    name: attalos
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: attalos-bardin-haus-chat
+  labels:
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5100
+    protocol: TCP
+  selector:
+    name: attalos
 ---
 apiVersion: v1
 kind: Service
@@ -105,7 +102,7 @@ spec:
         - name: APP_ENV
           value: production
         - name: DEFAULT_BOSH_HOST
-          value: "localhost"
+          value: "attalos-bardin-haus-chat"
         - name: PORT
           value: "5000"
         - name: DEFAULT_XMPP_PORT
@@ -115,8 +112,7 @@ spec:
       - name: attalos-bardin-haus-chat
         image: fart
         ports:
-        - hostPort: 5100
-          containerPort: 5100
+        - containerPort: 5100
         resources:
           requests:
             memory: 100Mi
@@ -128,7 +124,7 @@ spec:
         - name: PORT
           value: "5100"
         - name: DEFAULT_BOSH_HOST
-          value: "localhost"
+          value: "attalos-bardin-haus-chat"
         - name: DEFAULT_XMPP_PORT
           value: "5100"
         - name: DEFAULT_BOSH_PORT
@@ -150,7 +146,7 @@ spec:
         - name: PORT
           value: "5200"
         - name: DEFAULT_BOSH_HOST
-          value: "localhost"
+          value: "attalos-bardin-haus-chat"
         - name: DEFAULT_XMPP_PORT
           value: "5100"
         - name: DEFAULT_BOSH_PORT

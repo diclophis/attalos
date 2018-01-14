@@ -39,11 +39,11 @@ c2s.on('connect', function(client) {
 
   // Stanza handling
   client.on('stanza', function(stanza) {
-    console.log(stanza);
+    //console.log(stanza);
 
-    var fff = stanza.attrs.from;
-    var ttt = stanza.attrs.to;
-    console.log(fff, ttt);
+    //var fff = stanza.attrs.from;
+    //var ttt = stanza.attrs.to;
+    //console.log(fff, ttt);
 
     // This re-broadcasts the stanza to all connected clients, in effect creating an echo chamber
     // at some point this will be replaced with specific logic based on different XEPs
@@ -51,18 +51,23 @@ c2s.on('connect', function(client) {
       var client = clients[i];
       var msg = null;
 
+      /*
       //if (stanza.name != "presence" && stanza.name != "message") {
       if (stanza.from.indexOf("rtc") != -1) {
         msg = new Message({type: stanza.type});
       } else if (stanza.name == "presence") {
         msg = new Message({ type: stanza.type, from: stanza.to });
       } else {
-        msg = new Message({ type: stanza.type, from: stanza.to + "/" + fff });
+        msg = new Message({ type: stanza.type, from: stanza.to });
       }
+      */
 
-      console.log(msg);
+      msg = new Message({ type: stanza.type, from: stanza.to });
+
+      //console.log(msg);
 
       msg.c('body').t(stanza.getChildText('body'));
+
       client.send(msg);
     }
   });
