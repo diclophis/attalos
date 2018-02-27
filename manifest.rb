@@ -39,8 +39,8 @@ document_handler_switch = Proc.new do |document|
 
     when "Deployment"
       description["spec"]["template"]["spec"]["containers"][0]["image"] = (registry_domain + (image_name + ":" + image_tag))
-      description["spec"]["template"]["spec"]["containers"][1]["image"] = (registry_domain + (image_name + ":" + image_tag))
-      description["spec"]["template"]["spec"]["containers"][2]["image"] = (registry_domain + (image_name + ":" + image_tag))
+      #description["spec"]["template"]["spec"]["containers"][1]["image"] = (registry_domain + (image_name + ":" + image_tag))
+      #description["spec"]["template"]["spec"]["containers"][2]["image"] = (registry_domain + (image_name + ":" + image_tag))
 
   else
   end

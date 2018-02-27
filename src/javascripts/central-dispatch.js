@@ -3,7 +3,7 @@
 var EventEmitter = require('events').EventEmitter;
 var url = require('url');
 var slug = require('./slug'); //TODO: spec this
-var xmpp = require('stanza.io');
+var xmpp = require('./cheap-xmpp');
 var stateTree = require('./state-tree');
 
 var cd = new EventEmitter();

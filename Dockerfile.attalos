@@ -18,8 +18,6 @@ WORKDIR /home/app
 USER app
 RUN NPM_CONFIG_OPTIONAL=false npm install
 
-ADD bosh.conf.js /home/app
-ADD chat.js /home/app
 ADD web.js /home/app
 ADD public /home/app/public
 
