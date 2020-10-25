@@ -35,7 +35,7 @@ MANIFEST_TMP=$(BUILD)/deployment.yml
 .PHONY: image uninstall clean
 .PHONY: all check clean dist-clean
 
-all: dev check dist $(BUILD)/$(IMAGE_TAG) install
+all: dev check dist
 
 env: $(node_modules)
 	nslookup $(TARGET_HOST)
@@ -85,7 +85,7 @@ $(debug_js): $(javascripts)
 	./bin/javascript_package $(TARGET_MODULE) build/index.js $@
 
 $(dist_js): $(debug_js)
-	./bin/javascript_compress $(TARGET_MODULE) $< $@
+	bundle exec ./bin/javascript_compress $(TARGET_MODULE) $< $@
 
 #docker:
 #	vagrant up

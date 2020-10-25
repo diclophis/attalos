@@ -33,7 +33,7 @@ module.exports.render = function(packageModule, js, css, cb) {
 
       var mainContainerId = packageModule.toLowerCase() + "-container";
       var bootstrapFunction = '(' + module.exports.bootstrap.toString() + ')';
-      var bootstrapInvokation = '(' + packageModule + ', "' + boshHost + '", ' + boshPort + ', document.getElementById("' + mainContainerId + '"));';
+      var bootstrapInvokation = '(' + packageModule + ',"' + boshHost + '", ' + boshPort + ', document.getElementById("' + mainContainerId + '"));';
       var bootstrapSource = (bootstrapFunction + bootstrapInvokation).replace('\n', ''); //=> bootstrap('ModulePackageName', document.getElementById('main-container');
       return(
         <html>

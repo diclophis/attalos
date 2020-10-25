@@ -68,17 +68,19 @@ var Room = createReactClass({
     }
   },
 
-  componentWillReceiveProps: function(nextProps) {
+/*
+  getDerivedStateFromProps: function(nextProps) {
     var shouldFocusNow = false;
 
     if (!this.state.meJoinedRoom && nextProps.joined) {
       shouldFocusNow = true;
     }
       
-    this.setState({messages: nextProps.messages, meJoinedRoom: nextProps.joined, shouldFocusNow: shouldFocusNow});
+    return {shouldFocusNow: shouldFocusNow};
   },
+*/
 
-  componentWillMount: function() {
+  componentDidMount: function() {
     this.setState({messages: this.props.messages});
   },
 
@@ -87,6 +89,7 @@ var Room = createReactClass({
     node.focus();
   },
 
+/*
   componentWillUpdate: function() {
     var node = this.refs.allm;
     //var node2 = this.refs.videos.getDOMNode();
@@ -100,6 +103,7 @@ var Room = createReactClass({
       this.shouldScrollBottom = false; //(node.offsetHeight + getPosition(node).y) == window.innerHeight;
     }
   },
+*/
    
   componentDidUpdate: function() {
     if (this.shouldScrollBottom) {

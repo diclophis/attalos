@@ -66,7 +66,7 @@ spec:
 #          serviceName: attalos-bardin-haus-bosh
 #          servicePort: 5200
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: attalos
@@ -78,6 +78,9 @@ spec:
     rollingUpdate:
       maxUnavailable: 0
   replicas: 1
+  selector:
+    matchLabels:
+      name: attalos
   template:
     metadata:
       labels:
@@ -88,7 +91,8 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: attalos-bardin-haus-web
-        image: -placeholder-
+        image: attalos:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3001
         resources:
