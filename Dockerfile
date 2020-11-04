@@ -9,8 +9,6 @@ RUN apt-get update -qq && apt-get install --no-install-recommends -y --force-yes
 
 RUN useradd --home-dir /home/app --create-home --shell /bin/bash app
 
-#RUN chown -R app. /home/app
-
 WORKDIR /home/app
 USER app
 
@@ -22,8 +20,6 @@ RUN bundle install --path=vendor/bundle
 
 USER root
 COPY [".", "/home/app"]
-
-#RUN chown -R app /home/app
 
 WORKDIR /home/app
 USER app

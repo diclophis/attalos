@@ -47,7 +47,6 @@ module.exports.render = function(packageModule, js, css, cb) {
             <div id={mainContainerId} className="static">
               <AttalosComponent bootstrapped={false} boshPort={boshPort} boshHost={boshHost}/>
             </div>
-            <script type="text/javascript" dangerouslySetInnerHTML={{__html:'__REACT_DEVTOOLS_GLOBAL_HOOK__ = {};'}}></script>
             <script type="text/javascript" src={this.props.js}></script>
             <script type="text/javascript" dangerouslySetInnerHTML={{__html:bootstrapSource}}></script>
           </body>

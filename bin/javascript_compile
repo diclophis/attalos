@@ -1,6 +1,3 @@
 #!/bin/sh
 
-#./node_modules/.bin/jsx $1
-#cat $1
-
 ./node_modules/.bin/babel src/javascripts -d build

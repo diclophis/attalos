@@ -2,8 +2,8 @@
 
 set -e
 
-if [ ! -z $BROWSERIFY ]; then
-  ./node_modules/.bin/browserify --standalone $1 $2 > $3
-else
-  ./node_modules/.bin/webpack --display-error-details --output-source-map-file --module-bind json --output-library $1 --output-library-target umd $2 $3
-fi
+#if [ ! -z $BROWSERIFY ]; then
+#  ./node_modules/.bin/browserify --standalone $1 $2 > $3
+#else
+./node_modules/.bin/webpack --display-error-details --output-source-map-file --module-bind json --output-library $1 --output-library-target umd $2 $3
+#fi

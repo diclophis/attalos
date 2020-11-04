@@ -9,32 +9,27 @@ var stateTree = require('./state-tree');
 var cd = new EventEmitter();
 var lastOpts = null;
 
-
-
 cd.loggedIn = false;
 cd.isConnecting = false;
 
-cd.client = xmpp.createClient({
-});
+cd.client = xmpp.createClient({});
 
 cd.clientConnect = function(opts) {
-  if (lastOpts == null) {
-    //TODO: keep-alive ping check, ugh
-    setInterval(function() {
-      cd.send({
-        to: "ping",
-        body: "",
-        type: 'groupchat'
-      });
-    }, 5000);
-  }
+  //if (lastOpts == null) {
+  //  //TODO: keep-alive ping check, ugh
+  //  setInterval(function() {
+  //    cd.send({
+  //      to: "ping",
+  //      body: "",
+  //      type: 'groupchat'
+  //    });
+  //  }, 5000);
+  //}
+  //if (opts) {
+  //  lastOpts = opts;
+  //}
 
-  if (opts) {
-    lastOpts = opts;
-  }
-
-
-  cd.client.connect(lastOpts);
+  cd.client.connect(opts);
 };
 
 cd.navigateTo = function(href) {
